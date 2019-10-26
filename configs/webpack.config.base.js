@@ -6,6 +6,8 @@ import path from 'path';
 import webpack from 'webpack';
 import { dependencies } from '../package.json';
 
+const appPath = path.join(__dirname, '..','app')
+
 export default {
   externals: [...Object.keys(dependencies || {})],
 
@@ -34,7 +36,19 @@ export default {
    * Determine the array of extensions that should be used to resolve modules.
    */
   resolve: {
-    extensions: ['.js', '.jsx', '.json']
+    extensions: ['.js', '.jsx', '.json'],
+    alias: {
+      actions: path.join(appPath, 'actions'),
+      components: path.join(appPath, 'components'),
+      containers: path.join(appPath, 'containers'),
+      constants: path.join(appPath, 'constants'),
+      reducers: path.join(appPath, 'reducers'),
+      style: path.join(appPath, 'style'),
+      tool: path.join(appPath, 'tool'),
+      page: path.join(appPath, 'page'),
+      static: path.join(appPath, 'static'),
+      images: path.join(appPath, 'static/images'),
+    },
   },
 
   plugins: [

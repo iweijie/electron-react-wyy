@@ -1,0 +1,186 @@
+@import "../../style/common.global.less";
+
+@broder-gray: #bc2d2d;
+
+
+.no-drag {
+  -webkit-app-region: no-drag;
+}
+
+.drag {
+  -webkit-app-region: drag;
+}
+
+
+.top-nav {
+  .drag;
+  height: 50px;
+  background-color: @red;
+  padding: 12px 15px;
+  display: flex;
+
+
+  .top-nav-left {
+    width: 200px;
+
+    h1 {
+      .no-drag;
+      width: 120px;
+      height: 26px;
+      text-indent: -100000px;
+      background: @red 0 -13px url(../../static/images/topbar.png) no-repeat;
+      background-size: 180px;
+      overflow: hidden;
+    }
+  }
+
+  .top-nav-right {
+    padding: 2px 0;
+    flex: 1;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .top-nav-search {
+    display: flex;
+
+    .top-nav-search-btn {
+      .no-drag;
+      width: 55px;
+      height: 22px;
+      border: 1px solid #a82828;
+      border-radius: 4px;
+
+      span:first-child {
+        width: 27px;
+        border-right: 1px solid #a82828;
+      }
+    }
+
+    span {
+      display: inline-block;
+      width: 26px;
+      height: 20px;
+      cursor: pointer;
+    }
+
+
+    .back-btn {
+      background: url(../../static/images/arrow_left.png) no-repeat;
+      background-size: 16px 18px;
+      background-position: 3px 0px;
+    }
+
+    .back-btn-active {
+      background: url(../../static/images/arrow_left_active.png) no-repeat;
+      background-size: 16px 18px;
+      background-position: 3px 0px;
+    }
+
+    .forward-btn {
+      background: url(../../static/images/arrow_right.png) no-repeat;
+      background-size: 16px 18px;
+      background-position: 7px 0px;
+    }
+
+    .forward-btn-active {
+      background: url(../../static/images/arrow_right_active.png) no-repeat;
+      background-size: 16px 18px;
+      background-position: 7px 0px;
+    }
+  }
+
+  .top-nav-search-input {
+    .no-drag;
+    margin-left: 10px;
+    position: relative;
+
+    input {
+      width: 220px;
+      height: 22px;
+      background-color: #a82828;
+      border-radius: 11px;
+      border: none;
+      outline: none;
+      padding-left: 10px;
+      color: #ffffff;
+      font-size: 12px;
+
+      &::-webkit-input-placeholder {
+        /* placeholder颜色  */
+        color: #b65454;
+        /* placeholder字体大小  */
+        font-size: 12px;
+        line-height: 22px;
+      }
+
+      &:focus+.search-btn {
+        background: url(../../static/images/sousuo-active.png) no-repeat;
+        background-size: 14px 14px;
+        background-position: 7px 3px;
+      }
+    }
+
+    i {
+      position: absolute;
+      top: 0;
+      right: 5px;
+      width: 26px;
+      height: 20px;
+      cursor: pointer;
+    }
+
+    .search-btn {
+      background: url(../../static/images/sousuo.png) no-repeat;
+      background-size: 14px 14px;
+      background-position: 7px 3px;
+
+      &:hover {
+        background: url(../../static/images/sousuo-active.png) no-repeat;
+        background-size: 14px 14px;
+        background-position: 7px 3px;
+      }
+    }
+
+  }
+
+  .top-nav-tool-wrap {
+
+    .no-drag;
+    display: flex;
+    align-items: center;
+
+    .user-info {
+      padding-right: 10px;
+    }
+
+    .top-nav-tool {
+      padding-left: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+      &::before {
+        content: '';
+        position: absolute;
+        top: -10%;
+        left: 0;
+        height: 120%;
+        width: 1px;
+        background-color: rgba(0, 0, 0, .2);
+      }
+
+      i {
+        display: inline-block;
+        padding: 0 5px;
+        color: #e29595;
+        cursor: pointer;
+        font-size: 13px;
+
+        &:hover {
+          color: #fafafa;
+        }
+      }
+    }
+  }
+}

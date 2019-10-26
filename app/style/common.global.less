@@ -1,0 +1,58 @@
+@red : #c62f2f;
+
+.padding-and-margin-loop(@count )when(@count > 0) {
+  .padding-top-@{count} {
+    padding-top: @count
+  }
+
+  .padding-left-@{count} {
+    padding-left: @count
+  }
+
+  .padding-bottom-@{count} {
+    padding-bottom: @count
+  }
+
+  .padding-right-@{count} {
+    padding-right: @count
+  }
+
+  .padding-@{count} {
+    padding: @count
+  }
+
+  .margin-top-@{count} {
+    margin-top: @count
+  }
+
+  .margin-left-@{count} {
+    margin-left: @count
+  }
+
+  .margin-bottom-@{count} {
+    margin-bottom: @count
+  }
+
+  .margin-right-@{count} {
+    margin-right: @count
+  }
+
+  .margin-@{count} {
+    margin: @count
+  }
+
+  .padding-and-margin-loop((@count - 5));
+}
+
+.padding-and-margin-loop(40);
+
+
+.font-size-loop(@count )when(@count > 12) {
+  .font-size-@{count} {
+    font-size: @count
+  }
+
+  .font-size-loop((@count - 1));
+}
+
+.font-size-loop(20);
