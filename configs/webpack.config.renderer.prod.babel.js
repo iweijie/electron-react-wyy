@@ -67,7 +67,7 @@ export default merge.smart(baseConfig, {
       },
       // Add SASS support  - compile all .global.scss files and pipe it to style.css
       {
-        test: /\.global\.(scss|sass)$/,
+        test: /\.global\.less$/,
         use: [
           {
             loader: MiniCssExtractPlugin.loader
@@ -80,7 +80,7 @@ export default merge.smart(baseConfig, {
             }
           },
           {
-            loader: 'sass-loader',
+            loader: 'less-loader',
             options: {
               sourceMap: true
             }
@@ -89,7 +89,7 @@ export default merge.smart(baseConfig, {
       },
       // Add SASS support  - compile all other .scss files and pipe it to style.css
       {
-        test: /^((?!\.global).)*\.(scss|sass)$/,
+        test: /^((?!\.global).)*\.less$/,
         use: [
           {
             loader: MiniCssExtractPlugin.loader
@@ -104,7 +104,7 @@ export default merge.smart(baseConfig, {
             }
           },
           {
-            loader: 'sass-loader',
+            loader: 'less-loader',
             options: {
               sourceMap: true
             }
