@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import styles from './index.less';
 import Icon from 'components/Icon';
 import topbar from '../../static/images/topbar.png';
+import historyStack from '../../utils/historyStack';
 
 class TopNav extends Component {
 	handleMinimize = (e) => {
@@ -30,9 +31,8 @@ class TopNav extends Component {
 	}
 
 	render() {
-		console.log(this.props);
 		const { handleMinimize, handleMaximize, handleClose } = this;
-		const hasBack = false;
+		const { historyState } = this.props;
 		return (
 			<div className={styles['top-nav']}>
 				<div className={styles['top-nav-left']}>
@@ -41,8 +41,12 @@ class TopNav extends Component {
 				<div className={styles['top-nav-right']}>
 					<div className={styles['top-nav-search']}>
 						<div className={styles['top-nav-search-btn']}>
-							<span className={hasBack ? styles['back-btn-active'] : styles['back-btn']} />
-							<span className={hasBack ? styles['forward-btn-active'] : styles['forward-btn']} />
+							<span className={historyState.isBack ? styles['back-btn-active'] : styles['back-btn']} />
+							<span
+								className={
+									historyState.isForward ? styles['forward-btn-active'] : styles['forward-btn']
+								}
+							/>
 						</div>
 						<div className={styles['top-nav-search-input']}>
 							<input type="text" placeholder="搜索音乐，视频，歌词，电台" />
@@ -66,7 +70,8 @@ class TopNav extends Component {
 
 function mapStateToProps(state) {
 	return {
-		windowState: state.windowState
+		windowState: state.windowState,
+		historyState: state.historyState
 	};
 }
 
