@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import { get } from 'lodash';
 import Icon from '../Icon/index';
 import styles from './index.less';
-
 // 样板
 const menuList = [
 	{

@@ -7,6 +7,7 @@ import styles from './index.less';
 import Icon from 'components/Icon';
 import topbar from '../../static/images/topbar.png';
 import historyStack from '../../utils/historyStack';
+import { getSongList } from '../../request/index';
 
 class TopNav extends Component {
 	handleMinimize = (e) => {
@@ -28,6 +29,7 @@ class TopNav extends Component {
 
 	componentDidMount() {
 		ipcRenderer.on('window-size-change', this.handleWindowSizeChange);
+		getSongList();
 	}
 
 	render() {
@@ -70,8 +72,8 @@ class TopNav extends Component {
 
 function mapStateToProps(state) {
 	return {
-		windowState: state.windowState,
-		historyState: state.historyState
+		windowState: state.common.windowState,
+		historyState: state.common.historyState
 	};
 }
 

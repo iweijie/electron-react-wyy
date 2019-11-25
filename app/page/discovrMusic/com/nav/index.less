@@ -1,0 +1,31 @@
+@import '../../../../style/common.variate.less';
+
+.ul {
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  line-height: 40px;
+  border-bottom: 1px solid #f2f2f2;
+
+  >li {
+    margin-right: 45px;
+
+    &:last-child {
+      margin-right: 0;
+    }
+
+    &.active {
+      position: relative;
+
+      &::after {
+        content: "";
+        height: 2px;
+        background-color: @red;
+        position: absolute;
+        top: 0;
+        left: 0;
+      }
+    }
+  }
+}

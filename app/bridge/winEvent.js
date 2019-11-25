@@ -1,6 +1,6 @@
 import { app, BrowserWindow, ipcMain, ipcRenderer } from 'electron';
 import observer from '../utils/pubSub';
-import { WINDOW_STATE_HIDE, WINDOW_STATE_NORMAL, WINDOW_STATE_MIN, WINDOW_STATE_MAX } from '../actions/windowAction';
+import { WINDOW_STATE_HIDE, WINDOW_STATE_NORMAL, WINDOW_STATE_MIN, WINDOW_STATE_MAX } from '../store/quiescent';
 
 export default (mainWindow) => {
 	// mainWindow.on('resize', (e) => {});

@@ -38,13 +38,12 @@ export default {
   resolve: {
     extensions: ['.js', '.jsx', '.json'],
     alias: {
-      actions: path.join(appPath, 'actions'),
       components: path.join(appPath, 'components'),
       containers: path.join(appPath, 'containers'),
       constants: path.join(appPath, 'constants'),
-      reducers: path.join(appPath, 'reducers'),
       style: path.join(appPath, 'style'),
-      tool: path.join(appPath, 'tool'),
+      utils: path.join(appPath, 'utils'),
+      store: path.join(appPath, 'store'),
       page: path.join(appPath, 'page'),
       static: path.join(appPath, 'static'),
       images: path.join(appPath, 'static/images'),

@@ -1,9 +1,10 @@
-import type { GetState, Dispatch } from '../reducers/types';
+// user
+export const SET_USER_INFO = 'SET_USER_INFO';
 
+// window
 export const WINDOW_STATE_HIDE = 'WINDOW_STATE_HIDE';
 export const WINDOW_STATE_NORMAL = 'WINDOW_STATE_NORMAL';
 export const WINDOW_STATE_MIN = 'WINDOW_STATE_MIN';
 export const WINDOW_STATE_MAX = 'WINDOW_STATE_MAX';
-
+// history
 export const HISTORY_STATE_CHANGE = 'HISTORY_STATE_CHANGE';
-
