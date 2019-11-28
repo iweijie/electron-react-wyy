@@ -9,7 +9,8 @@
   border-bottom: 1px solid #f2f2f2;
 
   >li {
-    margin-right: 45px;
+    margin-right: 35px;
+    padding: 0 15px;
 
     &:last-child {
       margin-right: 0;
@@ -18,12 +19,17 @@
     &.active {
       position: relative;
 
+      >a {
+        color: @red;
+      }
+
       &::after {
         content: "";
         height: 2px;
+        width: 100%;
         background-color: @red;
         position: absolute;
-        top: 0;
+        bottom: 0;
         left: 0;
       }
     }

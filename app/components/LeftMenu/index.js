@@ -3,24 +3,6 @@ import { Link } from 'react-router-dom';
 import { get } from 'lodash';
 import Icon from '../Icon/index';
 import styles from './index.less';
-// 样板
-const menuList = [
-	{
-		title: '推荐',
-		chalidren: [
-			{
-				link: '/discovrMusic',
-				title: '发现音乐',
-				iconType: 'yinyue',
-				iconStyle: {
-					// top left 为调整icon 的偏移量
-					top: 4
-				},
-				isActive: false
-			}
-		]
-	}
-];
 
 const getMenuList = (menuList) => {
 	return menuList.map((item) => {

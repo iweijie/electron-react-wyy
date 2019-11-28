@@ -5,8 +5,8 @@
 * @Last Modified time: 2017-11-01 14:24:33
 */
 // const host = 'http://5fan.win:3000';
-const host = 'http://localhost:3000';
-// const host = 'http://wangyiyun.iweijie.cn';
+// const host = 'http://localhost:3000';
+const host = 'http://wangyiyun.iweijie.cn';
 
 export const login = host + '/login/cellphone'; // 登入
 export const songListUrl = host + '/user/playlist'; //获取歌单

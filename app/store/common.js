@@ -37,5 +37,5 @@ export default {
 		test({ call, put, state, rootState }, name) {
 			call('todos/add', 'call_add');
 		}
-	}
+	},
 };

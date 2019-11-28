@@ -26,24 +26,25 @@ const menuList = [
 
 export default class Layout extends Component {
 	componentDidMount() {
-		window.addEventListener('hashchange', (e) => {
-			console.log(e);
-		});
+		// window.addEventListener('hashchange', (e) => {
+		// 	console.log(e);
+		// });
 	}
 
 	render() {
-		console.log(this.props)
+		console.log(this.props);
 		return (
 			<div className="global-layout">
 				<TopNav />
 				<div className={styles['global-container']}>
-					<LeftMenu menu={menuList} />
-					<Switch>
+					<div className={styles['global-container-left']}>
+						<LeftMenu menu={menuList} />
+					</div>
+					<div className={styles['global-container-right']}>
 						{routers.map((route, i) => (
 							<Route key={i} exact={route.exact} path={route.path} component={route.component} />
 						))}
-						<Redirect to="/discovrMusic/recommendation" />
-					</Switch>
+					</div>
 				</div>
 			</div>
 		);
