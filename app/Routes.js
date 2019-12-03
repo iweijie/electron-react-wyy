@@ -1,5 +1,6 @@
-import React from 'react';
+// import React from 'react';
 import DiscovrMusicPage from './page/discovrMusic/index';
+import NotFound from './page/404/index';
 // import CounterPage from './containers/CounterPage';
 
 // const router =  require.context("./page", true, /\.router\.js$/)
@@ -7,19 +8,15 @@ import DiscovrMusicPage from './page/discovrMusic/index';
 // console.log("router",router)
 
 const routers = [
-	{
-		path: '/discovrMusic/:id',
-		exact: true,
-		component: DiscovrMusicPage,
-		// render: (props) => {
-		// 	console.log('props--:', props);
-		// 	return <DiscovrMusicPage {...props} />;
-		// }
-	}
-	// {
-	// 	path: '/counter',
-	// 	component: CounterPage
-	// },
+  {
+    path: '/discovrMusic/:id',
+    exact: true,
+    component: DiscovrMusicPage
+  },
+  {
+    path: '*',
+    component: NotFound
+  }
 ];
 
 export default routers;

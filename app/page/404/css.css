@@ -1,0 +1,32 @@
+/* 404 */
+.error {
+  width: 100%;
+  padding-bottom: 35px;
+  text-align: center;
+}
+.error h2 {
+  font-size: 135px;
+  color: #00a8ff;
+}
+.error h3 {
+  font-size: 65px;
+  color: #3c3c3c;
+}
+.error h4 {
+  font-size: 20px;
+  color: #707070;
+}
+.error p {
+  margin-top: 77px;
+}
+.error a {
+  color: #00a8ff;
+}
+@media screen and (max-width: 800px) {
+  .error h2 {
+    font-size: 60px;
+  }
+  .error h3 {
+    font-size: 30px;
+  }
+}

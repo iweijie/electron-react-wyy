@@ -1,0 +1,121 @@
+@import "../../style/common.variate.less";
+
+.slide-wrap {
+  width: 100%;
+
+  .slideBox {
+    width: 630px;
+    height: 210px;
+    margin: 0 auto;
+    position: relative;
+
+    .slide {
+      position: absolute;
+      left: 13%;
+      bottom: 0%;
+      width: 75%;
+      transition: all 0.3s linear;
+      user-select: none; // 禁止用户选中(防止图片被选中时变色);
+
+      &:hover {
+        // 鼠标经过时显示小手样式
+        cursor: pointer;
+      }
+
+      .img-wrap {
+        position: relative;
+
+        span {
+          display: inline-block;
+          position: absolute;
+          right: -3px;
+          bottom: 5%;
+          color: #ffffff;
+          border-top-left-radius: 8px;
+          border-bottom-left-radius: 8px;
+          padding: 0 8px 0  8px;
+          line-height: 18px;
+          font-size: 12px;
+        }
+      }
+
+      img {
+        width: 100%;
+        display: block;
+      }
+
+      .masking {
+        // 蒙板，有个灰度渐变的效果
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.15);
+        transition: all 0.3s linear;
+      }
+
+      &.middle {
+        // 此为中间展示的那张
+        left: 10%;
+        bottom: 0%;
+        width: 80%;
+        z-index: 2;
+        background: transparent;
+      }
+
+      &.start {
+        // 第一张则为左侧那张
+        left: -8%;
+        bottom: 0%;
+        width: 75%;
+        z-index: 1;
+      }
+
+      &.end {
+        // 最后一张及右侧那张
+        left: 33%;
+        // right: -10%;
+        bottom: 0%;
+        width: 75%;
+        z-index: 1;
+      }
+    }
+
+    .point {
+      width: 100%;
+      position: absolute;
+      left: 0;
+      bottom: -18px;
+      z-index: 999;
+      display: flex;
+      justify-content: center;
+
+      div {
+        padding: 5px 5px;
+        height: 15px;
+        box-sizing: border-box;
+        line-height: 5px;
+
+        &:hover {
+          cursor: pointer;
+
+          span {
+            background-color: @red;
+          }
+        }
+      }
+
+      span {
+        display: inline-block;
+        width: 20px;
+        height: 2px;
+        background-color: #d9d9d9;
+
+        &.active {
+          background-color: @red;
+        }
+      }
+    }
+  }
+}

@@ -1,8 +1,13 @@
+import { get } from 'lodash';
 import { axiosGet } from './axios';
-import {songListUrl} from './api'
+import { songListUrl, getBannerUrl } from './api';
 
-export function getSongList() {
-	return axiosGet(songListUrl, { uid: 376014539 }, function(data) {
-		console.log(data);
-	});
+// 获取轮播图列表
+export function getBanner(type = 0) {
+  return axiosGet(getBannerUrl, { type }).then(res => {
+    if (get(res, 'code') === 200) {
+      return get(res, 'banners', []);
+    }
+    return [];
+  });
 }

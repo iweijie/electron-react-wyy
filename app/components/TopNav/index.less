@@ -152,7 +152,96 @@
     align-items: center;
 
     .user-info {
-      padding-right: 10px;
+      display: flex;
+      align-items: center;
+      padding-right: 30px;
+      position: relative;
+      cursor: pointer;
+
+      &::after {
+        content: "";
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        border-left: 5px solid transparent;
+        border-right: 5px solid transparent;
+        border-top: 5px solid @grey;
+        border-bottom: 5px solid transparent;
+      }
+
+      &:hover {
+        &::after {
+          border-top: 5px solid #ffffff;
+        }
+
+        .user-name {
+          color: #ffffff;
+        }
+
+      }
+
+      &.active::after {
+        top: 5px;
+        border-left: 5px solid transparent;
+        border-right: 5px solid transparent;
+        border-top: 5px solid transparent;
+        border-bottom: 5px solid #ffffff;
+      }
+    }
+
+    .user-via {
+      width: 25px;
+      height: 25px;
+      border-radius: 50%;
+      overflow: hidden;
+
+      >img {
+        width: 100%;
+        display: block;
+      }
+    }
+
+    .user-name {
+      margin-left: 10px;
+      color: @grey;
+    }
+
+    .user-popup {
+      position: absolute;
+      top: 37px;
+      left: 50%;
+      transform: translate(-50%);
+      color: #c1c1c1;
+      background-color: #fff;
+      border-radius: 4px;
+      height: 300px;
+      width: 200px;
+      z-index: 1;
+      text-align: left;
+
+      &::before {
+        content: "";
+        position: absolute;
+        top: -10px;
+        left: 50%;
+        border-left: 5px solid transparent;
+        border-right: 5px solid transparent;
+        border-top: 5px solid transparent;
+        border-bottom: 5px solid #fff;
+      }
+
+      >li {
+        padding: 0 30px;
+        width: 100%;
+        line-height: 40px;
+        height: 40px;
+        cursor: pointer;
+
+        &:hover {
+          color: #333333;
+          background-color: @grey;
+        }
+      }
     }
 
     .top-nav-tool {
@@ -161,6 +250,7 @@
       justify-content: space-between;
       align-items: center;
       position: relative;
+
       &::before {
         content: '';
         position: absolute;

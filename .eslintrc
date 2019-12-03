@@ -41,7 +41,25 @@
     "promise/param-names": "error",
     "promise/always-return": "error",
     "promise/catch-or-return": "error",
+    "no-unused-vars": "warn",
     "promise/no-native": "off",
+    "no-underscore-dangle": "off",
+    "import/order": "off",
+    "lines-between-cla": "off",
+    "func-names": "off",
+    "jsx-a11y/click-events-have-key-events": "off",
+    "jsx-a11y/no-static-element-interactions": "off",
+    "linebreak-style": [0, "error", "windows"],
+    "react/no-array-index-key": "off",
+    "react/forbid-prop-types": "off",
+    "react/require-default-props": "off",
+    "no-param-reassign": "off",
+    "prefer-destructuring": "off",
+    "lines-between-class-members": "off",
+    "prefer-arrow-callback": "off",
+    "react/prop-types": "warn",
+    "dot-notation": "warn",
+    "import/prefer-default-export": "warn",
     "react/sort-comp": [
       "error",
       {
@@ -57,7 +75,9 @@
     "react/jsx-no-bind": "off",
     "react/jsx-filename-extension": [
       "error",
-      { "extensions": [".js", ".jsx"] }
+      {
+        "extensions": [".js", ".jsx"]
+      }
     ],
     "react/prefer-stateless-function": "off"
   },
