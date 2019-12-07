@@ -5,6 +5,9 @@ import {
 	WINDOW_STATE_MAX,
 	HISTORY_STATE_CHANGE
 } from './quiescent';
+import requestMap from '../request/index';
+import { getStore, setStore } from '../utils/index';
+
 export default {
 	namespace: 'common',
 	state: {
@@ -17,7 +20,8 @@ export default {
 		historyState: {
 			isBack: true,
 			isForward: true
-		}
+		},
+		userInfo: null
 	},
 	reducers: {
 		handleChangeWindowState({ state, rootState }, payload) {
@@ -34,8 +38,17 @@ export default {
 		}
 	},
 	effects: {
-		test({ call, put, state, rootState }, name) {
-			call('todos/add', 'call_add');
+		async login({ call, put, state, rootState }, payload) {
+			let userInfo = getStore('userInfo');
+			if (!userInfo) {
+				payload = { phone: 18620813846, password: 'zrf9520' };
+				userInfo = await requestMap.requestLogin(payload);
+				setStore('userInfo', userInfo);
+			}
+
+			put('common/userInfo', userInfo);
+
+			return userInfo;
 		}
-	},
+	}
 };

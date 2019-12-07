@@ -4,9 +4,14 @@ import { Switch, Route, Redirect } from 'react-router';
 import styles from './index.less';
 import Nav from './com/nav/index';
 import Recommendation from './recommendation/index';
+import RecommendSongs from './recommendSongs/index';
+
+import request from '../../request/index';
 
 export default class Home extends Component {
-  componentDidMount() {}
+  componentDidMount() {
+
+  }
   render() {
     const { history, match } = this.props;
     return (
@@ -17,6 +22,11 @@ export default class Home extends Component {
             exact
             path="/discovrMusic/recommendation"
             component={Recommendation}
+          />
+          <Route
+            exact
+            path="/discovrMusic/recommendSongs"
+            component={RecommendSongs}
           />
           <Route
             exact

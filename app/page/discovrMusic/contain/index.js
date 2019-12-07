@@ -9,3 +9,5 @@ export const navList = [
 	{ name: '最新音乐', path: `${rootpath}/newSong` }
 	// 推荐排行榜歌单主播电台歌手新碟上架
 ];
+
+export const weekList = [ '日', '一', '二', '三', '四', '五', '六', '日' ];

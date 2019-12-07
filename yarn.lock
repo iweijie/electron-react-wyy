@@ -4053,6 +4053,11 @@ electron-chromedriver@~3.0.0:
     electron-download "^4.1.0"
     extract-zip "^1.6.5"
 
+electron-cookies@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/electron-cookies/-/electron-cookies-1.1.0.tgz#7935a82fd0e0e883d981935d5e64b6dd302f4315"
+  integrity sha1-eTWoL9Dg6IPZgZNdXmS23TAvQxU=
+
 electron-debug@^2.0.0:
   version "2.0.0"
   resolved "https://registry.npmjs.org/electron-debug/-/electron-debug-2.0.0.tgz#3059a6557acbfb091f138d83875f57bac80cea6d"
@@ -9617,9 +9622,10 @@ request-promise-native@^1.0.5:
     stealthy-require "^1.1.0"
     tough-cookie ">=2.3.3"
 
-request@^2.45.0, request@^2.83.0, request@^2.87.0:
+request@^2.45.0, request@^2.83.0, request@^2.87.0, request@^2.88.0:
   version "2.88.0"
-  resolved "https://registry.npmjs.org/request/-/request-2.88.0.tgz#9c2fca4f7d35b592efe57c7f0a55e81052124fef"
+  resolved "https://registry.yarnpkg.com/request/-/request-2.88.0.tgz#9c2fca4f7d35b592efe57c7f0a55e81052124fef"
+  integrity sha512-NAqBSrijGLZdM0WZNsInLJpkJokL72XYjUpnB0iwsRgxh7dB6COrHnTBNwN0E+lHDAJzu7kLAkDeY08z2/A0hg==
   dependencies:
     aws-sign2 "~0.7.0"
     aws4 "^1.8.0"
