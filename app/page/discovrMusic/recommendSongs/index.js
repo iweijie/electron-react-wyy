@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { reducers } from 'store';
+import { map } from 'lodash';
 import SongsList from '../../../components/SongsList';
 import { weekList } from '../contain';
 import styles from './index.less';
@@ -20,7 +21,7 @@ class RecommendSongs extends Component {
 	}
 	render() {
 		const { week, day } = this.state;
-		const { bannerList, personalizedList } = this.props;
+		const { recommendSongsList } = this.props;
 		return (
 			<div className={styles.container}>
 				<div className={styles.head}>
@@ -38,16 +39,16 @@ class RecommendSongs extends Component {
 				<div className={styles['songs-list-wrap']}>
 					<div className={styles['songs-list']}>
 						<div className={styles.control}>
-							<div className={styles['play-all']}>
+							<div className={styles['play-all']} onClick={() => this.handlePlayAll('replace')}>
 								<div className={styles.repalace}>
 									<i className="iconfont iconicon-test1" /> <span>播放全部</span>
 								</div>
-								<div className={styles.push}>
+								<div className={styles.push} onClick={() => this.handlePlayAll('push')}>
 									<i className="iconfont iconincrease" />
 								</div>
 							</div>
 						</div>
-						<SongsList />
+						<SongsList songslist={recommendSongsList} />
 					</div>
 				</div>
 			</div>
@@ -61,6 +62,19 @@ class RecommendSongs extends Component {
 			week: weekList[date.getDay()] || '日'
 		};
 	}
+	// replace : 替换正在播放歌单
+	// push :  播放列表追加
+	handlePlayAll = (mode) => {
+		const { recommendSongsList } = this.props;
+		console.log(JSON.stringify(this.formatPlayListData(recommendSongsList)))
+	};
+
+	formatPlayListData = (list) => {
+		return map(list, (item, index) => {
+			const { name, id, alias, duration, album, mvid = 0 } = item;
+			return { name, id, alias, duration, album, mvid };
+		});
+	};
 }
 
 function mapStateToProps(state) {

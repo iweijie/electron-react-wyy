@@ -139,7 +139,6 @@ class TopNav extends Component {
 		const { userInfo } = this.props;
 		const { isShowTip, isBack, isForward } = this.state;
 		const { handleMinimize, handleMaximize, handleClose } = this;
-		// const { historyState } = this.props;
 		return (
 			<div className={styles['top-nav']}>
 				<div className={styles['top-nav-left']}>
@@ -194,9 +193,6 @@ function mapStateToProps(state) {
 	return {
 		windowState: state.common.windowState,
 		userInfo: state.common.userInfo
-		// profile
-
-		// historyState: state.common.historyState
 	};
 }
 

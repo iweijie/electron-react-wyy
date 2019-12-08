@@ -22,7 +22,7 @@ const PlaylistTitle = (props) => {
 	);
 };
 
-PlaylistTitle.PropTypes = {
+PlaylistTitle.propTypes = {
 	title: PropTypes.string.isRequired,
 	link: PropTypes.string,
 	child: PropTypes.element

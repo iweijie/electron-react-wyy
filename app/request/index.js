@@ -20,7 +20,9 @@ const apis = {
 	},
 	// 获取歌曲url
 	requestGetSong: {
-		url: host + '/music/url'
+		url: host + '/song/url',
+		field: 'data.0',
+		defaultValue: {}
 	},
 	// 获取歌词url
 	requestGetLyric: {
@@ -55,7 +57,9 @@ const apis = {
 	},
 	// 获取每日推荐歌曲
 	requestRecommendSongs: {
-		url: host + '/recommend/songs'
+		url: host + '/recommend/songs',
+		field: 'recommend',
+		defaultValue: []
 	},
 	// 获取每日推荐mv
 	requestRecommendMv: {

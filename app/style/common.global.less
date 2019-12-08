@@ -1,5 +1,5 @@
 @import "common.variate.less";
-@import url("http://at.alicdn.com/t/font_1546671_ra15iokev5h.css");
+@import url("http://at.alicdn.com/t/font_1546671_013k9mcuq1ykm.css");
 
 * {
   margin: 0;
@@ -12,7 +12,7 @@ body {
   height: 100vh;
   font-size: 12px;
   background-color: #fafafa;
-  font-family: Arial, Helvetica, sans-serif, Helvetica Neue, serif;
+  font-family: "Microsoft Yahe", Arial, Helvetica, sans-serif, "Helvetica Neue", serif;
   overflow-y: hidden;
   user-select: none;
 }
@@ -121,3 +121,62 @@ a:hover {
 }
 
 .font-size-loop(20);
+
+
+
+@toastPrefixCls: am-toast;
+
+.@{toastPrefixCls} {
+  position: fixed;
+  width: 100%;
+  z-index: 1999;
+  font-size: 14px;
+  text-align: center;
+
+  >span {
+    max-width: 50%;
+  }
+
+  &&-mask {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    left: 0;
+    top: 0;
+    transform: translateZ(1px);
+  }
+
+  &&-nomask {
+    position: fixed;
+    max-width: 50%;
+    width: auto;
+    left: 50%;
+    top: 50%;
+    transform: translateZ(1px);
+
+    .@{toastPrefixCls}-notice {
+      transform: translateX(-50%) translateY(-50%);
+    }
+  }
+
+  &-notice-content {
+    .@{toastPrefixCls}-text {
+      min-width: 60px;
+      border-radius: 3px;
+      color: #fff;
+      background-color: rgba(58, 58, 58, 0.9);
+      line-height: 1.5;
+      padding: 9px 15px;
+
+      &.@{toastPrefixCls}-text-icon {
+        border-radius: 5px;
+        padding: 15px;
+
+        .@{toastPrefixCls}-text-info {
+          margin-top: 6px;
+        }
+      }
+    }
+  }
+}

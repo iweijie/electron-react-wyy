@@ -1,0 +1,213 @@
+@charset "UTF-8";
+
+// @import '../../../../static/sass/base.scss';
+
+// Notice
+.zby-notice {
+  position: absolute;
+  box-sizing: border-box;
+  left: 50%;
+  top: 30%;
+  margin: 0;
+  width: 100%;
+  padding: 20px 30px;
+  background: rgba(0, 0, 0, .7);
+  border-radius: 10px;
+  text-align: center;
+  font-size: 28px;
+  line-height: 42px;
+  color: #fff;
+  z-index: 1110;
+
+  transition: all .3s;
+  transform: translate3D(-50%, -50%, 0) scale(1, 1);
+
+  &.leave {
+    transform: translate3D(-50%, -100%, 0);
+    opacity: 0;
+  }
+
+  // 正常提示
+  &.info {
+    animation: Flop .5s linear;
+  }
+
+  // 成功提示
+  &.success {
+    animation: BombIn .3s;
+  }
+
+  // 警告提示⚠️
+  &.warning {
+    animation: slideInFromBottom .3s;
+  }
+
+  // 错误提示
+  &.error {
+    animation: shake .5s;
+  }
+
+  .zby-notice-icon {
+    padding: 20px;
+    font-size: 80px;
+    text-align: center;
+    color: #fff;
+  }
+
+  .zby-notice-content {
+    font-size: 28px;
+    text-align: center;
+    color: #fff;
+  }
+}
+
+// 公共动画库
+// 爆炸进入
+@keyframes BombIn {
+  0% {
+    transform: translate(-50%, -50%, 0) scale(0, 0);
+    -webkit-transform: translate(-50%, -50%, 0) scale(0, 0);
+  }
+
+  50% {
+    transform: translate(-50%, -50%, 0) scale(1.2, 1.2);
+    -webkit-transform: translate(-50%, -50%) scale(1.2, 1.2);
+  }
+
+  100% {
+    transform: translate(-50%, -50%) scale(1, 1);
+    -webkit-transform: translate(-50%, -50%) scale(1, 1);
+  }
+}
+
+// 翻转
+@keyframes Flop {
+  0% {
+    transform: translate(-50%, -50%) rotateY(90deg);
+    -webkit-transform: translate(-50%, -50%) rotateY(90deg);
+  }
+
+  33% {
+    transform: translate(-50%, -50%) rotateY(0deg);
+    -webkit-transform: translate(-50%, -50%) rotateY(0deg);
+  }
+
+  67% {
+    transform: translate(-50%, -50%) rotateY(-30deg);
+    -webkit-transform: translate(-50%, -50%) rotateY(-30deg);
+  }
+
+  100% {
+    transform: translate(-50%, -50%) rotateY(0deg);
+    -webkit-transform: translate(-50%, -50%) rotateY(0deg);
+  }
+}
+
+// 从底部滑入
+@keyframes slideInFromBottom {
+  0% {
+    transform: translate(-50%, 0%);
+    -webkit-transform: translate(-50%, 0%);
+    opacity: 0;
+  }
+
+  100% {
+    transform: translate(-50%, -50%);
+    -webkit-transform: translate(-50%, -50%);
+    opacity: 1;
+  }
+}
+
+
+// 摇晃
+@keyframes shake {
+
+  from,
+  to {
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+  }
+
+  15%,
+  45%,
+  75% {
+    -webkit-transform: translate(-60%, -50%);
+    transform: translate(-60%, -50%);
+  }
+
+  30%,
+  60%,
+  90% {
+    -webkit-transform: translate(-40%, -50%);
+    transform: translate(-40%, -50%);
+  }
+}
+
+// 0-160
+@keyframes scaleIn {
+  0% {
+    width: 0;
+    height: 0;
+  }
+
+  100% {
+    width: 160px;
+    height: 160px;
+  }
+}
+
+// 160-0
+@keyframes scaleOut {
+  0% {
+    width: 160px;
+    height: 160px;
+    opacity: 1;
+  }
+
+  100% {
+    width: 0;
+    height: 0;
+    opacity: 0;
+  }
+}
+
+//
+@keyframes turnUp {
+  0% {
+    transform: translate3D(0, -10px, 0) rotateX(90deg);
+  }
+
+  100% {
+    transform: translate3D(0, -10px, 0) rotateX(0);
+  }
+}
+
+@keyframes turnLeft {
+  0% {
+    transform: translate3D(-10px, 0, 0) rotateY(90deg);
+  }
+
+  100% {
+    transform: translate3D(-10px, 0, 0) rotateY(0);
+  }
+}
+
+@keyframes turnRight {
+  0% {
+    transform: translate3D(10px, 0, 0) rotateY(90deg);
+  }
+
+  100% {
+    transform: translate3D(10px, 0, 0) rotateY(0);
+  }
+}
+
+@keyframes turnBottom {
+  0% {
+    transform: translate3D(0, 10px, 0) rotateX(90deg);
+  }
+
+  100% {
+    transform: translate3D(0, 10px, 0) rotateX(0);
+  }
+}
