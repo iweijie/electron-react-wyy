@@ -14,17 +14,23 @@ export default {
 		currentPlaySongId: ''
 	},
 	reducers: {
-		changePlayMode(state, payload) {
+		changePlayMode({ state }, payload) {
 			return {
 				...state,
 				playMode: payload || 1
 			};
+		},
+		changePlayMore({ state }, payload = {}) {
+			return {
+				...state,
+				...payload
+			};
 		}
 	},
 	effects: {
-		async getSongInfo({ call, put, state, rootState }, name) {
-			const list = await requestMap.requestGetSong();
-			put('recommendation/bannerList', list);
-		}
+		// async getSongInfo({ call, put, state, rootState }, name) {
+		// 	const list = await requestMap.requestGetSong();
+		// 	put('recommendation/bannerList', list);
+		// }
 	}
 };

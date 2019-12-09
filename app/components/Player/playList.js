@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import { getFormatTime } from '../../utils';
 import { isEmpty, map, join, get, noop } from 'lodash';
 import styles from './index.less';
 
@@ -62,7 +63,7 @@ class PlayerList extends Component {
 								<div className={styles.artists}>
 									{!isEmpty(artists) && join(map(artists, (item) => item.name), '/')}
 								</div>
-								<div className={styles.duration}>{this.getDurationTime(duration)}</div>
+								<div className={styles.duration}>{getFormatTime(duration / 1000)}</div>
 							</li>
 						);
 					})}

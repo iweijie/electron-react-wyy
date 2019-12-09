@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import styles from './index.less';
+import { getFormatTime } from '../../utils';
 import { isEmpty, map, join, get } from 'lodash';
 
 export default class Songslist extends Component {
@@ -41,7 +42,7 @@ export default class Songslist extends Component {
 										<span className={styles.alias}>（{join(album.alias, '，')}）</span>
 									)}
 								</div>
-								<div className={styles.duration}>{this.getDurationTime(duration)}</div>
+								<div className={styles.duration}>{getFormatTime(duration / 1000)}</div>
 							</li>
 						);
 					})}
@@ -58,18 +59,6 @@ export default class Songslist extends Component {
 		}
 		return num;
 	};
-	getDurationTime(num) {
-		num = Math.floor(num / 1000);
-		let minute = Math.floor(num / 60);
-		let second = num % 60;
-		if (second < 10) {
-			second = '0' + second;
-		}
-		if (minute < 10) {
-			minute = '0' + minute;
-		}
-		return `${minute}:${second}`;
-	}
 
 	handleClick = (item, index) => {
 		this.setState({

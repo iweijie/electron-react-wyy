@@ -1,4 +1,5 @@
-import { setCookie } from "../bridge/cookies";
+import { setCookie } from '../bridge/cookies';
+import { isNaN } from 'lodash';
 
 /**
  * 存储localStorage
@@ -69,4 +70,38 @@ export const getStyle = (element, attr, NumberMode = 'int') => {
 	//在获取 opactiy 时需要获取小数 parseFloat
 	return NumberMode == 'float' ? parseFloat(target) : parseInt(target);
 };
+/**
+ * 
+ * @param {Function} callback 回调 
+ * @param {Number} duration 延时
+ * @return {Function} 停止方法
+ */
+export const loopCallback = (callback, duration) => {
+	let time = Date.now();
+	let flag = true;
+	function call() {
+		if (flag && Date.now() - time >= duration) callback && callback();
+		window.requestAnimationFrame(call);
+	}
+	window.requestAnimationFrame(call);
+	return () => (flag = false);
+};
 
+/**
+ * @param {Number} 时间 （秒）
+ * @return {String} 00:00
+ */
+export function getFormatTime(num) {
+	if (isNaN(num)) return '00:00';
+	if (!num) return '00:00';
+	num = Math.floor(num);
+	let minute = Math.floor(num / 60);
+	let second = num % 60;
+	if (second < 10) {
+		second = '0' + second;
+	}
+	if (minute < 10) {
+		minute = '0' + minute;
+	}
+	return `${minute}:${second}`;
+}
