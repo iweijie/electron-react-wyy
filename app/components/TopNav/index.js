@@ -143,6 +143,11 @@ class TopNav extends Component {
 			<div className={styles['top-nav']}>
 				<div className={styles['top-nav-left']}>
 					<h1>网易云音乐</h1>
+					<div className={styles['logo-wrap']}>
+						<div className={styles['logo']}>
+							<i className="iconfont iconwangyiyunyinle1" />
+						</div>
+					</div>
 				</div>
 				<div className={styles['top-nav-right']}>
 					<div className={styles['top-nav-search']}>

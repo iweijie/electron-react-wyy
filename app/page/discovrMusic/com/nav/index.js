@@ -5,7 +5,7 @@ import styles from './index.less';
 
 export default (props) => {
 	const { match } = props;
-  const isActiveItem = navList.find((item) => match.url === item.path);
+	const isActiveItem = navList.find((item) => match.url === item.path);
 	return isActiveItem ? (
 		<ul className={styles['ul']}>
 			{navList.map((item) => {

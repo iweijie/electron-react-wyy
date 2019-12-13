@@ -23,7 +23,7 @@ class PlayerList extends Component {
 
 	render() {
 		const { tabIndex } = this.state;
-		const { playerList = [], handleClose = noop, currentIndex, handleDoubleClick = noop } = this.props;
+		const { playerList = [], handleClose = noop, currentPlaySongId, handleDoubleClick = noop } = this.props;
 		const len = playerList.length;
 		return (
 			<div className={styles['player-list-wrap']}>
@@ -47,9 +47,9 @@ class PlayerList extends Component {
 						const { name, artists, alias, album = {}, id, mvid, duration } = item;
 						return (
 							<li
-								className={currentIndex === index ? styles['active'] : ''}
+								className={currentPlaySongId === id ? styles['active'] : ''}
 								key={id}
-								onDoubleClick={() => handleDoubleClick(item, index)}
+								onDoubleClick={() => handleDoubleClick(item)}
 							>
 								<div className={styles.name}>
 									<div className={styles.title}>

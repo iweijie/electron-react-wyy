@@ -19,9 +19,9 @@ export default {
 			put(
 				'recommendation/personalizedList',
 				list
-					.sort((a, b) => {
-						return b.playCount - a.playCount;
-					})
+					// .sort((a, b) => {
+					// 	return b.playCount - a.playCount;
+					// })
 					.slice(0, 9)
 			);
 		},
@@ -32,3 +32,4 @@ export default {
 		}
 	}
 };
+ 

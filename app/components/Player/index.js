@@ -10,6 +10,9 @@ import PlayList from './playList';
 import styles from './index.less';
 import { reducers } from '../../store';
 
+const AUDIO_STATUS_IS_PLAY = 1;
+const AUDIO_STATUS_IS_PAUSED = 0;
+
 class Player extends Component {
 	constructor(props) {
 		super(props);
@@ -20,9 +23,11 @@ class Player extends Component {
 			// 当前歌单展示状态
 			playListStatus: false,
 			//音乐播放状态：  0： 暂停 ； 1：播放
-			audioPlayStatus: 0,
+			audioPlayStatus: AUDIO_STATUS_IS_PAUSED,
 			// 当前歌曲已播放时长
-			currentTime: 0
+			currentTime: 0,
+			// 随机播放列表
+			randomPlayList: []
 		};
 	}
 
@@ -32,10 +37,21 @@ class Player extends Component {
 		// child: PropTypes.element
 	};
 
+	componentDidMount() {
+		// Toast.fail('音乐获取失败，请重新尝试',2);
+		// Toast.info('普通的Toast我普通的摇！！', 4000);
+	}
+
+	componentDidUpdate(preProps) {
+		// if (preProps.playMode !== this.props.playMode) {
+		// 	this.handleChangePlayMode();
+		// }
+	}
+
 	render() {
 		const { audio } = this;
 		const { playListStatus, audioPlayStatus, currentTime } = this.state;
-		const { currentIndex, playerList } = this.props;
+		const { playerList, playMode, currentPlaySongId } = this.props;
 		return (
 			<div className={styles.player}>
 				<div className={styles.song} />
@@ -75,8 +91,18 @@ class Player extends Component {
 							<span className={styles['progress-mask']} />
 						</div>
 					</div>
-					<div className={styles['play-mode']} title="模式">
-						<i className="iconfont iconxunhuan1" />
+					<div
+						onClick={this.handleChangeMode}
+						className={styles['play-mode']}
+						title={playMode === 1 ? '循环播放' : playMode === 2 ? '随机播放' : '单曲循环'}
+					>
+						{playMode === 1 && <i className="iconfont iconxunhuan1" />}
+						{playMode === 2 && <i className="iconfont iconsuiji1" />}
+						{playMode === 3 && (
+							<i className="iconfont iconxunhuan">
+								<span>1</span>
+							</i>
+						)}
 					</div>
 					<div className={styles['songs-list-btn']} onClick={this.handleChangePlayListStatus} title="歌单">
 						<i className="iconfont iconRectangleCopy" />
@@ -85,9 +111,9 @@ class Player extends Component {
 				<div style={{ display: playListStatus ? 'block' : 'none' }}>
 					<PlayList
 						playerList={playerList}
-						currentIndex={currentIndex}
+						currentPlaySongId={currentPlaySongId}
 						handleClose={this.handleChangePlayListStatus}
-						handleDoubleClick={this.handlePlayListDoubleClick}
+						handleDoubleClick={this.handlePlay}
 					/>
 				</div>
 			</div>
@@ -119,7 +145,7 @@ class Player extends Component {
 	};
 
 	handleCanplay = (event) => {
-		this.handlePlay();
+		this.handlePlayAudio();
 	};
 
 	handleEnded = (event) => {
@@ -129,85 +155,96 @@ class Player extends Component {
 			case 1:
 				return this.loopMode();
 			case 2:
-				return this.loopMode();
+				return this.randomMode();
 			case 3:
-				return this.loopMode();
+				return;
 			default:
 				return this.loopMode();
-		}
-		if (playMode == 1) {
-			// audio.addEventListener('ended', this.ended);
-		} else if (playMode == 1) {
-			// audio.addEventListener('ended', this.randomended);
-		} else if (playMode == 2) {
-			audio.loop = true;
 		}
 	};
 
 	loopMode = () => {
-		const { currentIndex, playerList, changePlayMore } = this.props;
-		const nextIndex = (currentIndex + 1) % playerList.length;
-		this.handlePlayListDoubleClick(playerList[nextIndex], nextIndex);
+		const { playerList, changePlayMore, currentPlaySongId } = this.props;
+		if (!playerList.length) return;
+		const currentIndex = playerList.findIndex((player) => currentPlaySongId === player.id);
+		this.handlePlay(playerList[(currentIndex + 1) % playerList.length]);
+	};
+
+	randomMode = () => {
+		let { randomPlayList } = this.state;
+		const { currentPlaySongId, playerList } = this.props;
+		if (!playerList.length) return;
+		// 随机列表存在曲目 ， 直接 获取
+		if (!randomPlayList.length) {
+			randomPlayList = this.getRandomList();
+		}
+		let item = randomPlayList.pop();
+		this.setState({
+			randomPlayList
+		});
+		this.handlePlay(item);
 	};
 
 	handleError(e) {
-		Toast('音乐获取失败，请重新尝试');
-		// this.changePlayInfo({
-		// 	type: [ 3 ],
-		// 	state: true
-		// });
-		// this.changeAudio({
-		// 	type: [ 2, 3 ],
-		// 	flag: false,
-		// 	sign: true
-		// });
+		Toast.fail('音乐获取失败，请重新尝试');
 	}
-
+	// 切换 播放 与 暂停
 	handleSwitchAudioPlayStatus = () => {
+		const { playerList, currentPlaySongId } = this.props;
+		if (!playerList.length) return;
 		let { audioPlayStatus } = this.state;
-		if (audioPlayStatus === 1) {
-			this.handleStop();
+		if (audioPlayStatus === AUDIO_STATUS_IS_PLAY) {
+			this.handleStopAudio();
 		} else {
-			this.handlePlay();
+			if (!currentPlaySongId) {
+				this.handlePlay(playerList[0]);
+			} else {
+				this.handlePlayAudio();
+			}
 		}
 	};
 
-	handleSwitchSong = (src, id, index) => {
+	handleSwitchSong = (src, id) => {
 		const { changePlayMore } = this.props;
 		const audio = this.audio;
-		this.handleStop();
+		this.handleStopAudio();
 		changePlayMore({
-			currentIndex: index,
 			// 当前列表播放歌曲id
 			currentPlaySongId: id
 		});
 		audio.src = src;
 	};
 
-	handlePlay = () => {
+	handlePlayAudio = () => {
 		const { currentPlaySongId } = this.props;
 		if (!currentPlaySongId) return;
 		const audio = this.audio;
 		if (audio.paused) {
 			audio.play();
 		}
-		if (this.loopStopCallBack) {
-			this.loopStopCallBack();
-		}
+		this.handleStopLoopCallBack();
 		this.loopStopCallBack = loopCallback(() => {
 			this.setState({
 				currentTime: this.getAudioCurrentTime()
 			});
 		}, 100);
-		this.setState({ audioPlayStatus: 1, currentTime: audio.currentTime });
+		this.setState({ audioPlayStatus: AUDIO_STATUS_IS_PLAY, currentTime: audio.currentTime });
 	};
 
-	handleStop = () => {
+	handleStopAudio = () => {
 		const audio = this.audio;
 		if (!audio.paused) {
 			audio.pause();
 		}
-		this.setState({ audioPlayStatus: 0 });
+		this.handleStopLoopCallBack();
+		this.setState({ audioPlayStatus: AUDIO_STATUS_IS_PAUSED });
+	};
+
+	handleStopLoopCallBack = () => {
+		if (this.loopStopCallBack) {
+			this.loopStopCallBack();
+			this.loopStopCallBack = null;
+		}
 	};
 
 	handleChangePlayListStatus = () => {
@@ -221,12 +258,24 @@ class Player extends Component {
 		return requestMap.requestGetSong({ id });
 	};
 
-	handlePlayListDoubleClick = async (item, index) => {
+	handlePlay = async (item) => {
+		const { playerList, currentPlaySongId } = this.props;
 		const id = get(item, 'id');
-		if (!id) return;
+		if (!id || currentPlaySongId === id) return;
 		const data = await this.getSongInfo(id);
 		if (!get(data, 'id') || !get(data, 'url')) return;
-		this.handleSwitchSong(get(data, 'url'), get(data, 'id'), index);
+		this.handleSwitchSong(get(data, 'url'), get(data, 'id'));
+	};
+
+	getRandomList = () => {
+		const { randomPlayList } = this.state;
+		const { currentPlaySongId, playerList } = this.props;
+		let list = [ ...playerList ];
+		if (!list.length) return list;
+		if (currentPlaySongId) {
+			list = list.filter((item) => item.id !== currentPlaySongId);
+		}
+		return this.disorder(list, 3);
 	};
 
 	disorder = (arr, l = 2) => {
@@ -238,13 +287,39 @@ class Player extends Component {
 		}
 		return arr;
 	};
+	// 切换播放模式后的 处理程序
+	handleChangePlayModeCall = (mode) => {
+		const audio = this.audio;
+		const { playerList, currentPlaySongId } = this.props;
+		switch (mode) {
+			case 1:
+				audio.loop = false;
+				break;
+			case 2:
+				break;
+			case 3:
+				audio.loop = true;
+				this.setState({
+					randomPlayList: []
+				});
+		}
+	};
+	// 切换播放模式
+	handleChangeMode = () => {
+		const { changePlayMore, playMode } = this.props;
+		const mode = playMode + 1 > 3 ? 1 : playMode + 1;
+		changePlayMore({
+			playMode: mode
+		});
+		this.handleChangePlayModeCall(mode);
+	};
 }
 
 function mapStateToProps(state) {
 	return {
 		playerList: state.player.playerList,
 		playMode: state.player.playMode,
-		currentIndex: state.player.currentIndex,
+		// currentIndex: state.player.currentIndex,
 		currentPlaySongId: state.player.currentPlaySongId,
 		// 测试数据
 		playerList: state.recommendation.recommendSongsList

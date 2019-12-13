@@ -157,6 +157,7 @@
   border-top: 1px solid @border-color;
   border-left: 1px solid @border-color;
   box-shadow: -1px -1px 8px rgba(0, 0, 0, .1);
+  z-index: 100;
 
   .player-list-head {
     position: relative;
@@ -165,7 +166,6 @@
     justify-content: center;
     align-items: center;
     border-bottom: 1px solid @border-color;
-
   }
 
   .tabs {
@@ -321,5 +321,17 @@
   .duration {
     .grey;
     width: 50px;
+  }
+}
+
+:global(.iconxunhuan) {
+  position: relative;
+
+  >span {
+    position: absolute;
+    top: 3px;
+    left: 7px;
+    transform: scale(.6);
+    font-size: 13px;
   }
 }
