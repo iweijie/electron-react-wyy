@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import { ipcRenderer } from 'electron';
 import { get, noop } from 'lodash';
 import styles from './index.less';
@@ -143,11 +144,13 @@ class TopNav extends Component {
 			<div className={styles['top-nav']}>
 				<div className={styles['top-nav-left']}>
 					<h1>网易云音乐</h1>
-					<div className={styles['logo-wrap']}>
-						<div className={styles['logo']}>
-							<i className="iconfont iconwangyiyunyinle1" />
+					<Link to="/discovrMusic/recommendation">
+						<div className={styles['logo-wrap']}>
+							<div className={styles['logo']}>
+								<i className="iconfont iconwangyiyunyinle1" />
+							</div>
 						</div>
-					</div>
+					</Link>
 				</div>
 				<div className={styles['top-nav-right']}>
 					<div className={styles['top-nav-search']}>

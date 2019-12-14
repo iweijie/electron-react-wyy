@@ -8,15 +8,16 @@ import NotFound from './page/404/index';
 // console.log("router",router)
 
 const routers = [
-  {
-    path: '/discovrMusic/:id',
-    exact: true,
-    component: DiscovrMusicPage
-  },
-  {
-    path: '*',
-    component: NotFound
-  }
+	{
+		path: '/discovrMusic/:id',
+		exact: true,
+		component: DiscovrMusicPage
+	},
+	{
+		path: '/discovrMusic/recommendation',
+		exact: true,
+		component: DiscovrMusicPage
+	}
 ];
 
 export default routers;

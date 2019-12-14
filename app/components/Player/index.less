@@ -13,6 +13,7 @@
   align-items: center;
   justify-content: space-between;
   padding-right: 20px;
+  height: 100%;
 
   .btns {
     width: 200px;
@@ -21,30 +22,38 @@
     align-items: center;
     overflow: hidden;
 
-    :global(.iconfont) {
-      font-size: 40px;
+    // :global(.iconfont) {
+    //   font-size: 16px;
+    // }
+    :global(.iconbofang1) {
+      position: relative;
+      left: 2px;
     }
 
     button {
-      background-color: #ffffff;
+      background-color: @red;
       border: none;
       outline: none;
-      color: @red;
-      opacity: .9;
+      color: #fff;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      overflow: hidden;
       cursor: pointer;
+      font-size: 16px;
 
       &:nth-of-type(2) {
-        margin: 0 5px;
+        margin: 0 10px;
 
         :global(.iconfont) {
-          font-size: 45px;
+          font-size: 20px;
         }
       }
 
-      &:hover {
-        opacity: 1;
-        transform: scale(1.05);
-      }
+      // &:hover {
+      //   opacity: 1;
+      //   transform: scale(1.05);
+      // }
     }
 
   }
@@ -136,9 +145,19 @@
   .play-mode {
     padding: 0 8px;
     cursor: pointer;
+    position: relative;
 
     :global(.iconfont) {
       font-size: 20px;
+    }
+
+    >span {
+      cursor: pointer;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
     }
   }
 
@@ -333,5 +352,72 @@
     left: 7px;
     transform: scale(.6);
     font-size: 13px;
+  }
+}
+
+.small-song {
+  border-top: 1px solid @border-color;
+  position: absolute;
+  top: -61px;
+  left: 0;
+  width: 199px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+  padding-left: 10px;
+
+  .small-song-img {
+    position: relative;
+    margin-right: 10px;
+    border: 1px solid @border-color;
+  }
+
+  .mask {
+    display: none;
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, .5);
+    color: #fff;
+    align-items: center;
+    justify-content: center;
+
+    :global(.iconfont) {
+
+      font-size: 26px;
+    }
+  }
+
+  img {
+    display: block;
+    width: 40px;
+    height: 40px;
+  }
+
+  &:hover {
+    .mask {
+      display: flex;
+    }
+  }
+}
+
+.small-song-name {
+  width: 140px;
+
+  p {
+    width: 100%;
+    line-height: 20px;
+    font-size: 12px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  .artists {
+    color: #999;
   }
 }

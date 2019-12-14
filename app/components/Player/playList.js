@@ -23,22 +23,22 @@ class PlayerList extends Component {
 
 	render() {
 		const { tabIndex } = this.state;
-		const { playerList = [], handleClose = noop, currentPlaySongId, handleDoubleClick = noop } = this.props;
+		const { playerList = [], currentPlaySongId, handleDoubleClick = noop, handleClearPlayList } = this.props;
 		const len = playerList.length;
 		return (
-			<div className={styles['player-list-wrap']}>
+			<div className={`${styles['player-list-wrap']} _player-list-wrap`}>
 				<div className={styles['player-list-head']}>
 					<div className={styles.tabs}>
 						<button className={tabIndex === 1 ? styles['active'] : ''}>播放列表</button>
 						<button className={tabIndex === 2 ? styles['active'] : ''}>历史记录</button>
 					</div>
-					<div className={styles['play-list-close-btn']} onClick={handleClose}>
+					<div className={styles['play-list-close-btn']} onClick={this.handleClosePlayList}>
 						<i className="iconfont iconclose" />
 					</div>
 				</div>
 				<div className={styles['player-list-control']}>
 					<div>总{playerList.length}首</div>
-					<div className={styles.icon}>
+					<div onClick={handleClearPlayList} className={styles.icon}>
 						<i className="iconfont iconqingkong" /> 清空
 					</div>
 				</div>
@@ -72,33 +72,10 @@ class PlayerList extends Component {
 		);
 	}
 
-	getDurationTime(num) {
-		num = Math.floor(num / 1000);
-		let minute = Math.floor(num / 60);
-		let second = num % 60;
-		if (second < 10) {
-			second = '0' + second;
-		}
-		if (minute < 10) {
-			minute = '0' + minute;
-		}
-		return `${minute}:${second}`;
-	}
+	handleClosePlayList = (event) => {
+		const { handleClose = noop } = this.props;
+		handleClose(event, false);
+	};
 }
-
-// export default PlayerList;
-
-// function mapStateToProps(state, won) {
-// 	return {
-// 		...won,
-// 		recommendSongsList: state.recommendation.recommendSongsList
-// 	};
-// }
-
-// function mapDispatchToProps() {
-// 	return {
-// 		// getRecommendSongs: reducers.recommendation.getRecommendSongs
-// 	};
-// }
 
 export default PlayerList;

@@ -41,7 +41,7 @@ class RecommendSongs extends Component {
 						<div className={styles.control}>
 							<div className={styles['play-all']} onClick={() => this.handlePlayAll('replace')}>
 								<div className={styles.repalace}>
-									<i className="iconfont iconicon-test1" /> <span>播放全部</span>
+									<i className="iconfont iconbofang2" /> <span>播放全部</span>
 								</div>
 								<div className={styles.push} onClick={() => this.handlePlayAll('push')}>
 									<i className="iconfont iconincrease" />

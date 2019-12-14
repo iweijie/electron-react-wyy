@@ -8,8 +8,8 @@ export default {
 		playMode: 1,
 		// 1:播放列表；2：历史记录
 		tabIndex: 1,
-		// 当前列表播放歌曲 在播放列表的索引
-		currentIndex: 0,
+		// 当前列表播放歌曲
+		currentPlaySong: null,
 		// 当前列表播放歌曲id
 		currentPlaySongId: ''
 	},

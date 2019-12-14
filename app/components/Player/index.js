@@ -3,7 +3,8 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import Toast from 'components/Toast';
-import { get, isNaN } from 'lodash';
+import observer from '../../utils/observer';
+import { get, isNaN, isEmpty, join, map } from 'lodash';
 import { loopCallback, getFormatTime } from '../../utils';
 import requestMap from '../../request/index';
 import PlayList from './playList';
@@ -12,11 +13,16 @@ import { reducers } from '../../store';
 
 const AUDIO_STATUS_IS_PLAY = 1;
 const AUDIO_STATUS_IS_PAUSED = 0;
+const DEFAULT_TIME = '00:00';
+
+function createAudio() {
+	return document.createElement('audio');
+}
 
 class Player extends Component {
 	constructor(props) {
 		super(props);
-		this.audio = document.createElement('audio');
+		this.audio = createAudio();
 		this.initAudio();
 		this.loopStopCallBack = null;
 		this.state = {
@@ -40,39 +46,69 @@ class Player extends Component {
 	componentDidMount() {
 		// Toast.fail('音乐获取失败，请重新尝试',2);
 		// Toast.info('普通的Toast我普通的摇！！', 4000);
+		observer.on('play-song', this.handlePlay);
 	}
 
-	componentDidUpdate(preProps) {
-		// if (preProps.playMode !== this.props.playMode) {
-		// 	this.handleChangePlayMode();
-		// }
-	}
+	componentDidUpdate(preProps) {}
 
+	handleGlobalClosePlayList = (event) => {
+		const { playListStatus } = this.state;
+		if (!playListStatus) return window.removeEventListener('click', this.handleGlobalClosePlayList);
+		let target = event.target;
+		while (target) {
+			if (target && target.classList && target.classList.contains('_player_wrap')) return;
+			target = target.parentNode;
+		}
+		window.removeEventListener('click', this.handleGlobalClosePlayList);
+		this.setState({
+			playListStatus: false
+		});
+	};
 	render() {
 		const { audio } = this;
 		const { playListStatus, audioPlayStatus, currentTime } = this.state;
-		const { playerList, playMode, currentPlaySongId } = this.props;
+		const { playerList, playMode, currentPlaySongId, changePlayMore } = this.props;
+		const currentPlaySong = playerList.find((player) => player.id === currentPlaySongId);
 		return (
-			<div className={styles.player}>
-				<div className={styles.song} />
+			<div className={`${styles.player} _player_wrap`}>
+				{currentPlaySongId ? (
+					<div className={styles.song}>
+						<div className={styles['small-song']}>
+							<div className={styles['small-song-img']}>
+								<div className={styles.mask}>
+									<i className="iconzhankaiquanpingkuozhan iconfont" />
+								</div>
+								<img src={this.getSmallSongImg(currentPlaySong)} alt="" />
+							</div>
+							<div className={styles['small-song-name']}>
+								<p className={styles.name}>{get(currentPlaySong, 'name')}</p>
+								<p className={styles.artists}>
+									{join(map(get(currentPlaySong, 'album.artists'), (item) => item.name), '/')}
+								</p>
+							</div>
+						</div>
+					</div>
+				) : null}
 				<div className={styles.control}>
 					<div className={styles.btns}>
 						<button>
-							<i className="iconfont iconshangyishou" />
+							<i className="iconfont iconSanMiAppglyphico" />
 						</button>
 						<button onClick={this.handleSwitchAudioPlayStatus}>
 							{audioPlayStatus ? (
-								<i className="iconfont iconzanting" />
+								<i className="iconfont iconbofangzanting" />
 							) : (
-								<i className="iconfont iconbofang" />
+								<i className="iconfont iconbofang1" />
 							)}
 						</button>
 						<button>
-							<i className="iconfont iconxiayishou" />
+							<i className="iconfont iconSanMiAppglyphico1" />
 						</button>
 					</div>
 					<div className={styles['time-progress']}>
-						<div className={styles['time-running']}>{getFormatTime(currentTime)}</div>
+						<div className={styles['time-running']}>
+							{isEmpty(playerList) ? DEFAULT_TIME : getFormatTime(currentTime)}
+						</div>
 						<div className={styles.progress}>
 							<span
 								className={styles['progress-mask']}
@@ -81,7 +117,9 @@ class Player extends Component {
 								<i className={styles.drag} />
 							</span>
 						</div>
-						<div className={styles['time-end']}>{getFormatTime(audio.duration)}</div>
+						<div className={styles['time-end']}>
+							{isEmpty(playerList) ? DEFAULT_TIME : getFormatTime(audio.duration)}
+						</div>
 					</div>
 					<div className={styles['sound-progress']}>
 						<div className={styles['sound-control']}>
@@ -103,6 +141,7 @@ class Player extends Component {
 								<span>1</span>
 							</i>
 						)}
+						<span />
 					</div>
 					<div className={styles['songs-list-btn']} onClick={this.handleChangePlayListStatus} title="歌单">
 						<i className="iconfont iconRectangleCopy" />
@@ -110,6 +149,7 @@ class Player extends Component {
 				</div>
 				<div style={{ display: playListStatus ? 'block' : 'none' }}>
 					<PlayList
+						handleClearPlayList={this.handleClearPlayList}
 						playerList={playerList}
 						currentPlaySongId={currentPlaySongId}
 						handleClose={this.handleChangePlayListStatus}
@@ -162,7 +202,7 @@ class Player extends Component {
 				return this.loopMode();
 		}
 	};
-
+	// 循环播放模式
 	loopMode = () => {
 		const { playerList, changePlayMore, currentPlaySongId } = this.props;
 		if (!playerList.length) return;
@@ -170,6 +210,7 @@ class Player extends Component {
 		this.handlePlay(playerList[(currentIndex + 1) % playerList.length]);
 	};
 
+	// 随机播放模式
 	randomMode = () => {
 		let { randomPlayList } = this.state;
 		const { currentPlaySongId, playerList } = this.props;
@@ -247,19 +288,28 @@ class Player extends Component {
 		}
 	};
 
-	handleChangePlayListStatus = () => {
+	handleChangePlayListStatus = (event, status) => {
+		event;
 		const { playListStatus } = this.state;
+		status = status === undefined ? !playListStatus : status;
+
+		if (status) {
+			setTimeout(() => {
+				window.addEventListener('click', this.handleGlobalClosePlayList);
+			}, 100);
+		}
 		this.setState({
-			playListStatus: !playListStatus
+			playListStatus: status
 		});
 	};
+
 	// 获取歌曲信息，包含当前歌曲资源链接
 	getSongInfo = async (id) => {
 		return requestMap.requestGetSong({ id });
 	};
 
 	handlePlay = async (item) => {
-		const { playerList, currentPlaySongId } = this.props;
+		const { currentPlaySongId } = this.props;
 		const id = get(item, 'id');
 		if (!id || currentPlaySongId === id) return;
 		const data = await this.getSongInfo(id);
@@ -313,6 +363,26 @@ class Player extends Component {
 		});
 		this.handleChangePlayModeCall(mode);
 	};
+
+	// 清空播放列表
+	handleClearPlayList = () => {
+		const { changePlayMore } = this.props;
+		this.handleStopAudio();
+		this.setState({
+			currentTime: 0,
+			randomPlayList: []
+		});
+		changePlayMore({
+			playerList: [],
+			currentPlaySongId: ''
+		});
+	};
+
+	getSmallSongImg = (item) => {
+		const url = get(item, 'album.blurPicUrl', '');
+		if (url) return `${url}?param=140y140`;
+		return url;
+	};
 }
 
 function mapStateToProps(state) {
@@ -320,9 +390,9 @@ function mapStateToProps(state) {
 		playerList: state.player.playerList,
 		playMode: state.player.playMode,
 		// currentIndex: state.player.currentIndex,
-		currentPlaySongId: state.player.currentPlaySongId,
+		currentPlaySongId: state.player.currentPlaySongId
 		// 测试数据
-		playerList: state.recommendation.recommendSongsList
+		// playerList: state.recommendation.recommendSongsList
 	};
 }
 // getSongInfo

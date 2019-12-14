@@ -1,16 +1,19 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import styles from './index.less';
+import observer from '../../utils/observer';
 import { getFormatTime } from '../../utils';
+import { reducers } from '../../store';
 import { isEmpty, map, join, get } from 'lodash';
 
-export default class Songslist extends Component {
+class Songslist extends Component {
 	state = {
 		activeItemIdex: -1
 	};
 
 	render() {
 		const { activeItemIdex } = this.state;
-		const { songslist = [] } = this.props;
+		const { songslist = [], currentPlaySongId } = this.props;
 		const len = songslist.length;
 		return (
 			<div className={styles['songs-list']}>
@@ -22,8 +25,15 @@ export default class Songslist extends Component {
 								className={activeItemIdex === index ? styles['active'] : ''}
 								key={id}
 								onClick={() => this.handleClick(item, index)}
+								onDoubleClick={() => this.handleDoubleClick(item)}
 							>
-								<div className={styles.oreder}>{this.getOreder(index + 1, len)}</div>
+								<div className={styles.oreder}>
+									{currentPlaySongId === id ? (
+										<i className="iconfont iconshengyin" />
+									) : (
+										this.getOreder(index + 1, len)
+									)}
+								</div>
 								<div className={styles.name}>
 									<div className={styles.title}>
 										<span>{name}</span>
@@ -65,4 +75,28 @@ export default class Songslist extends Component {
 			activeItemIdex: index
 		});
 	};
+
+	handleDoubleClick = (item) => {
+		const { changePlayMore, songslist } = this.props;
+		changePlayMore({
+			playerList: [ ...songslist ],
+			tabIndex: 1
+		});
+		observer.emit('play-song', item);
+	};
 }
+
+function mapStateToProps(state, own = {}) {
+	return {
+		...own,
+		// currentIndex: state.player.currentIndex,
+		currentPlaySongId: state.player.currentPlaySongId
+	};
+}
+
+function mapDispatchToProps() {
+	return {
+		changePlayMore: reducers.player.changePlayMore
+	};
+}
+export default connect(mapStateToProps, mapDispatchToProps)(Songslist);
