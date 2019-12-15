@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import electron, { ipcRenderer, remote } from 'electron';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
@@ -44,8 +45,18 @@ class Player extends Component {
 	};
 
 	componentDidMount() {
+		console.log(electron.screen.getCursorScreenPoint());
+		console.log(electron.screen.getAllDisplays());
+		const browserWindow = remote.getCurrentWindow();
+
+		const ses = browserWindow.webContents.session;
+		console.log(ses.cookies.set)
+		console.log(ses.cookies.get({},function(...rst){
+			console.log(rst)
+		}),'11111')
 		// Toast.fail('音乐获取失败，请重新尝试',2);
 		// Toast.info('普通的Toast我普通的摇！！', 4000);
+		this.getWindowIsFoucs().then(console.log);
 		observer.on('play-song', this.handlePlay);
 	}
 
@@ -64,6 +75,18 @@ class Player extends Component {
 			playListStatus: false
 		});
 	};
+
+	getWindowIsFoucs = () => {
+		return new Promise((resolve, reject) => {
+			const id = `_${Date.now()}`;
+			ipcRenderer.once(id, function(evnet, bool) {
+				resolve(bool);
+			});
+			ipcRenderer.send('ipc-native-is-focused', id);
+			setTimeout(reject, 5000, 'timeout');
+		});
+	};
+
 	render() {
 		const { audio } = this;
 		const { playListStatus, audioPlayStatus, currentTime } = this.state;
@@ -383,6 +406,10 @@ class Player extends Component {
 		if (url) return `${url}?param=140y140`;
 		return url;
 	};
+
+	// handleChangeSound = ()=>{
+	// volume
+	// }
 }
 
 function mapStateToProps(state) {

@@ -79,7 +79,6 @@ class TopNav extends Component {
 
 	initForwardAndBack = () => {
 		const l = window.location;
-		console.log(l);
 		historyStack.push({
 			hash: '',
 			key: 'init_Key',

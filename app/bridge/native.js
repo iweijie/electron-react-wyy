@@ -13,6 +13,13 @@ export default (mainWindow) => {
 	ipcMain.on('ipc-native-is-maximize', (e) => {
 		e.reply('reply-is-maximize', mainWindow.isMaximized());
 	});
+	// 当前窗口是否为焦点
+	ipcMain.on('ipc-native-is-focused', (e, id = 'reply-is-focused') => {
+		console.log('id:', e);
+		console.log('id:', id);
+		mainWindow.webContents.send(id, mainWindow.isFocused());
+	});
+
 	// // 窗口 大小 变化时的事件
 	// ipcMain.on('window-size-change', (e, state) => {
 	// 	e.reply('reply-window-size-change', state);

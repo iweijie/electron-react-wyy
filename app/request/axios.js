@@ -10,12 +10,12 @@ axios.interceptors.request.use(
 );
 
 axios.interceptors.response.use(
-	(response) => {
+	async (response) => {
 		const setCookieList = get(response, 'headers.set-cookie');
 		if (!isEmpty(setCookieList)) {
 			const cookiesList = formatCookie(setCookieList);
-			cookiesList.forEach((cookie) => {
-				setCookie(cookie);
+			cookiesList.forEach(async (cookie) => {
+				await setCookie(cookie);
 			});
 		}
 		return response;
@@ -32,13 +32,15 @@ export function checkStatus(response) {
 	throw error;
 }
 
-export function axiosGet(url, params = {}) {
+export async function axiosGet(url, params = {}) {
+	const Cookie = await getCookie();
+	console.log('Cookie:', Cookie);
 	return axios
 		.get(url, {
 			params,
 			headers: {
 				'content-type': 'application/json',
-				Cookie: getCookie()
+				Cookie
 			},
 			withCredentials: true
 		})

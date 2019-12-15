@@ -1,5 +1,9 @@
+import electron, { ipcRenderer, remote } from 'electron';
+import config from '../config';
 import { setStore, getStore, setSessionStore, getSessionStore } from './index';
 import { get, join, map, split } from 'lodash';
+
+const session = remote.getCurrentWindow().webContents.session;
 
 export function formatCookie(cookiesList = []) {
 	return map(cookiesList, (cookie) => {
@@ -11,46 +15,44 @@ export function formatCookie(cookiesList = []) {
 			name,
 			value,
 			Path,
-			expirationDate: Math.floor(new Date(expirationDate).getTime())
+			expirationDate: Math.floor(new Date(expirationDate).getTime() / 1000)
 		};
 	});
 }
 
-const field = '__cookie';
-
 /**
  * 
- * @param {expirationDate} Number 时间戳，到截止时间的时间戳
+ * @param {expirationDate} Number 秒
  */
-export const setCookie = ({ name, value, path = '/', domain, expirationDate = 0 }) => {
-	//只存有  wangyiyun 的 cookie  ； 所以暂时不分区
-	let cookies;
-	if (!expirationDate || expirationDate < 0) {
-		cookies = getSessionStore(field) || [];
-		cookies.push({ name, value, path, expirationDate });
-		setSessionStore(field, cookies);
-	} else {
-		cookies = getStore(field) || [];
-		cookies.push({ name, value, path, expirationDate });
-		const now = Date.now();
-		cookies = cookies.filter((cookie) => cookie.expirationDate >= now);
-		setStore(field, cookies);
-	}
-};
 
-export const getCookie = () => {
-	const now = Date.now();
-	let store = getStore(field) || [];
-	store = store.filter((cookie) => cookie.expirationDate >= now);
-	const sessionStore = getSessionStore(field) || [];
+export function setCookie({ url = config.address, name, value, expirationDate, path }) {
+	return new Promise((resolve, reject) => {
+		session.cookies.set({ url, name, value, expirationDate, path }, (err, cookies) => {
+			if (err) return reject(err);
+			resolve(cookies);
+		});
+	});
+}
 
-	const cookies = [ ...store, ...sessionStore ];
-	return join(
-		map(cookies, (item) => {
-			const name = get(item, 'name', '');
-			const value = get(item, 'value', '');
-			return `${name}=${value}`;
-		}),
-		'; '
-	);
-};
+export function getCookie(url = config.address) {
+	return new Promise((resolve, reject) => {
+		session.cookies.get({ url }, (err, cookies) => {
+			if (err) return reject(err);
+			cookies = join(
+				map(cookies, (item) => {
+					const name = get(item, 'name', '');
+					const value = get(item, 'value', '');
+					return `${name}=${value}`;
+				}),
+				'; '
+			);
+			resolve(cookies);
+		});
+	});
+}
+
+export function removeCookie({ url, name }) {
+	return new Promise((resolve, reject) => {
+		session.cookies.remove(url, name, resolve);
+	});
+}
