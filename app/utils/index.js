@@ -1,5 +1,6 @@
 import { setCookie } from '../bridge/cookies';
 import { isNaN } from 'lodash';
+import './mainInfo';
 
 /**
  * 存储localStorage
@@ -105,3 +106,20 @@ export function getFormatTime(num) {
 	}
 	return `${minute}:${second}`;
 }
+
+export const getNodePosition = function(node) {
+	var left = node.offsetLeft; //获取元素相对于其父元素的left值var left
+	var top = node.offsetTop;
+	current = node.offsetParent; // 取得元素的offsetParent
+	// 一直循环直到根元素
+
+	while (current != null) {
+		left += current.offsetLeft;
+		top += current.offsetTop;
+		current = current.offsetParent;
+	}
+	return {
+		left: left,
+		top: top
+	};
+};

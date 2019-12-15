@@ -3,6 +3,8 @@ import requestMap from '../request/index';
 export default {
 	namespace: 'player',
 	state: {
+		// 是否展示播放野详情
+		isShowPlayDetailPage: false,
 		playerList: [],
 		// 1: 循环 ； 2 随机； 3 单曲
 		playMode: 1,

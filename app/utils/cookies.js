@@ -1,6 +1,5 @@
 import electron, { ipcRenderer, remote } from 'electron';
 import config from '../config';
-import { setStore, getStore, setSessionStore, getSessionStore } from './index';
 import { get, join, map, split } from 'lodash';
 
 const session = remote.getCurrentWindow().webContents.session;

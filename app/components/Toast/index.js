@@ -1,7 +1,7 @@
 import classnames from 'classnames';
 import * as React from 'react';
 import Notification from 'rmc-notification';
-import './index.less';
+import './index.global.less';
 // import Icon from '../icon';
 
 const SHORT = 3;

@@ -7,7 +7,6 @@ import Root from './Root';
 import history from './utils/history';
 import { store } from './store';
 import './style/common.global.less';
-
 render(
 	<AppContainer>
 		<Root store={store} history={history} />

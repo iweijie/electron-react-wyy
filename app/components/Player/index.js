@@ -1,12 +1,15 @@
 import React, { Component } from 'react';
 import electron, { ipcRenderer, remote } from 'electron';
+import { CSSTransition } from 'react-transition-group';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import Toast from 'components/Toast';
 import observer from '../../utils/observer';
-import { get, isNaN, isEmpty, join, map } from 'lodash';
+import { get, isNaN, isEmpty, join, map, first } from 'lodash';
 import { loopCallback, getFormatTime } from '../../utils';
+import { getContainerBounds } from '../../utils/mainInfo';
+
 import requestMap from '../../request/index';
 import PlayList from './playList';
 import styles from './index.less';
@@ -27,12 +30,16 @@ class Player extends Component {
 		this.initAudio();
 		this.loopStopCallBack = null;
 		this.state = {
+			// 是否展示播放野详情
+			isShowPlayDetailPage: false,
 			// 当前歌单展示状态
 			playListStatus: false,
 			//音乐播放状态：  0： 暂停 ； 1：播放
 			audioPlayStatus: AUDIO_STATUS_IS_PAUSED,
 			// 当前歌曲已播放时长
 			currentTime: 0,
+			// 进度条比例
+			runningTimeRatio: 0,
 			// 随机播放列表
 			randomPlayList: []
 		};
@@ -46,18 +53,10 @@ class Player extends Component {
 
 	componentDidMount() {
 		console.log(electron.screen.getCursorScreenPoint());
-		console.log(electron.screen.getAllDisplays());
-		const browserWindow = remote.getCurrentWindow();
-
-		const ses = browserWindow.webContents.session;
-		console.log(ses.cookies.set)
-		console.log(ses.cookies.get({},function(...rst){
-			console.log(rst)
-		}),'11111')
 		// Toast.fail('音乐获取失败，请重新尝试',2);
 		// Toast.info('普通的Toast我普通的摇！！', 4000);
-		this.getWindowIsFoucs().then(console.log);
 		observer.on('play-song', this.handlePlay);
+		// this.dragSlide(this.progressWrap);
 	}
 
 	componentDidUpdate(preProps) {}
@@ -76,29 +75,19 @@ class Player extends Component {
 		});
 	};
 
-	getWindowIsFoucs = () => {
-		return new Promise((resolve, reject) => {
-			const id = `_${Date.now()}`;
-			ipcRenderer.once(id, function(evnet, bool) {
-				resolve(bool);
-			});
-			ipcRenderer.send('ipc-native-is-focused', id);
-			setTimeout(reject, 5000, 'timeout');
-		});
-	};
-
 	render() {
 		const { audio } = this;
-		const { playListStatus, audioPlayStatus, currentTime } = this.state;
-		const { playerList, playMode, currentPlaySongId, changePlayMore } = this.props;
+		const { playListStatus, audioPlayStatus, currentTime, runningTimeRatio } = this.state;
+		const { playerList, playMode, currentPlaySongId, changePlayMore, isShowPlayDetailPage } = this.props;
 		const currentPlaySong = playerList.find((player) => player.id === currentPlaySongId);
 		return (
 			<div className={`${styles.player} _player_wrap`}>
-				{currentPlaySongId ? (
+				{/* 当有播放歌曲 且 没有展示详情的时候显示 */}
+				{currentPlaySongId && !isShowPlayDetailPage ? (
 					<div className={styles.song}>
 						<div className={styles['small-song']}>
 							<div className={styles['small-song-img']}>
-								<div className={styles.mask}>
+								<div className={styles.mask} onClick={this.handleShowDetail}>
 									<i className="iconzhankaiquanpingkuozhan iconfont" />
 								</div>
 								<img src={this.getSmallSongImg(currentPlaySong)} alt="" />
@@ -132,11 +121,8 @@ class Player extends Component {
 						<div className={styles['time-running']}>
 							{isEmpty(playerList) ? DEFAULT_TIME : getFormatTime(currentTime)}
 						</div>
-						<div className={styles.progress}>
-							<span
-								className={styles['progress-mask']}
-								style={{ width: `${this.getAudioProgressRatio()}%` }}
-							>
+						<div ref={(dom) => (this.progressWrap = dom)} className={styles.progress}>
+							<span className={styles['progress-mask']} style={{ width: `${runningTimeRatio}%` }}>
 								<i className={styles.drag} />
 							</span>
 						</div>
@@ -148,8 +134,10 @@ class Player extends Component {
 						<div className={styles['sound-control']}>
 							<i className="iconfont iconshengyin" />
 						</div>
-						<div className={styles.progress}>
-							<span className={styles['progress-mask']} />
+						<div ref={(dom) => (this.volumeWrap = dom)} className={styles.progress}>
+							<span className={styles['progress-mask']} style={{ width: `${audio.volume * 100}%` }}>
+								<i className={styles.drag} />
+							</span>
 						</div>
 					</div>
 					<div
@@ -199,13 +187,6 @@ class Player extends Component {
 	getAudioCurrentTime() {
 		return this.audio.currentTime;
 	}
-	// 满进度100 ；   保留两位小数
-	getAudioProgressRatio = () => {
-		const { currentTime } = this.state;
-		const duration = this.audio.duration;
-		if (!duration || !currentTime) return 0;
-		return Math.floor(currentTime / duration * 10000) / 100;
-	};
 
 	handleCanplay = (event) => {
 		this.handlePlayAudio();
@@ -225,6 +206,7 @@ class Player extends Component {
 				return this.loopMode();
 		}
 	};
+
 	// 循环播放模式
 	loopMode = () => {
 		const { playerList, changePlayMore, currentPlaySongId } = this.props;
@@ -288,8 +270,13 @@ class Player extends Component {
 		}
 		this.handleStopLoopCallBack();
 		this.loopStopCallBack = loopCallback(() => {
+			const currentTime = audio.currentTime;
+			const duration = audio.duration || 0;
+			// 满进度100 ；   保留两位小数
+			const runningTimeRatio = Math.max(Math.floor(currentTime / duration * 10000) / 100, 0);
 			this.setState({
-				currentTime: this.getAudioCurrentTime()
+				currentTime,
+				runningTimeRatio
 			});
 		}, 100);
 		this.setState({ audioPlayStatus: AUDIO_STATUS_IS_PLAY, currentTime: audio.currentTime });
@@ -407,8 +394,29 @@ class Player extends Component {
 		return url;
 	};
 
-	// handleChangeSound = ()=>{
-	// volume
+	handleShowDetail = () => {
+		const { changePlayMore } = this.props;
+		changePlayMore({
+			isShowPlayDetailPage: true
+		});
+	};
+
+	// handleMouseEvent = () => {
+	// 	const { x, y } = electron.screen.getCursorScreenPoint();
+	// 	console.log(x, y);
+	// };
+
+	// dragSlide(wrap) {
+	// 	const progress = first(wrap.getElementsByTagName('span'));
+	// 	const drag = first(wrap.getElementsByTagName('i'));
+	// 	if (!progress || !drag) return;
+	// 	wrap.addEventListener('mousedown', () => {
+	// 		const { x, y } = electron.screen.getCursorScreenPoint();
+	// 		document.addEventListener('mousemove', this.handleMouseEvent);
+	// 	});
+	// 	document.addEventListener('mouseup', () => {
+	// 		document.removeEventListener('mousemove', this.handleMouseEvent);
+	// 	});
 	// }
 }
 
@@ -416,7 +424,7 @@ function mapStateToProps(state) {
 	return {
 		playerList: state.player.playerList,
 		playMode: state.player.playMode,
-		// currentIndex: state.player.currentIndex,
+		isShowPlayDetailPage: state.player.isShowPlayDetailPage,
 		currentPlaySongId: state.player.currentPlaySongId
 		// 测试数据
 		// playerList: state.recommendation.recommendSongsList

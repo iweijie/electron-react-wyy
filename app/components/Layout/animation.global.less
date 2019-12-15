@@ -1,0 +1,40 @@
+.page-common {
+  transform-origin: bottom left;
+  transition: opacity .3s, transform .3s;
+}
+
+.page {
+  opacity: 1;
+  transform: scale(1);
+  .page-common;
+}
+
+.page-enter-done {
+  opacity: 1;
+  transform: scale(1);
+  .page-common;
+}
+
+.page-enter {
+  opacity: 0;
+  transform: scale(0.1);
+  .page-common;
+}
+
+.page-enter-active {
+  opacity: 1;
+  transform: scale(1);
+  .page-common;
+}
+
+.page-exit {
+  opacity: 1;
+  transform: scale(1);
+  .page-common;
+}
+
+.page-exit-active {
+  opacity: 0;
+  transform: scale(0.1);
+  .page-common;
+}
