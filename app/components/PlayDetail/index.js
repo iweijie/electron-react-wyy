@@ -21,7 +21,10 @@ class Player extends Component {
 		// child: PropTypes.element
 	};
 
-	componentDidMount() {}
+	componentDidMount() {
+		this.props.getSongDetail('528658316');
+		this.props.getLyric('528658316');
+	}
 
 	componentDidUpdate(preProps) {}
 
@@ -65,7 +68,9 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps() {
 	return {
-		changePlayMore: reducers.player.changePlayMore
+		changePlayMore: reducers.player.changePlayMore,
+		getSongDetail: reducers.playSongDetail.getSongDetail,
+		getLyric: reducers.playSongDetail.getLyric
 	};
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Player);

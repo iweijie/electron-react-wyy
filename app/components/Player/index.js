@@ -84,7 +84,6 @@ class Player extends Component {
 		return (
 			<div className={`${styles.player} _player_wrap`}>
 				{/* 当有播放歌曲 且 没有展示详情的时候显示 */}
-
 				<CSSTransition
 					in={currentPlaySongId && !isShowPlayDetailPage}
 					timeout={300}

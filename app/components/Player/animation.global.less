@@ -1,40 +1,41 @@
-.detail-common {
+.small-common {
+  width: 199px;
   transform-origin: bottom left;
   transition: opacity .3s, transform .3s;
 }
 
-.detail {
+.small {
   opacity: 1;
   transform: scale(1);
-  .detail-common;
+  .small-common;
 }
 
-.detail-enter-done {
+.small-enter-done {
   opacity: 1;
   transform: scale(1);
-  .detail-common;
+  width: 199px;
 }
 
-.detail-enter {
+.small-enter {
   opacity: 0;
-  transform: scale(0.1);
-  .detail-common;
+  transform: scale(1.1);
+  .small-common;
 }
 
-.detail-enter-active {
+.small-enter-active {
   opacity: 1;
   transform: scale(1);
-  .detail-common;
+  .small-common;
 }
 
-.detail-exit {
+.small-exit {
   opacity: 1;
   transform: scale(1);
-  .detail-common;
+  .small-common;
 }
 
-.detail-exit-active {
+.small-exit-active {
   opacity: 0;
-  transform: scale(0.1);
-  .detail-common;
+  transform: scale(1.1);
+  .small-common;
 }

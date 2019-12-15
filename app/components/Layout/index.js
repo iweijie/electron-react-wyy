@@ -18,7 +18,7 @@ const menuList = [
 		title: '推荐',
 		chalidren: [
 			{
-				link: '/discovrMusic',
+				link: '/discovrMusic/recommendation',
 				title: '发现音乐',
 				iconType: 'yinyue',
 				iconStyle: {
@@ -38,7 +38,6 @@ class Layout extends Component {
 
 	render() {
 		const { history, match, currentPlaySongId, isShowPlayDetailPage } = this.props;
-		console.log(this.props);
 		const isShowDetail = !!isShowPlayDetailPage && !!currentPlaySongId;
 		return (
 			<div className="global-layout">

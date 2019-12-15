@@ -26,7 +26,15 @@ const apis = {
 	},
 	// 获取歌词url
 	requestGetLyric: {
-		url: host + '/lyric'
+		url: host + '/lyric',
+		// field: 'lrc.lyric',
+		defaultValue: []
+	},
+	// 精选电台
+	requestSongDetail: {
+		url: host + '/song/detail',
+		field: 'songs.0',
+		defaultValue: {}
 	},
 	// 获取歌词评论
 	requestGetMusicComment: {
