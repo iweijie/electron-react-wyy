@@ -14,7 +14,7 @@ const routers = [
 		component: DiscovrMusicPage
 	},
 	{
-		path: '/discovrMusic/recommendation',
+		path: '*',
 		exact: true,
 		component: DiscovrMusicPage
 	}

@@ -12,8 +12,9 @@ import { getContainerBounds } from '../../utils/mainInfo';
 
 import requestMap from '../../request/index';
 import PlayList from './playList';
-import styles from './index.less';
 import { reducers } from '../../store';
+import styles from './index.less';
+import './animation.global.less';
 
 const AUDIO_STATUS_IS_PLAY = 1;
 const AUDIO_STATUS_IS_PAUSED = 0;
@@ -83,7 +84,15 @@ class Player extends Component {
 		return (
 			<div className={`${styles.player} _player_wrap`}>
 				{/* 当有播放歌曲 且 没有展示详情的时候显示 */}
-				{currentPlaySongId && !isShowPlayDetailPage ? (
+
+				<CSSTransition
+					in={currentPlaySongId && !isShowPlayDetailPage}
+					timeout={300}
+					classNames="small"
+					unmountOnExit
+					// onEnter={() => setShowButton(false)}
+					// onExited={() => setShowButton(true)}
+				>
 					<div className={styles.song}>
 						<div className={styles['small-song']}>
 							<div className={styles['small-song-img']}>
@@ -100,7 +109,7 @@ class Player extends Component {
 							</div>
 						</div>
 					</div>
-				) : null}
+				</CSSTransition>
 				<div className={styles.control}>
 					<div className={styles.btns}>
 						<button>

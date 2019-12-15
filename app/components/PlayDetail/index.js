@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import Toast from 'components/Toast';
 import { get, isNaN, isEmpty, join, map, first } from 'lodash';
-
+import './animation.global.less';
 import styles from './index.less';
 import { reducers } from '../../store';
 
@@ -26,13 +26,23 @@ class Player extends Component {
 	componentDidUpdate(preProps) {}
 
 	render() {
-		const { isShowPlayDetailPage, currentPlaySongId } = this.props;
+		const { currentPlaySongId, isShowPlayDetailPage } = this.props;
+		const isShowDetail = !!isShowPlayDetailPage && !!currentPlaySongId;
 		return (
-			<div className={styles['play-detail-wrap']}>
-				<div className="" onClick={this.handleCancle}>
-					handleCancle
+			<CSSTransition
+				in={isShowDetail}
+				timeout={300}
+				classNames="detail"
+				unmountOnExit
+				// onEnter={() => setShowButton(false)}
+				// onExited={() => setShowButton(true)}
+			>
+				<div className={styles['global-container-play-detail-wrap']}>
+					<div className="" onClick={this.handleCancle}>
+						handleCancle
+					</div>
 				</div>
-			</div>
+			</CSSTransition>
 		);
 	}
 

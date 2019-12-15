@@ -12,7 +12,6 @@ import PlayDetail from 'components/PlayDetail/index';
 import { get, last, split } from 'lodash';
 import { reducers } from '../../store/index';
 import styles from './index.less';
-import './animation.global.less';
 
 const menuList = [
 	{
@@ -39,6 +38,7 @@ class Layout extends Component {
 
 	render() {
 		const { history, match, currentPlaySongId, isShowPlayDetailPage } = this.props;
+		console.log(this.props);
 		const isShowDetail = !!isShowPlayDetailPage && !!currentPlaySongId;
 		return (
 			<div className="global-layout">
@@ -57,18 +57,7 @@ class Layout extends Component {
 							)}
 						</Switch>
 					</div>
-					<CSSTransition
-						in={isShowDetail}
-						timeout={300}
-						classNames="page"
-						unmountOnExit
-						// onEnter={() => setShowButton(false)}
-						// onExited={() => setShowButton(true)}
-					>
-						<div className={styles['global-container-play-detail-wrap']}>
-							<PlayDetail />
-						</div>
-					</CSSTransition>
+					<PlayDetail />
 				</div>
 				<Player />
 			</div>
@@ -76,18 +65,4 @@ class Layout extends Component {
 	}
 }
 
-function mapStateToProps(state, own = {}) {
-	return {
-		...own,
-		playerList: state.player.playerList,
-		isShowPlayDetailPage: state.player.isShowPlayDetailPage,
-		currentPlaySongId: state.player.currentPlaySongId
-	};
-}
-
-function mapDispatchToProps() {
-	return {
-		changePlayMore: reducers.player.changePlayMore
-	};
-}
-export default connect(mapStateToProps, mapDispatchToProps)(Layout);
+export default Layout;

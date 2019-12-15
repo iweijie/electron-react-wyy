@@ -1,0 +1,40 @@
+.small-common {
+  transform-origin: bottom left;
+  transition: opacity .3s, transform .3s;
+}
+
+.small {
+  opacity: 1;
+  transform: scale(1);
+  .small-common;
+}
+
+.small-enter-done {
+  opacity: 1;
+  transform: scale(1);
+  .small-common;
+}
+
+.small-enter {
+  opacity: 0;
+  transform: scale(1.2);
+  .small-common;
+}
+
+.small-enter-active {
+  opacity: 1;
+  transform: scale(1);
+  .small-common;
+}
+
+.small-exit {
+  opacity: 1;
+  transform: scale(1);
+  .small-common;
+}
+
+.small-exit-active {
+  opacity: 0;
+  transform: scale(1.2);
+  .small-common;
+}
