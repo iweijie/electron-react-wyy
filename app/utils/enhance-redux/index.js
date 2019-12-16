@@ -132,6 +132,8 @@ export default function enhanceRedux(models, { enhancer, reducer }) {
 
 	function middleware(store) {
 		return (next) => (action) => {
+			// 兼容性问题处理
+			if (!action) return;
 			if (action[CALL_DISPATCH]) {
 				const { type, payload = {} } = action;
 				try {
@@ -149,13 +151,14 @@ export default function enhanceRedux(models, { enhancer, reducer }) {
 			return next(action);
 		};
 	}
-
+	// react-redux  connect  第二个参数传对象时，会再被dispatch包裹一次
+	// action 会为空时；做下错误处理
 	function defaultReduce(state = {}, action = {}) {
 		if (!isProduction) {
 			checkType(state, action);
 		}
 		const { type, payload } = action;
-		if (isReduxPrimitiveType(type)) return state;
+		if (!type || isReduxPrimitiveType(type)) return state;
 		try {
 			const typeList = type.split(NAMESPACE_SEP);
 			const typeLastAttr = typeList.pop();
@@ -166,7 +169,7 @@ export default function enhanceRedux(models, { enhancer, reducer }) {
 				return { ...state };
 			}
 		} catch (err) {
-			console.warn(`${type}赋值错误`);
+			console.warn(`${type} 赋值错误`);
 		}
 		return state;
 	}

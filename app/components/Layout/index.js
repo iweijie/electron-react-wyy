@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { CSSTransition } from 'react-transition-group';
+// import { CSSTransition } from 'react-transition-group';
 import { Link } from 'react-router-dom';
 import { Switch, Route, Redirect } from 'react-router';
 import TopNav from '../TopNav/index';
