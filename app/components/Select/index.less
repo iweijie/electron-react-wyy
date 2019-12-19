@@ -1,0 +1,59 @@
+@lineColor: #e1e1e2;
+
+.selector {
+    padding: 4px 8px;
+    border: 1px solid @lineColor;
+    border-radius: 4px;
+    display: inline-block;
+    font-size: 12px;
+    cursor: pointer;
+    position: relative;
+
+    .menuContent {
+        width: 520px;
+        height: 364px;
+        display: none;
+        border-radius: 4px;
+        box-shadow: -1px -1px 10px @lineColor;
+        position: absolute;
+        left: 0;
+        top: 35px;
+        font-size: 14px;
+
+        &.menulistShow {
+            display: block;
+        }
+    }
+}
+
+.addLabel {
+    height: 40px;
+    line-height: 40px;
+    padding: 0 15px;
+    border-bottom: .5px solid @lineColor;
+    position: relative;
+
+    &::after {
+        content: "";
+        position: absolute;
+        width: 15px;
+        height: 15px;
+        transform: rotate(45deg);
+        top: -8px;
+        left: 25px;
+        background-color: #fff;
+        border: 1px solid @lineColor;
+        border-bottom: none;
+        border-right: none;
+    }
+}
+
+.menulist {
+    overflow-y: scroll;
+
+}
+
+.arrowDown {
+    vertical-align: middle;
+    margin-left: 2px;
+}
