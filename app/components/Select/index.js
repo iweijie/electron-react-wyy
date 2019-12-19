@@ -33,8 +33,8 @@ class SongSheets extends Component {
         const { value } = this.props;
         const { menulistShow } = this.state;
         return (
-            <div className={styles.selector}>
-                <div onClick={this.handleSelectorClick}>
+            <div className={styles.selectorWrap}>
+                <div className={styles.selector} onClick={this.handleSelectorClick}>
                     <span>{value}</span>
                     <Icon type='arrowDown' className={styles.arrowDown} />
                 </div>
