@@ -8,7 +8,7 @@ import Icon from '../Icon/index'
 
 import styles from './index.less'
 
-class SongSheets extends Component {
+class Select extends Component {
     static propTypes = {
 		value: PropTypes.string
     };
@@ -16,7 +16,7 @@ class SongSheets extends Component {
     static defaultProps = {
 		value: ''
     };
-    
+
     constructor(props) {
         super(props)
         this.state = {
@@ -51,4 +51,4 @@ class SongSheets extends Component {
     }
 }
 
-export default SongSheets;
+export default Select;

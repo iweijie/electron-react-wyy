@@ -1,4 +1,5 @@
 @lineColor: #e1e1e2;
+@bgColor: #fafafa;
 
 .selectorWrap {
     position: relative;
@@ -12,8 +13,9 @@
     }
 
     .menuContent {
-        width: 520px;
-        height: 364px;
+        width: 540px;
+        height: 415px;
+        background-color: @bgColor;
         display: none;
         border-radius: 4px;
         box-shadow: -1px -1px 10px @lineColor;
@@ -29,9 +31,9 @@
 }
 
 .addLabel {
-    height: 40px;
-    line-height: 40px;
-    padding: 0 15px;
+    height: 49px;
+    line-height: 49px;
+    padding: 0 9px;
     border-bottom: .5px solid @lineColor;
     position: relative;
 
@@ -43,7 +45,7 @@
         transform: rotate(45deg);
         top: -8px;
         left: 25px;
-        background-color: #fff;
+        background-color: @bgColor;
         border: 1px solid @lineColor;
         border-bottom: none;
         border-right: none;
@@ -52,7 +54,8 @@
 
 .menulist {
     overflow-y: scroll;
-
+    height: 366px;
+    padding: 10px 20px 30px;
 }
 
 .arrowDown {

@@ -76,6 +76,14 @@ const apis = {
 	// 精选电台
 	requestRecommendDj: {
 		url: host + '/dj/program'
+	},
+	// 获取歌单列表
+	requestPlaylist: {
+		url: host + '/playlist/catlist'
+	},
+	// 获取热门标签分类
+	requestTaglist: {
+		url: host + '/playlist/hot'
 	}
 };
 const requestMap = {};

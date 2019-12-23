@@ -5,9 +5,9 @@ import styles from './index.less';
 import Nav from './com/nav/index';
 import Recommendation from './recommendation/index';
 import RecommendSongs from './recommendSongs/index';
-import SongSheets from './songSheets/index';
+import Playlist from './playlist/index';
 // import Toast from 'components/Toast';
- 
+
 import request from '../../request/index';
 
 export default class Home extends Component {
@@ -28,7 +28,7 @@ export default class Home extends Component {
 				{/* <Switch> */}
 				<Route exact path="/discovrMusic/recommendation" component={Recommendation} />
 				<Route exact path="/discovrMusic/recommendSongs" component={RecommendSongs} />
-				<Route exact path="/discovrMusic/songSheets" component={SongSheets} />
+				<Route exact path="/discovrMusic/playlist" component={Playlist} />
 				{/* </Switch> */}
 			</div>
 		);

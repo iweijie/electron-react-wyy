@@ -1,0 +1,60 @@
+@lineColor: #e1e1e2;
+
+.songSheets {
+    padding: 0 28px;
+}
+
+.songSortsSelect {
+    margin: 20px 0 10px;
+}
+
+.allMenu {
+  border: 1px solid @lineColor;
+  padding: 12px 0;
+  color: #666;
+  text-align: center;
+  font-size: 12px;
+}
+
+.largeCategory {
+    color: #666;
+    display: flex;
+    margin-top: 10px;
+
+    .largeCategoryName {
+        color: pink;
+        font-size: 16px;
+        width: 82px;
+        height: 35px;
+        line-height: 35px;
+        flex: 82px 1 0;
+        text-align: center;
+    }
+}
+
+.smallTagsCategory {
+    display: flex;
+    flex-wrap: wrap;
+    color: #666;
+
+    li {
+        width: 82px;
+        height: 33px;
+        font-size: 12px;
+        line-height: 33px;
+        text-align: center;
+        border: 1px solid @lineColor;
+
+        + li {
+            border-left: none;
+        }
+
+        &.addBorderLeft {
+            border-left: 1px solid @lineColor;
+        }
+
+        &.noBorderTop {
+            border-top: none;
+        }
+    }
+}
