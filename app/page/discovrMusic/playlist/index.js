@@ -10,7 +10,7 @@ class Playlist extends Component {
     constructor(props) {
         super(props)
         this.state = {
-
+            selectValue: '全部歌单'
         }
     }
 
@@ -19,14 +19,21 @@ class Playlist extends Component {
       this.props.getPlaylist()
     }
 
+    handleSelect = (selectValue) => {
+        this.setState({ selectValue })
+    }
+
     render() {
         console.log(this.props, 'props')
+        const { selectValue } = this.state
         const { allCategories } = this.props.playlist
         return (
             <div className={styles.songSheets}>
                 <div className={styles.songSortsSelect}>
-                    <Select value='欧美'>
-                        <div className={styles.allMenu}>全部歌单</div>
+                    <Select value={selectValue}>
+                        <div className={classNames(styles.allMenu, {
+                            [styles.active]: selectValue === '全部歌单'
+                        })}>全部歌单</div>
                         <div className={styles.otherMenu}>
                             {
                                 allCategories.map(item => (
@@ -35,10 +42,14 @@ class Playlist extends Component {
                                         <ul className={styles.smallTagsCategory}>
                                             {
                                                 item.sub.map((ele, index) => (
-                                                    <li className={classNames({
-                                                        [styles.noBorderTop]: index > 4,
-                                                        [styles.addBorderLeft]: index % 5 === 0,
-                                                    })}>
+                                                    <li
+                                                        className={classNames({
+                                                            [styles.active]: selectValue === ele.name,
+                                                            [styles.noBorderTop]: index > 4,
+                                                            [styles.addBorderLeft]: index % 5 === 0,
+                                                        })}
+                                                        onClick={() => this.handleSelect(ele.name)}
+                                                    >
                                                         <div>{ele.name}</div>
                                                         {/* {ele.hot ? <div>hot</div> : null} */}
                                                     </li>
