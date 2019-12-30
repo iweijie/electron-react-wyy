@@ -14,6 +14,7 @@
   color: #666;
   text-align: center;
   font-size: 12px;
+  position: relative;
 }
 
 .largeCategory {
@@ -37,15 +38,16 @@
     flex-wrap: wrap;
     color: #666;
 
-    li {
+    .categoryItem {
         width: 82px;
         height: 33px;
         font-size: 12px;
         line-height: 33px;
         text-align: center;
         border: 1px solid @lineColor;
+        position: relative;
 
-        + li {
+        + .categoryItem {
             border-left: none;
         }
 
@@ -59,11 +61,46 @@
     }
 }
 
-.active {
-  border: 1px solid #c62f2f;
+.playlistChecked svg {
+  color: #c62f2f;
+  font-size: 26px;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+}
 
-  // &::after {
-  //   content: "";
-  //   position: absolute;
-  // }
+.active {
+  border: 1px solid #c62f2f !important;
+}
+
+.hotTags {
+  display: flex;
+  margin-top: 10px;
+
+  ul {
+    display: flex;
+    margin-left: 5px;
+
+    li {
+      padding: 0 15px;
+      position: relative;
+      cursor: pointer;
+      color: rgb(102, 102, 102);
+
+      & + li::after {
+        content: "";
+        position: absolute;
+        width: 1px;
+        height: 11px;
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        background-color: #d4ccd4;
+      }
+
+      &:hover {
+        color: #000;
+      }
+    }
+  }
 }

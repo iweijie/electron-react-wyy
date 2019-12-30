@@ -94,6 +94,21 @@ const arrowDown = () => {
 		</svg>
 	);
 };
+const playlistChecked = () => {
+	return (
+    <svg
+			viewBox="0 0 1024 1024"
+			focusable="false"
+			data-icon="step-forward"
+			width="1em"
+			height="1em"
+			fill="currentColor"
+			aria-hidden="true"
+    >
+      <path d="M1023.83 474.655l-549.255 549.283h549.255V474.655zM783.16 979.732l-96.896-96.933 36.335-36.35 60.56 60.583L952.729 737.4l36.335 36.35L783.16 979.731z" />
+    </svg>
+	);
+};
 const typeMap = {
 	mini: mini,
 	close: close,
@@ -101,6 +116,7 @@ const typeMap = {
 	mouth: mouth,
 	yinyue: yinyue,
 	arrowDown: arrowDown,
+	playlistChecked: playlistChecked,
 };
 
 export default class Icon extends PureComponent {

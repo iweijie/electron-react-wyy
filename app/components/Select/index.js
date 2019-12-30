@@ -10,31 +10,35 @@ import styles from './index.less'
 
 class Select extends Component {
     static propTypes = {
-		value: PropTypes.string
+		    value: PropTypes.string
     };
 
     static defaultProps = {
-		value: ''
+		    value: ''
     };
 
     constructor(props) {
         super(props)
         this.state = {
-            menulistShow: false
+
         }
     }
 
-    handleSelectorClick = () => {
-        this.setState({ menulistShow: !this.state.menulistShow })
-    }
+    // componentDidMount() {
+    //   document.body.addEventListener('click', e => {
+    //       console.log(e)
+    //       if (e.target && e.target.matches('#m-btn')) {
+    //           return;
+    //       }
+    //   })
+    // }
 
     render() {
         // console.log(this.props, 'props')
-        const { value } = this.props;
-        const { menulistShow } = this.state;
+        const { value, menulistShow } = this.props;
         return (
             <div className={styles.selectorWrap}>
-                <div className={styles.selector} onClick={this.handleSelectorClick}>
+                <div className={styles.selector} onClick={this.props.handleSelectorClick}>
                     <span>{value}</span>
                     <Icon type='arrowDown' className={styles.arrowDown} />
                 </div>
@@ -46,6 +50,7 @@ class Select extends Component {
                         {this.props.children}
                     </div>
                 </div>
+                <div onClick={this.handleMaskClick} className={styles.mask}></div>
             </div>
         )
     }
