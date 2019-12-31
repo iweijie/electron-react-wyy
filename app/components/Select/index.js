@@ -34,6 +34,7 @@ class Select extends Component {
     // }
 
     render() {
+      console.log('render')
         // console.log(this.props, 'props')
         const { value, menulistShow } = this.props;
         return (
@@ -50,7 +51,6 @@ class Select extends Component {
                         {this.props.children}
                     </div>
                 </div>
-                <div onClick={this.handleMaskClick} className={styles.mask}></div>
             </div>
         )
     }
