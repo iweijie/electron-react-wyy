@@ -1,3 +1,5 @@
+@import '../../../style/common.variate.less';
+
 @lineColor: #e1e1e2;
 
 .songSheets {
@@ -23,7 +25,7 @@
     margin-top: 10px;
 
     .largeCategoryName {
-        color: pink;
+        color: #ce4e4e;
         font-size: 16px;
         width: 82px;
         height: 35px;
@@ -62,7 +64,7 @@
 }
 
 .playlistChecked svg {
-  color: #c62f2f;
+  color: @red;
   font-size: 26px;
   position: absolute;
   right: 0;
@@ -70,7 +72,7 @@
 }
 
 .active {
-  border: 1px solid #c62f2f !important;
+  border: 1px solid @red !important;
 }
 
 .hotTags {
@@ -79,13 +81,17 @@
 
   ul {
     display: flex;
-    margin-left: 5px;
+    // margin-left: 5px;
 
     li {
       padding: 0 15px;
       position: relative;
       cursor: pointer;
       color: rgb(102, 102, 102);
+
+      &:first-child {
+        padding-left: 5px;
+      }
 
       & + li::after {
         content: "";

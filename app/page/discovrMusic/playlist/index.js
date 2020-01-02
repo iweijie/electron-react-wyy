@@ -23,8 +23,8 @@ class Playlist extends Component {
 
     handleSelect = (selectValue) => {
         this.setState({
-          selectValue,
-          menulistShow: false
+            selectValue,
+            menulistShow: false
         })
     }
 
@@ -41,7 +41,7 @@ class Playlist extends Component {
     }
 
     render() {
-        console.log(this.props, 'props')
+        // console.log(this.props, 'props')
         const { selectValue, menulistShow } = this.state
         const { taglist } = this.props
         const { allCategories } = this.props.playlist
@@ -50,9 +50,9 @@ class Playlist extends Component {
                 <div className={styles.songSortsSelect}>
                     <Select
                         value={selectValue}
-                        menulistShow={menulistShow}
+                        visible={menulistShow}
                         handleSelectorClick={this.handleSelectorClick}
-                        handleClose={this.props.handleClose}
+                        handleClose={this.handleClose}
                     >
                         <div
                             className={classNames(styles.allMenu, {
@@ -60,7 +60,7 @@ class Playlist extends Component {
                             })}
                             onClick={() => this.handleSelect('全部歌单')}
                         >全部歌单
-                          {selectValue === '全部歌单' ? <Icon type='playlistChecked' className={styles.playlistChecked} /> : null}
+                            {selectValue === '全部歌单' ? <Icon type='playlistChecked' className={styles.playlistChecked} /> : null}
                         </div>
                         <div className={styles.otherMenu}>
                             {
