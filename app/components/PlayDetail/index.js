@@ -22,25 +22,48 @@ class Player extends Component {
 	};
 
 	componentDidMount() {
-		this.props.getSongDetail('528658316');
-		this.props.getLyric('528658316');
+		this.props.getSongDetail('210837');
+		this.props.getLyric('210837');
+		// https://blog.csdn.net/yzy_csdn/article/details/84536646
+		// ontimeupdate  onseeked
 	}
 
 	componentDidUpdate(preProps) {}
 
 	render() {
-		const { currentPlaySongId, isShowPlayDetailPage } = this.props;
+		const { currentPlaySongId, isShowPlayDetailPage, info, lyric } = this.props;
+		console.log('info:', info);
 		const isShowDetail = !!isShowPlayDetailPage && !!currentPlaySongId;
 		return (
-			<CSSTransition
-				in={isShowDetail}
-				timeout={300}
-				classNames="detail"
-				unmountOnExit
-				// onEnter={() => setShowButton(false)}
-				// onExited={() => setShowButton(true)}
-			>
+			<CSSTransition in={isShowDetail} timeout={300} classNames="detail" unmountOnExit>
 				<div className={styles['global-container-play-detail-wrap']}>
+					<div className={styles['play-detail-lyric-wrap']}>
+						{/* <img className={styles.blur} src={get(info, 'al.picUrl', '')} alt="" /> */}
+						<div className={styles['play-detail-cd-wrap']}>
+							<div className={styles['play-detail-cd']}>
+								<img src={get(info, 'al.picUrl', '')} alt="" />
+							</div>
+							<div className={styles['play-detail-icon']}>
+								<div>喜欢</div>
+								<div>收藏</div>
+								<div>VIP下载</div>
+								<div>分享</div>
+							</div>
+						</div>
+						<div className={styles['play-detail-info-wrap']}>
+							<h3>{get(info, 'name', '')}</h3>
+							<div className={styles['play-detail-info']}>
+								<div>专辑：{get(info, 'al.name', '')}</div>
+								<div>歌手：{join(map(get(info, 'ar', []), (item) => item.name), '/')}</div>
+								<div>来源：搜网页</div>
+							</div>
+							<ul className={styles['play-detail-lyric']}>
+								{map(lyric, (item) => {
+									return <li>{get(item, 1, '')}</li>;
+								})}
+							</ul>
+						</div>
+					</div>
 					<div className="" onClick={this.handleCancle}>
 						handleCancle
 					</div>
@@ -59,8 +82,8 @@ class Player extends Component {
 
 function mapStateToProps(state) {
 	return {
-		playerList: state.player.playerList,
-		playMode: state.player.playMode,
+		lyric: state.playSongDetail.lyric,
+		info: state.playSongDetail.info,
 		isShowPlayDetailPage: state.player.isShowPlayDetailPage,
 		currentPlaySongId: state.player.currentPlaySongId
 	};

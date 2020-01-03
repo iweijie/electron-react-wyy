@@ -131,11 +131,11 @@ class Slideshow extends React.Component {
 		this.setState({ current: key });
 		const { imgListState } = this.state;
 		if (name === STARE) {
-			const pop = imgListState.pop();
-			imgListState.unshift(pop);
-		} else if (name === END) {
 			const shift = imgListState.shift();
 			imgListState.push(shift);
+		} else if (name === END) {
+			const pop = imgListState.pop();
+			imgListState.unshift(pop);
 		}
 		this.setState({ imgListState });
 	}
