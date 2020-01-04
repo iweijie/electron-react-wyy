@@ -7,7 +7,10 @@ import Toast from 'components/Toast';
 import { get, isNaN, isEmpty, join, map, first } from 'lodash';
 import './animation.global.less';
 import styles from './index.less';
+import requestMap from '../../request/index';
+import Comment from '../Comment';
 import { reducers } from '../../store';
+import { url } from 'inspector';
 
 class Player extends Component {
 	constructor(props) {
@@ -24,6 +27,7 @@ class Player extends Component {
 	componentDidMount() {
 		this.props.getSongDetail('210837');
 		this.props.getLyric('210837');
+		this.props.getHotComment('210837');
 		// https://blog.csdn.net/yzy_csdn/article/details/84536646
 		// ontimeupdate  onseeked
 	}
@@ -31,14 +35,16 @@ class Player extends Component {
 	componentDidUpdate(preProps) {}
 
 	render() {
-		const { currentPlaySongId, isShowPlayDetailPage, info, lyric } = this.props;
-		console.log('info:', info);
+		const { currentPlaySongId, isShowPlayDetailPage, info, lyric, hotComment } = this.props;
+
 		const isShowDetail = !!isShowPlayDetailPage && !!currentPlaySongId;
 		return (
 			<CSSTransition in={isShowDetail} timeout={300} classNames="detail" unmountOnExit>
 				<div className={styles['global-container-play-detail-wrap']}>
 					<div className={styles['play-detail-lyric-wrap']}>
-						{/* <img className={styles.blur} src={get(info, 'al.picUrl', '')} alt="" /> */}
+						<div className={styles.blur}>
+							<div style={{ backgroundImage: `url(${get(info, 'al.picUrl', '')})` }} />
+						</div>
 						<div className={styles['play-detail-cd-wrap']}>
 							<div className={styles['play-detail-cd']}>
 								<img src={get(info, 'al.picUrl', '')} alt="" />
@@ -58,14 +64,23 @@ class Player extends Component {
 								<div>来源：搜网页</div>
 							</div>
 							<ul className={styles['play-detail-lyric']}>
-								{map(lyric, (item) => {
-									return <li>{get(item, 1, '')}</li>;
+								{map(lyric, (item, index) => {
+									return <li key={get(item, 0, index)}>{get(item, 1, '')}</li>;
 								})}
 							</ul>
 						</div>
+						<div className={styles['play-detail-info-icon-wrap']}>
+							<span
+								title="收起音乐详情页"
+								className={styles['play-detail-info-icon']}
+								onClick={this.handleCancle}
+							>
+								<i className="iconfont iconsuoxiao" />
+							</span>
+						</div>
 					</div>
-					<div className="" onClick={this.handleCancle}>
-						handleCancle
+					<div className={styles['play-detail-a']}>
+						<Comment {...hotComment} />
 					</div>
 				</div>
 			</CSSTransition>
@@ -84,6 +99,7 @@ function mapStateToProps(state) {
 	return {
 		lyric: state.playSongDetail.lyric,
 		info: state.playSongDetail.info,
+		hotComment: state.playSongDetail.hotComment,
 		isShowPlayDetailPage: state.player.isShowPlayDetailPage,
 		currentPlaySongId: state.player.currentPlaySongId
 	};
@@ -93,7 +109,8 @@ function mapDispatchToProps() {
 	return {
 		changePlayMore: reducers.player.changePlayMore,
 		getSongDetail: reducers.playSongDetail.getSongDetail,
-		getLyric: reducers.playSongDetail.getLyric
+		getLyric: reducers.playSongDetail.getLyric,
+		getHotComment: reducers.playSongDetail.getHotComment
 	};
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Player);

@@ -6,6 +6,7 @@ import { get, noop } from 'lodash';
 import styles from './index.less';
 import Icon from 'components/Icon';
 import historyStack from '../../utils/historyStack';
+import { reducers } from '../../store';
 import history from 'utils/history';
 
 const POP = 'POP';
@@ -101,8 +102,7 @@ class TopNav extends Component {
 	};
 
 	handleWindowSizeChange = (event, state) => {
-		const { dispatch } = this.props;
-		dispatch({ type: state });
+		reducers.common.handleChangeWindowState(state);
 	};
 
 	handleWatchGlobalClick = (e) => {

@@ -40,6 +40,14 @@ const apis = {
 	requestGetMusicComment: {
 		url: host + '/comment/music'
 	},
+	// 获取热门评论
+	// 参数 ：  type  --- 包含：  0: 歌曲 1: mv 2: 歌单 3: 专辑 4: 电台 5: 视频 6: 动态
+	// 					id
+	requestGetHotComment: {
+		url: host + '/comment/hot',
+		// field: 'hotComments',
+		defaultValue: {}
+	},
 	// 获取轮播图
 	requestGetBanner: {
 		url: host + '/banner',

@@ -30,7 +30,7 @@ export function checkType(state, action) {
 	const { type } = action;
 	if (isReduxPrimitiveType(type)) return;
 	const namespaceList = type.split(NAMESPACE_SEP);
-	warning(state[namespaceList[0]], 'namespace未注册');
+	warning(state[namespaceList[0]], `namespace -- ${namespaceList[0]} 未注册`);
 }
 
 export function isSame(one, two) {

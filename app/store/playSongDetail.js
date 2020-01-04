@@ -29,7 +29,14 @@ export default {
 		// 当前列表播放歌曲id
 		// currentPlaySongId: '426881573',
 		lyric: [],
-		info: {}
+		info: {},
+		hotComment: {
+			total: 0,
+			pagination: false,
+			list: [],
+			page: 1,
+			limit: 20
+		}
 	},
 	reducers: {
 		changePlayMode({ state }, payload) {
@@ -57,6 +64,18 @@ export default {
 			const lyric = nolyric ? [ 0, '纯音乐，请您欣赏' ] : lyricFormat(get(lyricInfo, 'lrc.lyric', ''));
 			console.log('lyric:', lyric);
 			put('playSongDetail/lyric', lyric);
+		},
+		async getHotComment({ call, put, state, rootState }, id) {
+			const { hotComment } = state;
+			const commentInfo = await requestMap.requestGetHotComment({
+				id,
+				type: 0
+			});
+			put('playSongDetail/hotComment', {
+				...hotComment,
+				list: get(commentInfo, 'hotComments'),
+				total: get(commentInfo, 'total')
+			});
 		}
 	}
 };

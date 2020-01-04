@@ -34,7 +34,11 @@ export function checkStatus(response) {
 
 export async function axiosGet(url, params = {}) {
 	const Cookie = await getCookie();
-	console.log('Cookie:', Cookie);
+	// MUSIC_U 为标识登入的 cookie 字段；  没有跳转到 登入界面
+	// if(!Cookie.includes('MUSIC_U=')) {
+
+	// }
+	// console.log('Cookie:', Cookie);
 	return axios
 		.get(url, {
 			params,
