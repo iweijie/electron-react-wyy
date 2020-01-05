@@ -15,15 +15,6 @@ export function checkModel(model, registeredNamespace = {}) {
 	warning(isAllFunction(effects), 'effects 属性值需都为函数');
 }
 
-// export function checkModels(models, registeredNamespace) {
-// 	for (let i = 0; i < models.length; i++) {
-// 		const model = models[i];
-// 		warning(!registeredNamespace[model.namespace], `namespace：${model.namespace} 以注册，请勿重复注册`);
-// 		checkModel(model);
-// 		registeredNamespace[model.namespace] = true;
-// 	}
-// }
-
 export function checkType(state, action) {
 	if (action & (action.type === DISPATCH_PUT_TYPE)) return;
 	warning(action && action.type, 'action需包含type字段');

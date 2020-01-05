@@ -1,5 +1,5 @@
-import { warning, isArray, isReduxPrimitiveType, print, isProduction } from './util';
-import { NAMESPACE_SEP, CALL_DISPATCH } from './namespace_sep';
+import { warning, isArray, isReduxPrimitiveType, print, isProduction, isEmpty } from './util';
+import { NAMESPACE_SEP, CALL_DISPATCH, PUT_DISPATCH, FUNC_TYPE } from './namespace_sep';
 import { checkModel, checkType, isSame } from './check';
 import { createStore, applyMiddleware } from 'redux';
 
@@ -8,41 +8,68 @@ export default function enhanceRedux(models, { enhancer, reducer }) {
 	const decorateReducers = {};
 	const primevalReducer = {};
 	let states = {};
-	let dispatch;
+	let store;
+	let reduxDispatch;
 	let getState;
 	let replaceReducer;
+
+	/**
+	 * 自定义 dispatch 函数； 用于分发拦截
+	 * @param {object} action 
+	 */
+
+	function dispatch(action = {}) {
+		if (isEmpty(action && action.type)) return;
+		let { type, payload } = action;
+		if (action[CALL_DISPATCH]) {
+			try {
+				const [ namespace, key ] = type.split(NAMESPACE_SEP);
+				const callHandle = decorateReducers[namespace][key];
+				return callHandle(payload);
+			} catch (err) {
+				console.error(err);
+			}
+		} else {
+			return reduxDispatch(action);
+		}
+	}
 
 	/*
    *	包装 reducer 函数
    */
 
-	function decorateReducer(namespace, key, reducerHandle) {
-		return (...payload) => {
+	function decorateReducer(namespace, key, reducerHandle, type) {
+		const anonymous = (...payload) => {
 			if (!isProduction) {
-				print(`${namespace}${NAMESPACE_SEP}${key}`);
+				print(`${type}--  ${namespace}${NAMESPACE_SEP}${key}`);
 			}
 			const state = getState();
-			dispatch({
+			const data = reducerHandle(
+				{
+					state: state[namespace],
+					rootState: state
+				},
+				...payload
+			);
+			reduxDispatch({
 				type: `${namespace}`,
-				payload: reducerHandle(
-					{
-						state: state[namespace],
-						rootState: state
-					},
-					...payload
-				)
+				payload: data
 			});
+			return data;
 		};
+
+		anonymous[FUNC_TYPE] = type;
+		return anonymous;
 	}
 
 	/*
    *	包装 effect 函数
    */
 
-	function decorateEffect(namespace, key, effect) {
-		return (...payload) => {
+	function decorateEffect(namespace, key, effect, type) {
+		const anonymous = (...payload) => {
 			if (!isProduction) {
-				print(`${namespace}${NAMESPACE_SEP}${key}`);
+				print(`${type}--  ${namespace}${NAMESPACE_SEP}${key}`);
 			}
 			const state = getState();
 			return effect(
@@ -55,6 +82,8 @@ export default function enhanceRedux(models, { enhancer, reducer }) {
 				...payload
 			);
 		};
+		anonymous[FUNC_TYPE] = type;
+		return anonymous;
 	}
 
 	/*
@@ -81,7 +110,7 @@ export default function enhanceRedux(models, { enhancer, reducer }) {
 		Object.keys(reducers).forEach((key) => {
 			if (!decorateReducers[namespace]) decorateReducers[namespace] = {};
 			if (!primevalReducer[namespace]) primevalReducer[namespace] = {};
-			decorateReducers[namespace][key] = decorateReducer(namespace, key, reducers[key]);
+			decorateReducers[namespace][key] = decorateReducer(namespace, key, reducers[key], 'reducer');
 			primevalReducer[namespace][key] = reducers[key];
 		});
 		// 获取 effect
@@ -91,7 +120,7 @@ export default function enhanceRedux(models, { enhancer, reducer }) {
 			if (!decorateReducers[namespace]) decorateReducers[namespace] = {};
 			if (!primevalReducer[namespace]) primevalReducer[namespace] = {};
 			warning(!decorateReducers[key], `模块${namespace}中，reducers的${key}属性被effects中的${key}属性覆盖`);
-			decorateReducers[namespace][key] = decorateEffect(namespace, key, effects[key]);
+			decorateReducers[namespace][key] = decorateEffect(namespace, key, effects[key], 'effect');
 			primevalReducer[namespace][key] = effects[key];
 		});
 	}
@@ -110,10 +139,12 @@ export default function enhanceRedux(models, { enhancer, reducer }) {
 
 	function call(origin, oneType) {
 		return (twoType, payload) => {
-			if (process.env.NODE_ENV !== 'production') {
+			if (!isProduction) {
 				isSame(twoType, oneType);
+				// 如果是循环调用 ，表示无能为力
+				// throw new Error(`${twoType} 自调用，烦请看看是否调用错了。`);
 			}
-			dispatch({
+			return dispatch({
 				type: twoType,
 				payload,
 				[CALL_DISPATCH]: true
@@ -122,35 +153,36 @@ export default function enhanceRedux(models, { enhancer, reducer }) {
 	}
 	// origin, key
 	function put() {
-		return (namespace, payload) => {
+		return (namespace, payload) =>
 			dispatch({
 				type: namespace,
 				payload
+				// [PUT_DISPATCH]: true
 			});
-		};
 	}
 
-	function middleware(store) {
-		return (next) => (action) => {
-			// 兼容性问题处理
-			if (!action) return;
-			if (action[CALL_DISPATCH]) {
-				const { type, payload = {} } = action;
-				try {
-					const [ namespace, key ] = type.split(NAMESPACE_SEP);
-					const callHandle = primevalReducer[namespace][key];
-					const rootState = store.getState();
-					return next({
-						type: namespace,
-						payload: callHandle({ state: rootState[namespace], rootState }, ...payload)
-					});
-				} catch (err) {
-					console.error(err);
-				}
-			}
-			return next(action);
-		};
-	}
+	// function middleware(store) {
+	// 	return (next) => (action) => {
+	// 		// 兼容性问题处理
+	// 		if (!action) return;
+	// 		if (action[CALL_DISPATCH]) {
+	// 			const { type, payload = {} } = action;
+	// 			try {
+	// 				const [ namespace, key ] = type.split(NAMESPACE_SEP);
+	// 				const callHandle = primevalReducer[namespace][key];
+	// 				const rootState = store.getState();
+	// 				return next({
+	// 					type: namespace,
+	// 					payload: callHandle({ state: rootState[namespace], rootState }, payload)
+	// 				});
+	// 			} catch (err) {
+	// 				console.error(err);
+	// 			}
+	// 		}
+	// 		return next(action);
+	// 	};
+	// }
+
 	// react-redux  connect  第二个参数传对象时，会再被dispatch包裹一次
 	// action 会为空时；做下错误处理
 	function defaultReduce(state = {}, action = {}) {
@@ -188,15 +220,16 @@ export default function enhanceRedux(models, { enhancer, reducer }) {
 
 	models.forEach(registryModel);
 
-	const store = createStore(reducer || defaultReduce, states, applyMiddleware(middleware, ...enhancer));
+	store = createStore(reducer || defaultReduce, states, applyMiddleware(...enhancer));
 
-	dispatch = store.dispatch;
+	reduxDispatch = store.dispatch;
 	getState = store.getState;
 	replaceReducer = store.replaceReducer;
 
 	return {
 		store: {
-			...store
+			...store,
+			dispatch
 		},
 		reducers: { ...decorateReducers },
 		registry,

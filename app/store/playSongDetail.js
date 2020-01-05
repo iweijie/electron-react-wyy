@@ -4,10 +4,7 @@ import { get, split, slice, filter } from 'lodash';
 function lyricFormat(lyric) {
 	const newArr = [];
 	if (!lyric) return newArr;
-	// const num = str.indexOf('[00:');
-	// const b = str.slice(num);
 	const arr = filter(split(lyric, '\n'), Boolean);
-
 	for (let i = arr.length - 1; i >= 0; i--) {
 		if (!arr[i]) continue;
 		const a = split(arr[i].slice(1), ']');
@@ -26,8 +23,8 @@ function getTime(str) {
 export default {
 	namespace: 'playSongDetail',
 	state: {
-		// 当前列表播放歌曲id
-		// currentPlaySongId: '426881573',
+		// 当前显示详情的 id
+		playDetialId: '',
 		lyric: [],
 		info: {},
 		hotComment: {
@@ -39,16 +36,16 @@ export default {
 		}
 	},
 	reducers: {
-		changePlayMode({ state }, payload) {
+		setPlayDetailId({ state }, payload) {
 			return {
 				...state,
-				playMode: payload || 1
+				playDetialId: payload
 			};
 		},
-		changePlayMore({ state }, payload = {}) {
+		setHotComment({ state }, payload) {
 			return {
 				...state,
-				...payload
+				hotComment: payload
 			};
 		}
 	},
@@ -60,10 +57,9 @@ export default {
 		async getLyric({ call, put, state, rootState }, id) {
 			const lyricInfo = await requestMap.requestGetLyric({ id });
 			const nolyric = get(lyricInfo, 'nolyric', false);
-			console.log('lyricInfo:', lyricInfo);
 			const lyric = nolyric ? [ 0, '纯音乐，请您欣赏' ] : lyricFormat(get(lyricInfo, 'lrc.lyric', ''));
-			console.log('lyric:', lyric);
 			put('playSongDetail/lyric', lyric);
+			return lyric;
 		},
 		async getHotComment({ call, put, state, rootState }, id) {
 			const { hotComment } = state;
@@ -71,7 +67,7 @@ export default {
 				id,
 				type: 0
 			});
-			put('playSongDetail/hotComment', {
+			call('playSongDetail/setHotComment', {
 				...hotComment,
 				list: get(commentInfo, 'hotComments'),
 				total: get(commentInfo, 'total')

@@ -9,7 +9,6 @@ import PlaylistTitle from 'components/PlaylistTitle/index';
 import { request } from '../../../request/index';
 import { from } from 'rxjs';
 
-
 class Recommendation extends Component {
 	constructor(props) {
 		super(props);
@@ -20,7 +19,7 @@ class Recommendation extends Component {
 
 	componentDidMount() {
 		const { getBanner, getPersonalized } = this.props;
-		getBanner();
+		getBanner()
 		getPersonalized();
 	}
 	render() {

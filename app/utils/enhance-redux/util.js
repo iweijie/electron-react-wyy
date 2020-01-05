@@ -1,12 +1,12 @@
 import { __DO_NOT_USE__ActionTypes } from 'redux';
 
+export const isProduction = process.env.NODE_ENV === 'production';
+
 /**
- * @param {Boolean} condition 为否时触发
- * @param {String} message 信息
+ * @param   {Boolean} condition 为否时触发
+ * @param   {String}  message 信息
  * @returns {void}
  */
-
-export const isProduction = process.env.NODE_ENV === 'production';
 
 export function warning(condition, message) {
 	if (!!condition) return;
@@ -39,4 +39,8 @@ export const getUniqueness = (str = 'uniqueness') => {
 export const print = (actionType) => {
 	if (isProduction) return;
 	console.log(`调用了 %c ${actionType}`, 'font-size:14px;color:#ff8400;');
+};
+
+export const isEmpty = (obj) => {
+	return obj === undefined || obj === '' || obj === null;
 };

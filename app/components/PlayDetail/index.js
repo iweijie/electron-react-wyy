@@ -25,14 +25,17 @@ class Player extends Component {
 	};
 
 	componentDidMount() {
-		this.props.getSongDetail('210837');
-		this.props.getLyric('210837');
-		this.props.getHotComment('210837');
 		// https://blog.csdn.net/yzy_csdn/article/details/84536646
 		// ontimeupdate  onseeked
+		this.init();
 	}
 
-	componentDidUpdate(preProps) {}
+	componentDidUpdate(preProps) {
+		const { currentPlaySongId, isShowPlayDetailPage, playDetialId } = this.props;
+		if (isShowPlayDetailPage && playDetialId !== currentPlaySongId) {
+			this.init();
+		}
+	}
 
 	render() {
 		const { currentPlaySongId, isShowPlayDetailPage, info, lyric, hotComment } = this.props;
@@ -42,9 +45,9 @@ class Player extends Component {
 			<CSSTransition in={isShowDetail} timeout={300} classNames="detail" unmountOnExit>
 				<div className={styles['global-container-play-detail-wrap']}>
 					<div className={styles['play-detail-lyric-wrap']}>
-						<div className={styles.blur}>
+						{/* <div className={styles.blur}>
 							<div style={{ backgroundImage: `url(${get(info, 'al.picUrl', '')})` }} />
-						</div>
+						</div> */}
 						<div className={styles['play-detail-cd-wrap']}>
 							<div className={styles['play-detail-cd']}>
 								<img src={get(info, 'al.picUrl', '')} alt="" />
@@ -87,6 +90,15 @@ class Player extends Component {
 		);
 	}
 
+	init = () => {
+		const { currentPlaySongId, getSongDetail, getLyric, getHotComment, setPlayDetailId } = this.props;
+		if (!currentPlaySongId) return;
+		setPlayDetailId(currentPlaySongId);
+		getSongDetail(currentPlaySongId);
+		getLyric(currentPlaySongId);
+		getHotComment(currentPlaySongId);
+	};
+
 	handleCancle = () => {
 		const { isShowPlayDetailPage, changePlayMore } = this.props;
 		changePlayMore({
@@ -101,7 +113,8 @@ function mapStateToProps(state) {
 		info: state.playSongDetail.info,
 		hotComment: state.playSongDetail.hotComment,
 		isShowPlayDetailPage: state.player.isShowPlayDetailPage,
-		currentPlaySongId: state.player.currentPlaySongId
+		currentPlaySongId: state.player.currentPlaySongId,
+		playDetialId: state.playSongDetail.playDetialId
 	};
 }
 
@@ -110,7 +123,8 @@ function mapDispatchToProps() {
 		changePlayMore: reducers.player.changePlayMore,
 		getSongDetail: reducers.playSongDetail.getSongDetail,
 		getLyric: reducers.playSongDetail.getLyric,
-		getHotComment: reducers.playSongDetail.getHotComment
+		getHotComment: reducers.playSongDetail.getHotComment,
+		setPlayDetailId: reducers.playSongDetail.setPlayDetailId
 	};
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Player);

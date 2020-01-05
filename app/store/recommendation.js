@@ -12,6 +12,7 @@ export default {
 		async getBanner({ call, put, state, rootState }, name) {
 			const list = await requestMap.requestGetBanner();
 			put('recommendation/bannerList', list);
+			return list;
 		},
 
 		async getPersonalized({ call, put, state, rootState }, name) {
@@ -32,4 +33,3 @@ export default {
 		}
 	}
 };
- 
