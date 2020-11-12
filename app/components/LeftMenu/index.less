@@ -1,136 +1,60 @@
-@import "../../style/common.variate.less";
+@import '../../style/common.variate.less';
 
 .left-nav {
   width: 100%;
   height: 100%;
-  background-color: #f5f5f7;
+  // background-color: #f5f5f7;
   border-right: 1px solid @border-color;
   overflow-y: auto;
+  font-size: 14px;
+  padding: 0 18px 0 12px;
+  background-color: #fff;
+  a {
+    color: #000;
+  }
 }
 
-.sub-nav {
-  font-size: 13px;
-
-  .sub-nav-title {
-    padding-left: 10px;
-    height: 32px;
-    line-height: 32px;
-    color: #b2b2b3;
-    cursor: default;
-  }
-
-  .sub-nav-item {
-    height: 32px;
-    line-height: 32px;
-    cursor: pointer;
-
-    a {
-      display: inline-block;
-      width: 100%;
-      height: 100%;
-      color: #999;
+.list {
+  padding-top: 12px;
+  .list-item {
+    margin: 3px 0;
+    padding-left: 8px;
+    height: 36px;
+    line-height: 36px;
+    border-radius: 4px;
+    &.active {
+      font-size: 15px;
+      font-weight: 700;
+      background-color: #f6f6f7;
     }
-
-    &:hover a {
-      color: #333;
+    &:hover {
+      background-color: #f6f6f7;
     }
   }
-
-  .sub-nav-item-icon {
-    width: 18px;
-    height: 18px;
-    margin-left: 18px;
-    margin-right: 10px;
-    font-size: 16px;
-    position: relative;
-  }
-
-  .sub-nav-active {
-    background-color: #e6e7ea;
-    position: relative;
-
-    &::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      background-color: @red;
-      width: 3px;
-      height: 100%;
+}
+.sub-wrap {
+  .list {
+    padding-top: 0;
+    .list-item {
+      &.active {
+        font-size: 14px;
+        font-weight: 400;
+      }
     }
   }
-
-
-  .song-list {
-    .title {
-      line-height: 0.6rem;
-      background-color: #e8e8e8;
-      font-size: 0.24rem;
-
-      p {
-        position: relative;
-        padding-left: 0.6rem;
-      }
-
-      p::before {
-        content: '';
-        font-family: serif;
-        position: absolute;
-        width: 0.24rem;
-        height: 0.24rem;
-        top: 0.18rem;
-        left: 0.18rem;
-        background-image: url(../../static/images/down.png);
-        background-size: cover;
-        transition: all 0.3s linear;
-      }
-    }
-
-    li {
-      height: 1.2rem;
-      position: relative;
-      padding-left: 1.2rem;
-
-      .icon {
-        position: absolute;
-        top: 0.2rem;
-        left: 0.1rem;
-        width: 0.8rem;
-        height: 0.8rem;
-
-        img {
-          display: block;
-          width: 100%;
-        }
-
-      }
-
-      .cont {
-        padding-top: 0.3rem;
-        padding-bottom: 0.18rem;
-        border-bottom: 1px solid #dddddd;
-
-        .name {
-          font-size: 0.28rem;
-        }
-
-        .count {
-          color: #8c908f;
-        }
-      }
-    }
-
-    li:last-child {
-      .cont {
-        border-bottom: none;
-      }
-    }
-
+  p {
+    margin: 3px 0;
+    padding-left: 8px;
+    height: 36px;
+    line-height: 36px;
+    border-radius: 4px;
+    color: #aeaeae;
+    font-size: 13px;
   }
-
-  .song-list.up {
-    p::before {
-      transform: rotate(-180deg);
+  :global {
+    .iconfont {
+      font-size: 14px;
+      margin-right: 10px;
     }
   }
 }
