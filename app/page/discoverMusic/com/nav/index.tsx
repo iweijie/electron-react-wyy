@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, matchPath } from 'react-router-dom';
 import { map } from 'lodash';
 import classnames from 'classnames';
 import styles from './index.less';
@@ -12,7 +12,7 @@ interface INavItem {
 const navList: INavItem[] = [
   {
     name: '个性推荐',
-    url: '/discovrMusic/recommendation',
+    url: '/discoverMusic/recommendation',
   },
   {
     name: '歌单',
@@ -36,10 +36,10 @@ const navList: INavItem[] = [
   },
 ];
 
-const SubNav = () => {
+const DiscoverTopNav = () => {
   const { pathname } = useLocation();
   return (
-    <div className={styles['nav-list']}>
+    <div className={styles.list}>
       {map(navList, (item) => {
         return (
           <Link to={item.url}>
@@ -57,4 +57,4 @@ const SubNav = () => {
   );
 };
 
-export default SubNav;
+export default DiscoverTopNav;

@@ -17,7 +17,7 @@ const menuList = [
     title: '推荐',
     children: [
       {
-        link: '/discovrMusic/recommendation',
+        link: '/discoverMusic/recommendation',
         title: '发现音乐',
         iconType: 'yinyue',
         iconStyle: {
@@ -54,7 +54,7 @@ class Layout extends Component {
                 />
               ))}
               {window.location.pathname.includes('app.html') && (
-                <Redirect to="/discovrMusic/recommendation" />
+                <Redirect to="/discoverMusic/recommendation" />
               )}
             </Switch>
           </div>

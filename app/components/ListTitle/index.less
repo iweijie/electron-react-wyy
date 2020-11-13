@@ -1,29 +1,36 @@
-@import "../../style/common.variate.less";
+@import '../../style/common.variate.less';
 .playlist-title {
   .head {
     // height: 20px;
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
-    border-bottom: 1px solid @border-color;
-    padding-bottom: 8px;
+    // border-bottom: 1px solid @border-color;
   }
 
   .head-title {
-    font-size: 17px;
+    display: flex;
+    align-items: center;
+    font-size: 20px;
     color: #333333;
-    height: 17px;
-    line-height: 17px;
+    font-weight: 700;
+    height: 30px;
+    line-height: 30px;
+    :global {
+      .iconfont {
+        margin-top: 5px;
+        font-size: 24px;
+      }
+    }
   }
 
   .head-more {
-    >a {
+    > a {
       display: inline-block;
       font-size: 12px;
       line-height: 16px;
 
       i {
-
         vertical-align: text-top;
       }
     }

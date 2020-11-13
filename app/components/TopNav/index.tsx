@@ -163,7 +163,7 @@ class TopNav extends Component<ITopNavProps> {
       <div className={styles['top-nav']}>
         <div className={styles['top-nav-left']}>
           <h1>网易云音乐</h1>
-          <Link to="/discovrMusic/recommendation">
+          <Link to="/discoverMusic/recommendation">
             <div className={styles['logo-wrap']}>
               <div className={styles.logo}>
                 <i className="iconfont iconwangyiyunyinle1" />

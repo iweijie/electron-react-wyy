@@ -54,20 +54,20 @@ export default {
     },
   },
   effects: {
-    async getSongDetail({ call, put, state, rootState }, ids) {
+    async getSongDetail({ call, push, state, rootState }, ids) {
       const info = await requestMap.requestSongDetail({ ids });
-      put('playSongDetail/info', info);
+      push('playSongDetail/info', info);
     },
-    async getLyric({ call, put, state, rootState }, id) {
+    async getLyric({ call, push, state, rootState }, id) {
       const lyricInfo = await requestMap.requestGetLyric({ id });
       const nolyric = get(lyricInfo, 'nolyric', false);
       const lyric = nolyric
         ? [0, '纯音乐，请您欣赏']
         : lyricFormat(get(lyricInfo, 'lrc.lyric', ''));
-      put('playSongDetail/lyric', lyric);
+      push('playSongDetail/lyric', lyric);
       return lyric;
     },
-    async getHotComment({ call, put, state, rootState }, id) {
+    async getHotComment({ call, push, state, rootState }, id) {
       const { hotComment } = state;
       const commentInfo = await requestMap.requestGetHotComment({
         id,

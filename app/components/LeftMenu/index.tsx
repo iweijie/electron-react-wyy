@@ -13,7 +13,7 @@ interface IListItem {
 const list: IListItem[] = [
   {
     name: '发现音乐',
-    url: '/discovrMusic/recommendation',
+    url: '/discoverMusic/recommendation',
   },
   {
     name: '视频',

@@ -89,7 +89,7 @@ const createWindow = async () => {
 
   // mainWindow.loadURL(`file://${__dirname}/app.html`);
   mainWindow.loadURL(
-    `file://${__dirname}/app.html#/discovrMusic/recommendation`
+    `file://${__dirname}/app.html#/discoverMusic/recommendation`
     // 'http://localhost:3000/'
   );
 

@@ -3,7 +3,7 @@
 // import { Switch, Route } from 'react-router-dom';
 // import routes from './constants/routes.json';
 // import App from './containers/App';
-// import HomePage from './page/discovrMusic/index';
+// import HomePage from './page/discoverMusic/index';
 
 // // Lazily load routes and code split with webpack
 // const LazyCounterPage = React.lazy(() =>
@@ -28,7 +28,7 @@
 // }
 
 // import React from 'react';
-import DiscovrMusicPage from './page/discovrMusic/index';
+import DiscovrMusicPage from './page/discoverMusic/index';
 import NotFound from './page/404/index';
 // import CounterPage from './containers/CounterPage';
 
@@ -38,7 +38,7 @@ import NotFound from './page/404/index';
 
 const routers = [
   {
-    path: '/discovrMusic',
+    path: '/discoverMusic',
     component: DiscovrMusicPage,
   },
   {

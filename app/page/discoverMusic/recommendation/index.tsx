@@ -2,17 +2,40 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import styles from './index.less';
-import { reducers } from 'store';
+import { reducers } from '../../../store/index';
 import { weekList } from '../contain';
-import SubNav from './subNav';
 import Slideshow from '../../../components/Slideshow/index';
-import PlaylistTitle from '../../../components/PlaylistTitle/index';
+import ListTitle from '../../../components/ListTitle/index';
 
-class Recommendation extends Component {
-  constructor(props) {
+const getTodayInfo = () => {
+  const date = new Date();
+  return {
+    day: date.getDate(),
+    week: weekList[date.getDay()] || '日',
+  };
+};
+
+interface IRecommendationProps {
+  getBanner: () => void;
+  getPersonalized: () => void;
+  bannerList: any[];
+  personalizedList: any[];
+  history: History;
+}
+
+interface IRecommendationState {
+  day: number;
+  week: string;
+}
+
+class Recommendation extends Component<
+  IRecommendationProps,
+  IRecommendationState
+> {
+  constructor(props: IRecommendationProps) {
     super(props);
     this.state = {
-      ...this.getTodayInfo(),
+      ...getTodayInfo(),
     };
   }
 
@@ -27,20 +50,26 @@ class Recommendation extends Component {
     const { bannerList, personalizedList } = this.props;
     return (
       <div className={styles.container}>
-        <SubNav />
         <div className={styles.pb30}>
           <Slideshow list={bannerList} />
         </div>
-        <PlaylistTitle title="推荐歌单" link="/test">
+        <ListTitle title="推荐歌单" link="/test">
           <ul className={styles.personalized}>
             <li className={styles['recommend-songs']}>
               <div
                 className={styles['border-grey']}
-                onClick={() => this.goRoute('/discovrMusic/recommendSongs')}
+                onClick={() => this.goRoute('/discoverMusic/recommendSongs')}
               >
                 <div className={styles.tip}>根据您的音乐口味生成，每日推荐</div>
-                <p className={styles.week}>星期{week}</p>
-                <p className={styles.day}>{day}</p>
+                {/* <p className={styles.week}>星期{week}</p> */}
+                <div className={styles.bg} />
+                <div className={styles.day}>
+                  <i className="iconfont iconcalendar-" />
+                  {day}
+                </div>
+                <div className={styles['play-icon']}>
+                  <i className="iconfont iconbofang1" />
+                </div>
               </div>
               <p className={styles.name}>每日歌曲推荐</p>
             </li>
@@ -55,36 +84,27 @@ class Recommendation extends Component {
                   >
                     <div className={styles.tip}>{item.copywriter}</div>
                     <p className={styles.playCount}>
-                      <i className="iconfont iconerji" />
+                      <i className="iconfont iconbofangsanjiaoxing" />
                       &nbsp;&nbsp;
                       {this.getFormatPlayCount(item.playCount)}
                     </p>
-                    <p />
+                    <div className={styles['play-icon']}>
+                      <i className="iconfont iconbofang1" />
+                    </div>
                   </div>
                   <p className={styles.name}>{item.name}</p>
                 </li>
               );
             })}
           </ul>
-        </PlaylistTitle>
+        </ListTitle>
       </div>
     );
   }
 
-  getTodayInfo() {
-    const date = new Date();
-    return {
-      day: date.getDate(),
-      week: weekList[date.getDay()] || '日',
-    };
-  }
-
-  getFormatPlayCount(num) {
-    if (num > 10 * 10000) {
-      return Math.floor(num / 10000) + '万';
-    }
-    return num;
-  }
+  getFormatPlayCount = (num: number): string => {
+    return num > 10 * 10000 ? `${Math.floor(num / 10000)}万` : num.toString();
+  };
 
   goRoute = (path) => {
     const { history } = this.props;

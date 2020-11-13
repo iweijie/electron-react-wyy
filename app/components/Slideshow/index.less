@@ -1,11 +1,13 @@
-@import "../../style/common.variate.less";
+@import '../../style/common.variate.less';
 
 .slide-wrap {
   width: 100%;
-
+  margin-top: 20px;
+  height: 240px;
+  position: relative;
   .slideBox {
     width: 630px;
-    height: 210px;
+    height: 195px;
     margin: 0 auto;
     position: relative;
     .slide {
@@ -15,7 +17,8 @@
       width: 75%;
       transition: all 0.3s linear;
       user-select: none; // 禁止用户选中(防止图片被选中时变色);
-
+      border-radius: 5px;
+      overflow: hidden;
       &:hover {
         // 鼠标经过时显示小手样式
         cursor: pointer;
@@ -32,7 +35,7 @@
           color: #ffffff;
           border-top-left-radius: 8px;
           border-bottom-left-radius: 8px;
-          padding: 0 8px 0  8px;
+          padding: 0 8px 0 8px;
           line-height: 18px;
           font-size: 12px;
         }
@@ -56,9 +59,9 @@
 
       &.middle {
         // 此为中间展示的那张
-        left: 10%;
-        bottom: 0%;
-        width: 80%;
+        left: 5%;
+        bottom: -7.5%;
+        width: 90%;
         z-index: 2;
         background: transparent;
       }
@@ -71,6 +74,11 @@
         z-index: 1;
       }
 
+      &.start:hover ~ .btn-left {
+        background-color: rgba(0, 0, 0, 0.3);
+        color: rgba(255, 255, 255, 0.7);
+      }
+
       &.end {
         // 最后一张及右侧那张
         left: 33%;
@@ -79,42 +87,72 @@
         width: 75%;
         z-index: 1;
       }
-    }
-
-    .point {
-      width: 100%;
-      position: absolute;
-      left: 0;
-      bottom: -18px;
-      z-index: 1;
-      display: flex;
-      justify-content: center;
-
-      div {
-        padding: 5px 5px;
-        height: 15px;
-        box-sizing: border-box;
-        line-height: 5px;
-
-        &:hover {
-          cursor: pointer;
-
-          span {
-            background-color: @red;
-          }
-        }
+      &.end:hover ~ .btn-right {
+        background-color: rgba(0, 0, 0, 0.3);
+        color: rgba(255, 255, 255, 0.7);
       }
+    }
+  }
 
-      span {
-        display: inline-block;
-        width: 20px;
-        height: 2px;
-        background-color: #d9d9d9;
+  .point {
+    width: 100%;
+    position: absolute;
+    left: 0;
+    bottom: 8px;
+    z-index: 1;
+    display: flex;
+    justify-content: center;
 
-        &.active {
+    div {
+      padding: 5px 5px;
+      height: 15px;
+      box-sizing: border-box;
+      line-height: 5px;
+
+      &:hover {
+        cursor: pointer;
+
+        span {
           background-color: @red;
         }
       }
+    }
+
+    span {
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background-color: #d9d9d9;
+
+      &.active {
+        background-color: @red;
+      }
+    }
+  }
+
+  .btn {
+    position: absolute;
+    top: 50%;
+    left: -20px;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    background-color: rgba(0, 0, 0, 0.15);
+    color: rgba(255, 255, 255, 0.3);
+    line-height: 25px;
+    text-align: center;
+    padding-top: 1px;
+    z-index: 10;
+    &.btn-right {
+      left: auto;
+      right: -20px;
+    }
+    &:hover {
+      cursor: pointer;
+      background-color: rgba(0, 0, 0, 0.3);
+      color: rgba(255, 255, 255, 0.7);
+      // color: rgba(255, 255, 255, 1);
     }
   }
 }

@@ -1,0 +1,85 @@
+@import '../../../../style/common.variate.less';
+
+.left-nav {
+  width: 100%;
+  height: 100%;
+  // background-color: #f5f5f7;
+  border-right: 1px solid @border-color;
+  overflow-y: auto;
+  font-size: 14px;
+  padding: 0 18px 0 12px;
+  background-color: #fff;
+  a {
+    color: #000;
+  }
+}
+
+.list {
+  height: 40px;
+  display: flex;
+  line-height: 40px;
+  width: 760px;
+  margin: 0 auto;
+  margin-top: 10px;
+  color: @darkColor;
+  font-size: 16px;
+  .list-item {
+    padding: 0 10px;
+    &:hover {
+      color: #000000;
+    }
+  }
+
+  .active {
+    color: #000000;
+    font-size: 20px;
+    font-weight: 700;
+    position: relative;
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 20px;
+      width: calc(100% - 40px);
+      height: 3px;
+      border-radius: 2px;
+      background-color: @red;
+    }
+  }
+}
+
+.ul {
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  line-height: 40px;
+  border-bottom: 1px solid #f2f2f2;
+
+  > li {
+    margin-right: 35px;
+    padding: 0 15px;
+
+    &:last-child {
+      margin-right: 0;
+    }
+
+    &.active {
+      position: relative;
+
+      > a {
+        color: @red;
+      }
+
+      &::after {
+        content: '';
+        height: 2px;
+        width: 100%;
+        background-color: @red;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+      }
+    }
+  }
+}

@@ -29,20 +29,20 @@ export default class Home extends Component<IDiscovrMusic> {
     const { history, match } = this.props;
     return (
       <div className={styles.container}>
-        <Nav history={history} match={match} />
-        {/* <Switch> */}
-        <Route
-          exact
-          path="/discovrMusic/recommendation"
-          component={Recommendation}
-        />
-        <Route
-          exact
-          path="/discovrMusic/recommendSongs"
-          component={RecommendSongs}
-        />
-        <Route exact path="/discovrMusic/playlist" component={Playlist} />
-        {/* </Switch> */}
+        <Nav />
+        <Switch>
+          <Route
+            exact
+            path="/discoverMusic/recommendation"
+            component={Recommendation}
+          />
+          <Route
+            exact
+            path="/discoverMusic/recommendSongs"
+            component={RecommendSongs}
+          />
+          <Route exact path="/discoverMusic/playlist" component={Playlist} />
+        </Switch>
       </div>
     );
   }
