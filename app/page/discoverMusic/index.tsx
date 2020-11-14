@@ -28,21 +28,23 @@ export default class Home extends Component<IDiscovrMusic> {
   render() {
     const { history, match } = this.props;
     return (
-      <div className={styles.container}>
+      <div className={styles.wrap}>
         <Nav />
-        <Switch>
-          <Route
-            exact
-            path="/discoverMusic/recommendation"
-            component={Recommendation}
-          />
-          <Route
-            exact
-            path="/discoverMusic/recommendSongs"
-            component={RecommendSongs}
-          />
-          <Route exact path="/discoverMusic/playlist" component={Playlist} />
-        </Switch>
+        <div className={styles.container}>
+          <Switch>
+            <Route
+              exact
+              path="/discoverMusic/recommendation"
+              component={Recommendation}
+            />
+            <Route
+              exact
+              path="/discoverMusic/recommendSongs"
+              component={RecommendSongs}
+            />
+            <Route exact path="/discoverMusic/playlist" component={Playlist} />
+          </Switch>
+        </div>
       </div>
     );
   }

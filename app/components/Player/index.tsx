@@ -156,108 +156,125 @@ class Player extends Component<IPlayerProps, IPlayerState> {
       (player) => player.id === currentPlaySongId
     );
     return (
-      <div className={`${styles.player} _player_wrap`} ref={this.wrapRef}>
-        {/* 当有播放歌曲 且 没有展示详情的时候显示 */}
-        <CSSTransition
-          in={!!currentPlaySongId && !isShowPlayDetailPage}
-          timeout={300}
-          classNames="small"
-          unmountOnExit
-          // onEnter={() => setShowButton(false)}
-          // onExited={() => setShowButton(true)}
-        >
-          <div className={styles.song}>
-            <div className={styles['small-song']}>
-              <div className={styles['small-song-img']}>
-                <div className={styles.mask} onClick={this.handleShowDetail}>
-                  <i className="iconzhankaiquanpingkuozhan iconfont" />
+      <>
+        <div className={`${styles.player} _player_wrap`} ref={this.wrapRef}>
+          {/* 当有播放歌曲 且 没有展示详情的时候显示 */}
+          <div className={styles['small-play-detail']}>
+            <CSSTransition
+              in={!!currentPlaySongId && !isShowPlayDetailPage}
+              timeout={300}
+              classNames="small"
+              unmountOnExit
+            >
+              <div className={styles['small-song']}>
+                <div className={styles['small-song-img']}>
+                  <div className={styles.mask} onClick={this.handleShowDetail}>
+                    <i className="iconzhankaiquanpingkuozhan iconfont" />
+                  </div>
+                  <img src={this.getSmallSongImg(currentPlaySong)} alt="" />
                 </div>
-                <img src={this.getSmallSongImg(currentPlaySong)} alt="" />
+                <div className={styles['small-song-name']}>
+                  <p className={styles.name}>{get(currentPlaySong, 'name')}</p>
+                  <p className={styles.artists}>
+                    {join(
+                      map(
+                        get(currentPlaySong, 'album.artists'),
+                        (item) => item.name
+                      ),
+                      '/'
+                    )}
+                  </p>
+                </div>
+                <div className={styles.love}>
+                  <i className="iconfont iconlove" />
+                </div>
               </div>
-              <div className={styles['small-song-name']}>
-                <p className={styles.name}>{get(currentPlaySong, 'name')}</p>
-                <p className={styles.artists}>
-                  {join(
-                    map(
-                      get(currentPlaySong, 'album.artists'),
-                      (item) => item.name
-                    ),
-                    '/'
-                  )}
-                </p>
+            </CSSTransition>
+          </div>
+          {/* 音乐控制功能 */}
+          <div className={styles.control}>
+            {/* 控制按钮 */}
+            <div className={styles.btns}>
+              {/* 播放方式 */}
+              <div
+                className={styles['play-mode']}
+                onClick={this.handleChangeMode}
+                title={this.getPlayerModeText()}
+              >
+                {playMode === 1 && <i className="iconfont iconxunhuan1" />}
+                {playMode === 2 && <i className="iconfont iconsuiji1" />}
+                {playMode === 3 && (
+                  <i className="iconfont iconxunhuan">
+                    <span>1</span>
+                  </i>
+                )}
+              </div>
+              <button type="button" className={styles['switch-song']}>
+                <i className="iconfont iconSanMiAppglyphico" />
+              </button>
+              <button
+                className={styles['play-btn']}
+                type="button"
+                onClick={this.handleSwitchAudioPlayStatus}
+              >
+                {audioPlayStatus ? (
+                  <i className="iconfont iconbofangzanting" />
+                ) : (
+                  <i className="iconfont iconbofang1" />
+                )}
+              </button>
+              <button type="button" className={styles['switch-song']}>
+                <i className="iconfont iconSanMiAppglyphico1" />
+              </button>
+              <button type="button">词</button>
+            </div>
+            {/* 音乐进度条 */}
+            <div className={styles['time-progress']}>
+              <div className={styles['time-running']}>
+                {isEmpty(playerList)
+                  ? DEFAULT_TIME
+                  : getFormatTime(currentTime)}
+              </div>
+              <div ref={this.progressRef} className={styles.progress}>
+                <span
+                  className={styles['progress-mask']}
+                  style={{ width: `${runningTimeRatio}%` }}
+                >
+                  <i className={styles.drag} />
+                </span>
+              </div>
+              <div className={styles['time-end']}>
+                {isEmpty(playerList)
+                  ? DEFAULT_TIME
+                  : getFormatTime(audio.duration)}
               </div>
             </div>
           </div>
-        </CSSTransition>
-        <div className={styles.control}>
-          <div className={styles.btns}>
-            <button type="button">
-              <i className="iconfont iconSanMiAppglyphico" />
-            </button>
-            <button type="button" onClick={this.handleSwitchAudioPlayStatus}>
-              {audioPlayStatus ? (
-                <i className="iconfont iconbofangzanting" />
-              ) : (
-                <i className="iconfont iconbofang1" />
-              )}
-            </button>
-            <button type="button">
-              <i className="iconfont iconSanMiAppglyphico1" />
-            </button>
-          </div>
-          <div className={styles['time-progress']}>
-            <div className={styles['time-running']}>
-              {isEmpty(playerList) ? DEFAULT_TIME : getFormatTime(currentTime)}
+          <div>
+            <div className={styles['sound-progress']}>
+              <div className={styles['sound-control']}>
+                <i className="iconfont iconshengyin" />
+              </div>
+              <div ref={this.volumeRef} className={styles.progress}>
+                <span
+                  className={styles['progress-mask']}
+                  style={{ width: `${audio.volume * 100}%` }}
+                >
+                  <i className={styles.drag} />
+                </span>
+              </div>
             </div>
-            <div ref={this.progressRef} className={styles.progress}>
-              <span
-                className={styles['progress-mask']}
-                style={{ width: `${runningTimeRatio}%` }}
-              >
-                <i className={styles.drag} />
-              </span>
+            <div
+              className={styles['songs-list-btn']}
+              onClick={() => this.handleChangePlayListStatus(!playListStatus)}
+              title="歌单"
+            >
+              <i className="iconfont iconRectangleCopy" />
             </div>
-            <div className={styles['time-end']}>
-              {isEmpty(playerList)
-                ? DEFAULT_TIME
-                : getFormatTime(audio.duration)}
-            </div>
-          </div>
-          <div className={styles['sound-progress']}>
-            <div className={styles['sound-control']}>
-              <i className="iconfont iconshengyin" />
-            </div>
-            <div ref={this.volumeRef} className={styles.progress}>
-              <span
-                className={styles['progress-mask']}
-                style={{ width: `${audio.volume * 100}%` }}
-              >
-                <i className={styles.drag} />
-              </span>
-            </div>
-          </div>
-          <div
-            onClick={this.handleChangeMode}
-            className={styles['play-mode']}
-            title={this.getPlayerModeText()}
-          >
-            {playMode === 1 && <i className="iconfont iconxunhuan1" />}
-            {playMode === 2 && <i className="iconfont iconsuiji1" />}
-            {playMode === 3 && (
-              <i className="iconfont iconxunhuan">
-                <span>1</span>
-              </i>
-            )}
-            <span />
-          </div>
-          <div
-            className={styles['songs-list-btn']}
-            onClick={() => this.handleChangePlayListStatus(!playListStatus)}
-            title="歌单"
-          >
-            <i className="iconfont iconRectangleCopy" />
           </div>
         </div>
+
+        {/* 歌单列表 */}
         <div style={{ display: playListStatus ? 'block' : 'none' }}>
           <PlayList
             handleClearPlayList={this.handleClearPlayList}
@@ -267,7 +284,7 @@ class Player extends Component<IPlayerProps, IPlayerState> {
             handleDoubleClick={this.handlePlay}
           />
         </div>
-      </div>
+      </>
     );
   }
 
@@ -292,7 +309,7 @@ class Player extends Component<IPlayerProps, IPlayerState> {
   };
 
   handleEnded = () => {
-    // 1: 循环 ； 2 随机； 3 单曲
+    // 1: 循环 ； 2 随机； 3 单曲, 4: 顺序
     const { playMode } = this.props;
     switch (playMode) {
       case 1:
@@ -300,6 +317,8 @@ class Player extends Component<IPlayerProps, IPlayerState> {
       case 2:
         return this.randomMode();
       case 3:
+        return undefined;
+      case 4:
         return undefined;
       default:
         return this.loopMode();

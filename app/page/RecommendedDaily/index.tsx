@@ -3,8 +3,8 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { reducers } from 'store';
 import { map } from 'lodash';
-import SongsList from '../../../components/SongsList';
-import { weekList } from '../contain';
+import SongsList from '../../components/SongsList';
+import { weekList } from '../../constants/index';
 import styles from './index.less';
 
 class RecommendSongs extends Component {
@@ -97,4 +97,9 @@ function mapDispatchToProps() {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(RecommendSongs);
+const RecommendedDaily = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(RecommendSongs);
+
+export default RecommendedDaily;

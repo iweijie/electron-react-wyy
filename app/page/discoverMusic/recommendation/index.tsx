@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+import classnames from 'classnames';
+import { History } from 'history';
 import styles from './index.less';
 import { reducers } from '../../../store/index';
 import { weekList } from '../contain';
@@ -47,7 +49,7 @@ class Recommendation extends Component<
 
   render() {
     const { week, day } = this.state;
-    const { bannerList, personalizedList } = this.props;
+    const { bannerList, personalizedList, history } = this.props;
     return (
       <div className={styles.container}>
         <div className={styles.pb30}>
@@ -58,7 +60,7 @@ class Recommendation extends Component<
             <li className={styles['recommend-songs']}>
               <div
                 className={styles['border-grey']}
-                onClick={() => this.goRoute('/discoverMusic/recommendSongs')}
+                onClick={() => history.push('/recommendedDaily')}
               >
                 <div className={styles.tip}>根据您的音乐口味生成，每日推荐</div>
                 {/* <p className={styles.week}>星期{week}</p> */}
@@ -88,7 +90,7 @@ class Recommendation extends Component<
                       &nbsp;&nbsp;
                       {this.getFormatPlayCount(item.playCount)}
                     </p>
-                    <div className={styles['play-icon']}>
+                    <div className={classnames(styles['play-icon'])}>
                       <i className="iconfont iconbofang1" />
                     </div>
                   </div>
@@ -104,11 +106,6 @@ class Recommendation extends Component<
 
   getFormatPlayCount = (num: number): string => {
     return num > 10 * 10000 ? `${Math.floor(num / 10000)}万` : num.toString();
-  };
-
-  goRoute = (path) => {
-    const { history } = this.props;
-    history.push(path);
   };
 }
 

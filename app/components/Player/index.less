@@ -1,61 +1,67 @@
-@import "../../style/common.variate.less";
+@import '../../style/common.variate.less';
 
 .player {
+  display: flex;
+  justify-content: space-between;
   position: relative;
   width: 100%;
-  height: 50px;
+  height: 73px;
   border-top: 1px solid @border-color;
-  background-color: #fff;
+  background-color: #f6f6f8;
 }
 
 .control {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding-right: 20px;
   height: 100%;
-
+  width: 460px;
+  background-color: #fff;
+  padding-top: 10px;
   .btns {
-    width: 200px;
+    width: 220px;
+    margin: 0 auto;
     display: flex;
-    justify-content: center;
     align-items: center;
+    justify-content: space-between;
     overflow: hidden;
-
-    // :global(.iconfont) {
-    //   font-size: 16px;
-    // }
     :global(.iconbofang1) {
       position: relative;
       left: 2px;
     }
+    > div,
+    button {
+      width: 36px;
+      height: 36px;
+      i {
+        font-size: 20px;
+        display: inline-block;
+        height: 20px;
+      }
+      background-color: transparent;
+    }
+    .play-btn {
+      border-radius: 50%;
+      background-color: #ebebed;
+      &:hover {
+        background-color: #dddddd;
+      }
+    }
 
     button {
-      background-color: @red;
+      // background-color: @red;
       border: none;
       outline: none;
-      color: #fff;
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
+      // color: #fff;
+      // border-radius: 50%;
       overflow: hidden;
       cursor: pointer;
       font-size: 16px;
 
       &:nth-of-type(2) {
         margin: 0 10px;
-
         :global(.iconfont) {
           font-size: 20px;
         }
       }
-
-      // &:hover {
-      //   opacity: 1;
-      //   transform: scale(1.05);
-      // }
     }
-
   }
 
   .time-progress {
@@ -101,15 +107,14 @@
       height: 14px;
       border-radius: 50%;
       overflow: hidden;
-      border: 1px solid rgba(0, 0, 0, .2);
+      border: 1px solid rgba(0, 0, 0, 0.2);
 
       &:hover {
-
-        box-shadow: 0 0 10px rgba(0, 0, 0, .5);
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
       }
 
       &::after {
-        content: "";
+        content: '';
         position: absolute;
         top: 4px;
         left: 4px;
@@ -143,15 +148,13 @@
   }
 
   .play-mode {
-    padding: 0 8px;
+    font-weight: 700;
     cursor: pointer;
     position: relative;
-
-    :global(.iconfont) {
-      font-size: 20px;
-    }
-
-    >span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    > span {
       cursor: pointer;
       position: absolute;
       top: 0;
@@ -175,7 +178,7 @@
   background-color: #fff;
   border-top: 1px solid @border-color;
   border-left: 1px solid @border-color;
-  box-shadow: -1px -1px 8px rgba(0, 0, 0, .1);
+  box-shadow: -1px -1px 8px rgba(0, 0, 0, 0.1);
   z-index: 100;
 
   .player-list-head {
@@ -194,7 +197,7 @@
     border-radius: 6px;
     overflow: hidden;
 
-    >button {
+    > button {
       line-height: 26px;
       height: 26px;
       border: none;
@@ -215,7 +218,7 @@
     top: 2px;
     right: 0;
     padding: 8px;
-    opacity: .7;
+    opacity: 0.7;
 
     > :global(.iconfont) {
       font-size: 20px;
@@ -236,7 +239,7 @@
     justify-content: space-between;
     align-items: center;
 
-    >.icon {
+    > .icon {
       cursor: pointer;
 
       > :global(.iconfont) {
@@ -244,7 +247,6 @@
       }
 
       &:hover {
-
         color: #333333;
       }
     }
@@ -252,18 +254,16 @@
 }
 
 .player-list {
-
   width: 100%;
   height: 398px;
   overflow-y: auto;
   background-color: #fafafa;
 
   .grey {
-
     color: #c1c1c1;
   }
 
-  >ul {
+  > ul {
     text-align: left;
     color: rgba(51, 51, 51, 1);
   }
@@ -289,7 +289,7 @@
     }
 
     &.active::before {
-      content: "";
+      content: '';
       position: absolute;
       top: 8px;
       left: 10px;
@@ -336,7 +336,6 @@
     flex: 2;
   }
 
-
   .duration {
     .grey;
     width: 50px;
@@ -346,31 +345,30 @@
 :global(.iconxunhuan) {
   position: relative;
 
-  >span {
+  > span {
     position: absolute;
-    top: 3px;
-    left: 7px;
-    transform: scale(.6);
-    font-size: 13px;
+    top: 1.5px;
+    left: 6px;
+    transform: scale(0.6);
+    font-size: 12px;
   }
 }
-
+.small-play-detail {
+  width: 250px;
+}
 .small-song {
-  border-top: 1px solid @border-color;
-  position: absolute;
-  top: -61px;
-  left: 0;
-  width: 199px;
-  height: 60px;
+  height: 100%;
   display: flex;
-  align-items: center;
-  background-color: #fff;
-  padding-left: 10px;
+  border-top: 1px solid @border-color;
+  padding: 16px 0;
 
   .small-song-img {
     position: relative;
-    margin-right: 10px;
+    // margin-right: 10px;
     border: 1px solid @border-color;
+    border-radius: 4px;
+    overflow: hidden;
+    margin: 0 12px;
   }
 
   .mask {
@@ -381,13 +379,12 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, .5);
+    background-color: rgba(0, 0, 0, 0.5);
     color: #fff;
     align-items: center;
     justify-content: center;
 
     :global(.iconfont) {
-
       font-size: 26px;
     }
   }
@@ -403,21 +400,20 @@
       display: flex;
     }
   }
+  .love > i {
+    font-size: 20px;
+  }
 }
 
 .small-song-name {
-  width: 140px;
-
+  max-width: 140px;
+  margin-right: 12px;
   p {
     width: 100%;
     line-height: 20px;
-    font-size: 12px;
+    font-size: 14px;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
-  }
-
-  .artists {
-    color: #999;
   }
 }

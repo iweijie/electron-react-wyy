@@ -64,7 +64,6 @@ class Slideshow extends React.Component<ISlideshowProps, ISlideshowState> {
   }
 
   componentDidUpdate(preProps: ISlideshowProps, state: ISlideshowState) {
-    console.log('componentDidUpdate', state.current, state.imgListState);
     const { list } = this.props;
     if (preProps.list !== list) {
       // eslint-disable-next-line react/no-did-update-set-state
