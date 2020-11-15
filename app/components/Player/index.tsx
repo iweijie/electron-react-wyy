@@ -24,12 +24,32 @@ enum AudioStatus {
   PLAY,
 }
 
-// 1: 循环 ； 2 随机； 3 单曲
+// 0: 循环 1: 顺序 ； 2 随机； 3 单曲
 enum PlayMode {
-  loop = 1,
   random,
+  order,
+  loop,
   single,
 }
+
+const PlayModeIcon = ({ mode }: { mode: PlayMode }) => {
+  switch (mode) {
+    case PlayMode.loop:
+      return <i className="iconfont iconxunhuan1" />;
+    case PlayMode.random:
+      return <i className="iconfont iconsuiji1" />;
+    case PlayMode.single:
+      return (
+        <i className="iconfont iconxunhuan">
+          <span>1</span>
+        </i>
+      );
+    case PlayMode.order:
+      return <i className="iconfont iconRectangleCopy" />;
+    default:
+      throw new Error('PlayMode 类型错误');
+  }
+};
 
 function createAudio() {
   return document.createElement('audio');
@@ -38,7 +58,7 @@ function createAudio() {
 interface IPlayerProps {
   playerList: any[];
   playMode: PlayMode;
-  currentPlaySongId: string;
+  currentPlaySongId: number;
   changePlayMore: (params: any) => void;
   isShowPlayDetailPage: boolean;
 }
@@ -50,8 +70,8 @@ interface IPlayerState {
   currentTime: number;
   // 进度条比例
   runningTimeRatio: number;
-  // 随机播放列表
-  randomPlayList: any[];
+  // 播放列表
+  currentPlayerList: any[];
 }
 
 class Player extends Component<IPlayerProps, IPlayerState> {
@@ -85,8 +105,8 @@ class Player extends Component<IPlayerProps, IPlayerState> {
       currentTime: 0,
       // 进度条比例
       runningTimeRatio: 0,
-      // 随机播放列表
-      randomPlayList: [],
+      // 顺序播放列表
+      currentPlayerList: [],
     };
   }
 
@@ -97,6 +117,7 @@ class Player extends Component<IPlayerProps, IPlayerState> {
   };
 
   componentDidMount() {
+    console.log(this.state, this.props);
     // console.log(remote.screen.getCursorScreenPoint());
     // Toast.fail('音乐获取失败，请重新尝试',2);
     // Toast.info('普通的Toast我普通的摇！！', 4000);
@@ -133,6 +154,8 @@ class Player extends Component<IPlayerProps, IPlayerState> {
         return '随机播放';
       case PlayMode.single:
         return '单曲循环';
+      case PlayMode.order:
+        return '顺序播放';
       default:
         return '';
     }
@@ -201,13 +224,7 @@ class Player extends Component<IPlayerProps, IPlayerState> {
                 onClick={this.handleChangeMode}
                 title={this.getPlayerModeText()}
               >
-                {playMode === 1 && <i className="iconfont iconxunhuan1" />}
-                {playMode === 2 && <i className="iconfont iconsuiji1" />}
-                {playMode === 3 && (
-                  <i className="iconfont iconxunhuan">
-                    <span>1</span>
-                  </i>
-                )}
+                <PlayModeIcon mode={playMode} />
               </div>
               <button type="button" className={styles['switch-song']}>
                 <i className="iconfont iconSanMiAppglyphico" />
@@ -250,7 +267,7 @@ class Player extends Component<IPlayerProps, IPlayerState> {
               </div>
             </div>
           </div>
-          <div>
+          <div className={styles['control-right']}>
             <div className={styles['sound-progress']}>
               <div className={styles['sound-control']}>
                 <i className="iconfont iconshengyin" />
@@ -269,7 +286,7 @@ class Player extends Component<IPlayerProps, IPlayerState> {
               onClick={() => this.handleChangePlayListStatus(!playListStatus)}
               title="歌单"
             >
-              <i className="iconfont iconRectangleCopy" />
+              <i className="iconfont iconbofangliebiao" />
             </div>
           </div>
         </div>
@@ -309,17 +326,19 @@ class Player extends Component<IPlayerProps, IPlayerState> {
   };
 
   handleEnded = () => {
+    const { audio } = this;
+    audio.loop = false;
     // 1: 循环 ； 2 随机； 3 单曲, 4: 顺序
     const { playMode } = this.props;
     switch (playMode) {
-      case 1:
-        return this.loopMode();
-      case 2:
+      case PlayMode.random:
         return this.randomMode();
-      case 3:
-        return undefined;
-      case 4:
-        return undefined;
+      case PlayMode.order:
+        return this.orderMode();
+      case PlayMode.loop:
+        return this.loopMode();
+      case PlayMode.single:
+        return this.singleMode();
       default:
         return this.loopMode();
     }
@@ -337,16 +356,41 @@ class Player extends Component<IPlayerProps, IPlayerState> {
 
   // 随机播放模式
   randomMode = () => {
-    let { randomPlayList } = this.state;
+    let { currentPlayerList } = this.state;
     const { playerList } = this.props;
     if (!playerList.length) return;
     // 随机列表存在曲目 ， 直接 获取
-    if (!randomPlayList.length) {
-      randomPlayList = this.getRandomList();
+    if (isEmpty(currentPlayerList)) {
+      currentPlayerList = this.getRandomList();
     }
-    const item = randomPlayList.pop();
+    const item = currentPlayerList.pop();
     this.setState({
-      randomPlayList,
+      currentPlayerList,
+    });
+    this.handlePlay(item);
+  };
+  // 单曲循环
+  singleMode = () => {
+    const { audio } = this;
+    audio.loop = true;
+  };
+
+  // 顺序播放模式
+  orderMode = () => {
+    let { currentPlayerList } = this.state;
+    const { playerList, currentPlaySongId } = this.props;
+    if (!playerList.length) return;
+    // 随机列表存在曲目 ， 直接 获取
+    if (isEmpty(currentPlayerList)) {
+      const findIndex = playerList.findIndex(
+        (item) => item.id === currentPlaySongId
+      );
+
+      currentPlayerList = playerList.slice(findIndex);
+    }
+    const item = currentPlayerList.pop();
+    this.setState({
+      currentPlayerList,
     });
     this.handlePlay(item);
   };
@@ -451,7 +495,6 @@ class Player extends Component<IPlayerProps, IPlayerState> {
   };
 
   getRandomList = () => {
-    const { randomPlayList } = this.state;
     const { currentPlaySongId, playerList } = this.props;
     let list = [...playerList];
     if (!list.length) return list;
@@ -472,18 +515,18 @@ class Player extends Component<IPlayerProps, IPlayerState> {
   };
   // 切换播放模式后的 处理程序
   handleChangePlayModeCall = (mode: PlayMode) => {
-    const audio = this.audio;
+    const { audio } = this;
+    audio.loop = false;
     switch (mode) {
       case PlayMode.loop:
-        audio.loop = false;
+        this.randomMode();
         break;
       case PlayMode.random:
         break;
       case PlayMode.single:
         audio.loop = true;
-        this.setState({
-          randomPlayList: [],
-        });
+        break;
+      case PlayMode.order:
         break;
       default:
         throw new Error('播放模式错误');
@@ -492,9 +535,10 @@ class Player extends Component<IPlayerProps, IPlayerState> {
   // 切换播放模式
   handleChangeMode = () => {
     const { changePlayMore, playMode } = this.props;
-    const mode = playMode + 1 > 3 ? 1 : playMode + 1;
+    const mode = (playMode + 1) % 4;
     changePlayMore({
       playMode: mode,
+      currentPlayerList: [],
     });
     this.handleChangePlayModeCall(mode);
   };
@@ -505,7 +549,7 @@ class Player extends Component<IPlayerProps, IPlayerState> {
     this.handleStopAudio();
     this.setState({
       currentTime: 0,
-      randomPlayList: [],
+      currentPlayerList: [],
     });
     changePlayMore({
       playerList: [],

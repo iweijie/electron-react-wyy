@@ -20,7 +20,7 @@ export default {
       let { all, categories, sub } = await requestMap.requestPlaylist();
       // 增加allCategories字段，将所有sub归类
       let allCategories = [];
-      for (let key in categories) {
+      for (const key in categories) {
         allCategories.push({
           category: +key,
           name: categories[key],

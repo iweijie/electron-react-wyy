@@ -6,7 +6,13 @@ import { getFormatTime } from '../../utils';
 import { reducers } from '../../store';
 import { isEmpty, map, join, get } from 'lodash';
 
-class SongList extends Component {
+interface ISongListProps {
+  songslist: any[];
+  currentPlaySongId: number;
+  changePlayMore: (params: any) => any;
+}
+
+class SongList extends Component<ISongListProps> {
   state = {
     activeItemIndex: -1,
   };
@@ -18,6 +24,13 @@ class SongList extends Component {
     return (
       <div className={styles['songs-list']}>
         <ul>
+          <li className={styles['ul-title']}>
+            <div className={styles.oreder}> </div>
+            <div className={styles.name}>音乐标题</div>
+            <div className={styles.artists}>歌手</div>
+            <div className={styles.album}>专辑</div>
+            <div className={styles.duration}>时长</div>
+          </li>
           {map(songslist, (item, index) => {
             const {
               name,
@@ -29,6 +42,7 @@ class SongList extends Component {
               duration,
             } = item;
             return (
+              // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
               <li
                 className={activeItemIndex === index ? styles.active : ''}
                 key={id}
@@ -37,7 +51,7 @@ class SongList extends Component {
               >
                 <div className={styles.oreder}>
                   {currentPlaySongId === id ? (
-                    <i className="iconfont iconshengyin" />
+                    <i className="iconfont iconyinlianglabashengyin" />
                   ) : (
                     this.getOrder(index + 1, len)
                   )}
@@ -81,22 +95,22 @@ class SongList extends Component {
     );
   }
 
-  getOrder = (num, length) => {
+  getOrder = (num: any, length: any) => {
     num = String(num);
     const len = String(length).length;
     while (num.length < len) {
-      num = '0' + num;
+      num = `0${num}`;
     }
     return num;
   };
 
-  handleClick = (item, index) => {
+  handleClick = (item: any, index: any) => {
     this.setState({
       activeItemIndex: index,
     });
   };
 
-  handleDoubleClick = (item) => {
+  handleDoubleClick = (item: any) => {
     const { changePlayMore, songslist } = this.props;
     changePlayMore({
       playerList: [...songslist],
@@ -106,7 +120,10 @@ class SongList extends Component {
   };
 }
 
-function mapStateToProps(state, own = {}) {
+function mapStateToProps(
+  state: { player: { currentPlaySongId: any } },
+  own = {}
+) {
   return {
     ...own,
     // currentIndex: state.player.currentIndex,

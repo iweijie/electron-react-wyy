@@ -9,7 +9,7 @@ interface IPlayerListProps {
   playerList: any[];
   handleDoubleClick: (item: any) => void;
   handleClearPlayList: () => void;
-  currentPlaySongId: string;
+  currentPlaySongId: number;
 }
 interface IPlayerListState {
   tabIndex: number;

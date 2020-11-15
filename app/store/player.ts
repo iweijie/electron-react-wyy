@@ -5,9 +5,12 @@ export default {
   state: {
     // 是否展示播放野详情
     isShowPlayDetailPage: false,
+    // 播放列表展示
     playerList: [],
-    // 1: 循环 ； 2 随机； 3 单曲
-    playMode: 1,
+    // 播放列表， 和 playerList 无关
+    currentPlayerList: [],
+    // 0: 循环 ； 1 顺序； 2 随机； 3 单曲
+    playMode: 0,
     // 1:播放列表；2：历史记录
     tabIndex: 1,
     // 当前列表播放歌曲

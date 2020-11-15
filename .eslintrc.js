@@ -26,6 +26,7 @@ module.exports = {
     'prefer-destructuring': 0,
     // 自增自减
     'no-plusplus': 0,
+    'no-underscore-dangle': 0,
   },
   parserOptions: {
     ecmaVersion: 2020,
