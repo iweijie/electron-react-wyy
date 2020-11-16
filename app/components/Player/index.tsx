@@ -61,6 +61,8 @@ interface IPlayerProps {
   currentPlaySongId: number;
   changePlayMore: (params: any) => void;
   isShowPlayDetailPage: boolean;
+  // 播放列表
+  currentPlayerList: any[];
 }
 
 interface IPlayerState {
@@ -70,8 +72,6 @@ interface IPlayerState {
   currentTime: number;
   // 进度条比例
   runningTimeRatio: number;
-  // 播放列表
-  currentPlayerList: any[];
 }
 
 class Player extends Component<IPlayerProps, IPlayerState> {
@@ -81,6 +81,7 @@ class Player extends Component<IPlayerProps, IPlayerState> {
   volumeRef: React.RefObject<HTMLDivElement>;
   progressRef: React.RefObject<HTMLDivElement>;
   wrapRef: React.RefObject<HTMLDivElement>;
+  playListWrapRef: React.RefObject<HTMLDivElement>;
 
   constructor(props: IPlayerProps) {
     super(props);
@@ -93,6 +94,8 @@ class Player extends Component<IPlayerProps, IPlayerState> {
     this.progressRef = React.createRef();
     // 音量
     this.volumeRef = React.createRef();
+    // 当前播放歌单列表容器
+    this.playListWrapRef = React.createRef();
 
     this.state = {
       // 是否展示播放野详情
@@ -105,8 +108,6 @@ class Player extends Component<IPlayerProps, IPlayerState> {
       currentTime: 0,
       // 进度条比例
       runningTimeRatio: 0,
-      // 顺序播放列表
-      currentPlayerList: [],
     };
   }
 
@@ -128,18 +129,18 @@ class Player extends Component<IPlayerProps, IPlayerState> {
   handleGlobalClosePlayList = (event: any): void => {
     const { playListStatus } = this.state;
     if (!playListStatus) {
-      window.removeEventListener('click', this.handleGlobalClosePlayList);
+      document.removeEventListener('click', this.handleGlobalClosePlayList);
       return;
     }
     let { target } = event;
     while (target) {
-      if (this.wrapRef.current === target) {
+      if (this.playListWrapRef.current === target) {
         return;
       }
 
       target = target.parentNode;
     }
-    window.removeEventListener('click', this.handleGlobalClosePlayList);
+    document.removeEventListener('click', this.handleGlobalClosePlayList);
     this.setState({
       playListStatus: false,
     });
@@ -181,10 +182,9 @@ class Player extends Component<IPlayerProps, IPlayerState> {
     return (
       <>
         <div className={`${styles.player} _player_wrap`} ref={this.wrapRef}>
-          {/* 当有播放歌曲 且 没有展示详情的时候显示 */}
           <div className={styles['small-play-detail']}>
             <CSSTransition
-              in={!!currentPlaySongId && !isShowPlayDetailPage}
+              in={!!currentPlaySongId}
               timeout={300}
               classNames="small"
               unmountOnExit
@@ -192,7 +192,11 @@ class Player extends Component<IPlayerProps, IPlayerState> {
               <div className={styles['small-song']}>
                 <div className={styles['small-song-img']}>
                   <div className={styles.mask} onClick={this.handleShowDetail}>
-                    <i className="iconzhankaiquanpingkuozhan iconfont" />
+                    {isShowPlayDetailPage ? (
+                      <i className="iconzhankaiquanpingkuozhan iconfont" />
+                    ) : (
+                      <i className="iconzhankaiquanpingkuozhan iconfont" />
+                    )}
                   </div>
                   <img src={this.getSmallSongImg(currentPlaySong)} alt="" />
                 </div>
@@ -292,7 +296,10 @@ class Player extends Component<IPlayerProps, IPlayerState> {
         </div>
 
         {/* 歌单列表 */}
-        <div style={{ display: playListStatus ? 'block' : 'none' }}>
+        <div
+          ref={this.playListWrapRef}
+          style={{ display: playListStatus ? 'block' : 'none' }}
+        >
           <PlayList
             handleClearPlayList={this.handleClearPlayList}
             playerList={playerList}
@@ -326,48 +333,62 @@ class Player extends Component<IPlayerProps, IPlayerState> {
   };
 
   handleEnded = () => {
-    const { audio } = this;
-    audio.loop = false;
+    let { currentPlayerList } = this.props;
+    const { playerList } = this.props;
+    if (!playerList.length) return;
     // 1: 循环 ； 2 随机； 3 单曲, 4: 顺序
     const { playMode } = this.props;
-    switch (playMode) {
-      case PlayMode.random:
-        return this.randomMode();
-      case PlayMode.order:
-        return this.orderMode();
-      case PlayMode.loop:
-        return this.loopMode();
-      case PlayMode.single:
-        return this.singleMode();
-      default:
-        return this.loopMode();
+    let item: any;
+
+    if (playMode === PlayMode.random) {
+      item = currentPlayerList.pop();
+      if (!item) {
+        currentPlayerList = this.randomMode();
+        item = currentPlayerList.pop();
+      }
+    } else if (playMode === PlayMode.order) {
+      debugger;
+      item = currentPlayerList.pop();
+      if (!item) {
+        this.handleStopAudio();
+        this.setState({
+          runningTimeRatio: 0,
+        });
+        // eslint-disable-next-line no-useless-return
+        return;
+      }
+    } else if (playMode === PlayMode.loop) {
+      item = this.loopMode();
+    } else if (PlayMode.single) {
+      console.log('单曲循环的人儿呀');
+    } else {
+      throw new Error('模式错误');
     }
+
+    this.handlePlay(item);
   };
 
   // 循环播放模式
   loopMode = () => {
     const { playerList, currentPlaySongId } = this.props;
-    if (!playerList.length) return;
     const currentIndex = playerList.findIndex(
       (player) => currentPlaySongId === player.id
     );
-    this.handlePlay(playerList[(currentIndex + 1) % playerList.length]);
+    const playItem = playerList[(currentIndex + 1) % playerList.length];
+    return playItem;
   };
 
   // 随机播放模式
   randomMode = () => {
-    let { currentPlayerList } = this.state;
-    const { playerList } = this.props;
-    if (!playerList.length) return;
-    // 随机列表存在曲目 ， 直接 获取
-    if (isEmpty(currentPlayerList)) {
+    let { currentPlayerList } = this.props;
+    const { playerList, changePlayMore } = this.props;
+    if (!isEmpty(playerList)) {
+      currentPlayerList = [];
+    } else {
       currentPlayerList = this.getRandomList();
     }
-    const item = currentPlayerList.pop();
-    this.setState({
-      currentPlayerList,
-    });
-    this.handlePlay(item);
+    changePlayMore({ currentPlayerList });
+    return currentPlayerList;
   };
   // 单曲循环
   singleMode = () => {
@@ -377,22 +398,19 @@ class Player extends Component<IPlayerProps, IPlayerState> {
 
   // 顺序播放模式
   orderMode = () => {
-    let { currentPlayerList } = this.state;
-    const { playerList, currentPlaySongId } = this.props;
-    if (!playerList.length) return;
-    // 随机列表存在曲目 ， 直接 获取
-    if (isEmpty(currentPlayerList)) {
+    let currentPlayerList: any[];
+    const { playerList, currentPlaySongId, changePlayMore } = this.props;
+    if (!playerList.length) {
+      currentPlayerList = [];
+    } else {
       const findIndex = playerList.findIndex(
         (item) => item.id === currentPlaySongId
       );
-
-      currentPlayerList = playerList.slice(findIndex);
+      currentPlayerList = playerList.slice(findIndex + 1);
     }
-    const item = currentPlayerList.pop();
-    this.setState({
+    changePlayMore({
       currentPlayerList,
     });
-    this.handlePlay(item);
   };
 
   handleError = () => {
@@ -476,7 +494,7 @@ class Player extends Component<IPlayerProps, IPlayerState> {
 
     if (status) {
       setTimeout(() => {
-        window.addEventListener('click', this.handleGlobalClosePlayList);
+        document.addEventListener('click', this.handleGlobalClosePlayList);
       }, 100);
     }
     this.setState({
@@ -514,20 +532,22 @@ class Player extends Component<IPlayerProps, IPlayerState> {
     return arr;
   };
   // 切换播放模式后的 处理程序
-  handleChangePlayModeCall = (mode: PlayMode) => {
+  handleChangePlayModeCall = (mode: PlayMode): any => {
     const { audio } = this;
     audio.loop = false;
     switch (mode) {
       case PlayMode.loop:
-        this.randomMode();
+        this.loopMode();
         break;
       case PlayMode.random:
+        this.randomMode();
         break;
       case PlayMode.single:
         audio.loop = true;
         break;
       case PlayMode.order:
-        break;
+        this.orderMode();
+        return;
       default:
         throw new Error('播放模式错误');
     }
@@ -549,9 +569,9 @@ class Player extends Component<IPlayerProps, IPlayerState> {
     this.handleStopAudio();
     this.setState({
       currentTime: 0,
-      currentPlayerList: [],
     });
     changePlayMore({
+      currentPlayerList: [],
       playerList: [],
       currentPlaySongId: '',
     });
@@ -595,6 +615,7 @@ function mapStateToProps(state: any) {
     playMode: state.player.playMode,
     isShowPlayDetailPage: state.player.isShowPlayDetailPage,
     currentPlaySongId: state.player.currentPlaySongId,
+    currentPlayerList: state.player.currentPlayerList,
     // 测试数据
     // playerList: state.recommendation.recommendSongsList
   };

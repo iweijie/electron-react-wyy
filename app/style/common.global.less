@@ -1,5 +1,5 @@
-@import "common.variate.less";
-@import url("http://at.alicdn.com/t/font_1546671_qb3vvvildy.css");
+@import 'common.variate.less';
+@import url('http://at.alicdn.com/t/font_1546671_qb3vvvildy.css');
 
 * {
   margin: 0;
@@ -14,9 +14,9 @@
 }
 
 @font-face {
-  font-family: 'PingFang';
+  font-family: 'PingFang-SC-Regular';
   /* project id 1546671 */
-  src: url('../static/font/PingFang.ttf');
+  src: url('../static/font/PingFang-SC-Regular.ttf');
 }
 
 body {
@@ -24,7 +24,8 @@ body {
   height: 100vh;
   font-size: 12px;
   background-color: #fafafa;
-  font-family: 'PingFang', "Microsoft Yahe", Arial, Helvetica, sans-serif, "Helvetica Neue", serif;
+  font-family: 'PingFang-SC-Regular', 'Microsoft Yahe', Arial, Helvetica,
+    sans-serif, 'Helvetica Neue', serif;
   overflow-y: hidden;
   user-select: none;
 }
@@ -55,7 +56,6 @@ a:hover {
   cursor: pointer;
 }
 
-
 ::-webkit-scrollbar-track-piece {
   background-color: #f8f8f8;
 }
@@ -81,43 +81,43 @@ a:hover {
 
 .padding-and-margin-loop(@count )when(@count > 0) {
   .padding-top-@{count} {
-    padding-top: @count
+    padding-top: @count;
   }
 
   .padding-left-@{count} {
-    padding-left: @count
+    padding-left: @count;
   }
 
   .padding-bottom-@{count} {
-    padding-bottom: @count
+    padding-bottom: @count;
   }
 
   .padding-right-@{count} {
-    padding-right: @count
+    padding-right: @count;
   }
 
   .padding-@{count} {
-    padding: @count
+    padding: @count;
   }
 
   .margin-top-@{count} {
-    margin-top: @count
+    margin-top: @count;
   }
 
   .margin-left-@{count} {
-    margin-left: @count
+    margin-left: @count;
   }
 
   .margin-bottom-@{count} {
-    margin-bottom: @count
+    margin-bottom: @count;
   }
 
   .margin-right-@{count} {
-    margin-right: @count
+    margin-right: @count;
   }
 
   .margin-@{count} {
-    margin: @count
+    margin: @count;
   }
 
   .padding-and-margin-loop((@count - 5));
@@ -125,14 +125,12 @@ a:hover {
 
 .padding-and-margin-loop(40);
 
-
 .font-size-loop(@count )when(@count > 12) {
   .font-size-@{count} {
-    font-size: @count
+    font-size: @count;
   }
 
   .font-size-loop((@count - 1));
 }
 
 .font-size-loop(20);
-

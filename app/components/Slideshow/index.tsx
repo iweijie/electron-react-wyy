@@ -39,7 +39,7 @@ class Slideshow extends React.Component<ISlideshowProps, ISlideshowState> {
   static defaultProps = {
     list: [],
     autoplay: true,
-    delay: 3,
+    delay: 8,
   };
 
   timerId: any;

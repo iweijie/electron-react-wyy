@@ -56,7 +56,7 @@ class RecommendSongs extends Component {
                 </div>
               </div>
             </div>
-            <SongsList songslist={recommendSongsList} />
+            <SongsList songsList={recommendSongsList} />
           </div>
         </div>
       </div>

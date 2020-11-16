@@ -7,7 +7,8 @@ import { reducers } from '../../store';
 import { isEmpty, map, join, get } from 'lodash';
 
 interface ISongListProps {
-  songslist: any[];
+  songsList: any[];
+  loading?: boolean;
   currentPlaySongId: number;
   changePlayMore: (params: any) => any;
 }
@@ -19,19 +20,24 @@ class SongList extends Component<ISongListProps> {
 
   render() {
     const { activeItemIndex } = this.state;
-    const { songslist = [], currentPlaySongId } = this.props;
-    const len = songslist.length;
+    const { songsList = [], loading = false, currentPlaySongId } = this.props;
+    const len = songsList.length;
     return (
       <div className={styles['songs-list']}>
+        {loading ? (
+          <div className={styles.loading}>
+            <i className="iconfont iconxingzhuang" />
+          </div>
+        ) : null}
         <ul>
           <li className={styles['ul-title']}>
-            <div className={styles.oreder}> </div>
+            <div className={styles.order}> </div>
             <div className={styles.name}>音乐标题</div>
             <div className={styles.artists}>歌手</div>
             <div className={styles.album}>专辑</div>
             <div className={styles.duration}>时长</div>
           </li>
-          {map(songslist, (item, index) => {
+          {map(songsList, (item, index) => {
             const {
               name,
               artists,
@@ -72,6 +78,7 @@ class SongList extends Component<ISongListProps> {
                 <div className={styles.artists}>
                   {!isEmpty(artists) &&
                     join(
+                      // eslint-disable-next-line no-shadow
                       map(artists, (item) => item.name),
                       '/'
                     )}
@@ -111,9 +118,9 @@ class SongList extends Component<ISongListProps> {
   };
 
   handleDoubleClick = (item: any) => {
-    const { changePlayMore, songslist } = this.props;
+    const { changePlayMore, songsList } = this.props;
     changePlayMore({
-      playerList: [...songslist],
+      playerList: [...songsList],
       tabIndex: 1,
     });
     observer.emit('play-song', item);

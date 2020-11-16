@@ -7,11 +7,19 @@ import SongsList from '../../components/SongsList';
 import { weekList } from '../../constants/index';
 import styles from './index.less';
 
+const getTodayInfo = () => {
+  const date = new Date();
+  return {
+    day: date.getDate(),
+    week: weekList[date.getDay()] || '日',
+  };
+};
+
 class RecommendSongs extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      ...this.getTodayInfo(),
+      ...getTodayInfo(),
     };
   }
 
@@ -56,20 +64,13 @@ class RecommendSongs extends Component {
                 </div>
               </div>
             </div>
-            <SongsList songslist={recommendSongsList} />
+            <SongsList songsList={recommendSongsList} />
           </div>
         </div>
       </div>
     );
   }
 
-  getTodayInfo() {
-    const date = new Date();
-    return {
-      day: date.getDate(),
-      week: weekList[date.getDay()] || '日',
-    };
-  }
   // replace : 替换正在播放歌单
   // push :  播放列表追加
   handlePlayAll = (mode) => {

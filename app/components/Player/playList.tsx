@@ -35,10 +35,19 @@ class PlayerList extends Component<IPlayerListProps, IPlayerListState> {
     currentPlaySongId: undefined,
   };
 
-  state: IPlayerListState = {
-    // 1:播放列表；2：历史记录
-    tabIndex: 1,
-  };
+  wrapRef: React.RefObject<HTMLDivElement>;
+
+  constructor(props: IPlayerListProps) {
+    super(props);
+
+    // 容器
+    this.wrapRef = React.createRef();
+
+    this.state = {
+      // 1:播放列表；2：历史记录
+      tabIndex: 1,
+    };
+  }
 
   handleClosePlayList = () => {
     const { handleClose } = this.props;
@@ -54,7 +63,7 @@ class PlayerList extends Component<IPlayerListProps, IPlayerListState> {
       handleClearPlayList,
     } = this.props;
     return (
-      <div className={`${styles['player-list-wrap']} _player-list-wrap`}>
+      <div ref={this.wrapRef} className={`${styles['player-list-wrap']}`}>
         <div className={styles['player-list-head']}>
           <div className={styles.tabs}>
             <button
