@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import classnames from 'classnames';
 import { History } from 'history';
 import styles from './index.less';
+import { getFormatCount } from '../../../utils/index';
 import { reducers } from '../../../store/index';
 import { weekList } from '../contain';
 import Slideshow from '../../../components/Slideshow/index';
@@ -48,7 +49,7 @@ class Recommendation extends Component<
   }
 
   render() {
-    const { week, day } = this.state;
+    const { day } = this.state;
     const { bannerList, personalizedList, history } = this.props;
     return (
       <div className={styles.container}>
@@ -77,7 +78,11 @@ class Recommendation extends Component<
             </li>
             {personalizedList.map((item) => {
               return (
-                <li key={item.id} className={styles['personalized-item']}>
+                <li
+                  key={item.id}
+                  className={styles['personalized-item']}
+                  onClick={() => this.handleGoDetail(item.id)}
+                >
                   <div
                     className={styles['border-grey']}
                     style={{
@@ -88,7 +93,7 @@ class Recommendation extends Component<
                     <p className={styles.playCount}>
                       <i className="iconfont iconbofangsanjiaoxing" />
                       &nbsp;&nbsp;
-                      {this.getFormatPlayCount(item.playCount)}
+                      {getFormatCount(item.playCount)}
                     </p>
                     <div className={classnames(styles['play-icon'])}>
                       <i className="iconfont iconbofang1" />
@@ -104,12 +109,13 @@ class Recommendation extends Component<
     );
   }
 
-  getFormatPlayCount = (num: number): string => {
-    return num > 10 * 10000 ? `${Math.floor(num / 10000)}万` : num.toString();
+  handleGoDetail = (id: number) => {
+    const { history } = this.props;
+    history.push(`/songListDaily/${id}`);
   };
 }
 
-function mapStateToProps(state) {
+function mapStateToProps(state: any) {
   return {
     bannerList: state.recommendation.bannerList,
     personalizedList: state.recommendation.personalizedList,

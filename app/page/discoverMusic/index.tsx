@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import { Switch, Route, Redirect } from 'react-router';
 import Nav from './com/nav/index';
 import Recommendation from './recommendation/index';
-import RecommendSongs from './recommendSongs/index';
 import Playlist from './playlist/index';
 import { History } from '@types/history';
 import styles from './index.less';
@@ -26,7 +25,6 @@ export default class Home extends Component<IDiscovrMusic> {
   }
 
   render() {
-    const { history, match } = this.props;
     return (
       <div className={styles.wrap}>
         <Nav />
@@ -36,11 +34,6 @@ export default class Home extends Component<IDiscovrMusic> {
               exact
               path="/discoverMusic/recommendation"
               component={Recommendation}
-            />
-            <Route
-              exact
-              path="/discoverMusic/recommendSongs"
-              component={RecommendSongs}
             />
             <Route exact path="/discoverMusic/playlist" component={Playlist} />
           </Switch>

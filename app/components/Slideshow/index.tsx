@@ -98,7 +98,6 @@ class Slideshow extends React.Component<ISlideshowProps, ISlideshowState> {
     const { delay } = this.props;
     this.handleClearLoop();
     this.timerId = setInterval(() => {
-      console.log('setInterval:');
       const { current, imgList } = this.state;
       const nextCUrrent = (current + 1) % imgList.length;
       this.handleClickPoint(nextCUrrent);
@@ -129,7 +128,6 @@ class Slideshow extends React.Component<ISlideshowProps, ISlideshowState> {
 
   handleClickPoint(index: number) {
     const { current, imgListState } = this.state;
-    console.log(index, current, imgListState);
     if (index < current) {
       for (let i = 0; i < current - index; i += 1) {
         const shift = imgListState.shift();

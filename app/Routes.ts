@@ -1,13 +1,16 @@
+import React from 'react';
 import DiscovrMusicPage from './page/discoverMusic/index';
 import NotFound from './page/404/index';
 import RecommendedDaily from './page/RecommendedDaily/index';
 import SongListDaily from './page/SongListDaily';
 
-// const router =  require.context("./page", true, /\.router\.js$/)
+interface IRouter {
+  path: string;
+  exact?: boolean;
+  component: React.ComponentType<any>;
+}
 
-// console.log("router",router)
-
-const routers = [
+const routers: IRouter[] = [
   {
     path: '/discoverMusic',
     component: DiscovrMusicPage,

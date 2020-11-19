@@ -1,113 +1,85 @@
-@import "../../style/common.variate.less";
+@import '../../style/common.variate.less';
 
-.container {
+.wrap {
   margin-bottom: 20px;
 }
-
-.head {
-  width: 100%;
-  padding-top: 40px;
-  padding-bottom: 20px;
-  height: 160px;
-  background-size: cover;
-  background-repeat: no-repeat;
-
-  // background-image: linear-gradient(to right, rgb(255, 255, 255), rgb(245, 231, 229));
-  .head-container {
-    width: 760px;
-    margin: 0 auto;
-    display: flex;
-  }
-
-  .border-grey {
-    width: 100px;
-    height: 100px;
-    position: relative;
-    border: 1px solid @border-color;
-    text-align: center;
-  }
-
-  .week {
-    font-size: 14px;
-    line-height: 30px;
-    color: #333333;
-    opacity: .7;
-  }
-
-  .day {
-    font-size: 60px;
-    line-height: 70px;
-    color: @red;
-  }
-
-  .cue-words-wrap {
-    flex: 1;
-    padding-left: 30px;
-  }
-
-  .overday {
-    font-size: 26px;
-    font-weight: 700;
-    line-height: 50px;
-  }
-
-  .cue-words {
-    color: #333333;
-    opacity: .7;
-    line-height: 24px;
-  }
-}
-
-.songs-list-wrap {
-
-  width: 762px;
-  margin: 0 auto;
-}
-
-.songs-list {
-  border: 1px solid @border-color;
-}
-
-.control {
-  padding-left: 10px;
-  height: 40px;
+.header {
+  padding: 30px;
   display: flex;
-  align-items: center;
-  border-bottom: 1px solid @border-color;
-
-  .play-all {
-    cursor: pointer;
+  .via {
+    width: 184px;
+    height: 184px;
+    border-radius: 5px;
+    overflow: hidden;
+    background-size: contain;
+  }
+  .header-right {
+    flex: 1;
+    padding-left: 20px;
+    max-width: calc(100% - 184px);
+  }
+  .title {
     display: flex;
     align-items: center;
-    height: 24px;
-    line-height: 24px;
-    background-color: @red;
-    color: rgba(255, 255, 255, .7);
-    border-radius: 4px;
-
-    .repalace {
-      display: flex;
-      align-items: center;
-      vertical-align: middle;
-      padding: 0 8px;
-
-      &:hover {
-        color: #ffffff;
-      }
-
-      >i {
-        margin-right: 8px;
-      }
+    .type {
+      padding: 0 3px;
+      border: 1px solid @red;
+      color: @red;
+      font-size: 14px;
+      border-radius: 3px;
+      height: 22px;
+      line-height: 20px;
     }
-
-    .push {
-      border-left: 1px solid rgba(255, 255, 255, .1);
-      padding: 0 8px;
-
-      &:hover {
-        color: #ffffff;
-      }
+    h3 {
+      flex: 1;
+      padding-left: 10px;
+      font-size: 20px;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
     }
+  }
+  .creator {
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+    .creator-via {
+      display: inline-block;
+      width: 25px;
+      height: 25px;
+      background-size: contain;
+      border-radius: 50%;
+      overflow: hidden;
+      margin-right: 8px;
+    }
+    .nickname {
+      display: inline-block;
+      color: @blue;
+      margin-right: 8px;
+    }
+  }
 
+  .btns {
+    margin: 12px 0 20px;
+    > div {
+      margin-right: 8px;
+    }
+  }
+  .description {
+    p {
+      margin-bottom: 8px;
+    }
+  }
+  .tags {
+    span {
+      color: @blue;
+    }
+  }
+
+  .play-count {
+    span {
+      margin-right: 15px;
+    }
   }
 }

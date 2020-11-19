@@ -24,9 +24,13 @@ module.exports = {
     // class 属性类型定义要有间距， 不爽所以取消了
     '@typescript-eslint/lines-between-class-members': 0,
     'prefer-destructuring': 0,
+
+    'jsx-a11y/no-noninteractive-element-interactions': 0,
     // 自增自减
     'no-plusplus': 0,
     'no-underscore-dangle': 0,
+
+    'react/prop-types': 0,
   },
   parserOptions: {
     ecmaVersion: 2020,

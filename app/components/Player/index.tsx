@@ -347,7 +347,6 @@ class Player extends Component<IPlayerProps, IPlayerState> {
         item = currentPlayerList.pop();
       }
     } else if (playMode === PlayMode.order) {
-      debugger;
       item = currentPlayerList.pop();
       if (!item) {
         this.handleStopAudio();

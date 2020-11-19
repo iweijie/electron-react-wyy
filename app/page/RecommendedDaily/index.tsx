@@ -7,19 +7,26 @@ import SongsList from '../../components/SongsList';
 import { weekList } from '../../constants/index';
 import styles from './index.less';
 
-const getTodayInfo = () => {
-  const date = new Date();
-  return {
-    day: date.getDate(),
-    week: weekList[date.getDay()] || '日',
-  };
-};
+interface IRecommendSongProps {
+  getRecommendSongs: () => any;
+  recommendSongsList: any[];
+}
 
-class RecommendSongs extends Component {
-  constructor(props) {
+interface IRecommendSongState {
+  week: string;
+  day: number;
+}
+
+class RecommendSongs extends Component<
+  IRecommendSongProps,
+  IRecommendSongState
+> {
+  constructor(props: IRecommendSongProps) {
     super(props);
+    const date = new Date();
     this.state = {
-      ...getTodayInfo(),
+      day: date.getDate(),
+      week: weekList[date.getDay()] || '日',
     };
   }
 
@@ -73,12 +80,12 @@ class RecommendSongs extends Component {
 
   // replace : 替换正在播放歌单
   // push :  播放列表追加
-  handlePlayAll = (mode) => {
+  handlePlayAll = (mode: string) => {
     const { recommendSongsList } = this.props;
     console.log(JSON.stringify(this.formatPlayListData(recommendSongsList)));
   };
 
-  formatPlayListData = (list) => {
+  formatPlayListData = (list: any[]) => {
     return map(list, (item, index) => {
       const { name, id, alias, duration, album, mvid = 0 } = item;
       return { name, id, alias, duration, album, mvid };
