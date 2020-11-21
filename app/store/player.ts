@@ -1,6 +1,7 @@
 import requestMap from '../request/index';
+import { IModal } from '../utils/enhanceRedux/index.d';
 
-export default {
+const modal: IModal = {
   namespace: 'player',
   state: {
     // 是否展示播放野详情
@@ -40,3 +41,5 @@ export default {
     },
   },
 };
+
+export default modal;

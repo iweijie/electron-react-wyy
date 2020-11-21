@@ -13,7 +13,7 @@
 // const router = routerMiddleware(history);
 // const middleware = [...getDefaultMiddleware(), router];
 
-import enhanceRedux from 'enhance-redux';
+import enhanceRedux from '../utils/enhanceRedux/index';
 import { createLogger } from 'redux-logger';
 import commonModal from './common';
 import recommendationModal from './recommendation';
@@ -29,8 +29,8 @@ const modals = [
   playlistModal,
 ];
 
-const { store, reducers, registry, unRegistry } = enhanceRedux(modals, {
+const { store, reducers, register, unRegister } = enhanceRedux(modals, {
   enhancer: [createLogger()],
 });
 
-export { store, reducers, registry, unRegistry };
+export { store, reducers, register, unRegister };

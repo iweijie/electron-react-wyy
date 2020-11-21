@@ -31,6 +31,10 @@ module.exports = {
     'no-underscore-dangle': 0,
 
     'react/prop-types': 0,
+
+    'react/no-unused-prop-types': 0,
+
+    'no-implicit-dependencies': ['optional', ['app']],
   },
   parserOptions: {
     ecmaVersion: 2020,

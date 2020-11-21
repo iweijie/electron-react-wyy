@@ -20,19 +20,19 @@ const navList: INavItem[] = [
   },
   {
     name: '主播电台',
-    url: '/a',
+    url: '/b',
   },
   {
     name: '排行榜',
-    url: '/a',
+    url: '/c',
   },
   {
     name: '歌手',
-    url: '/a',
+    url: '/d',
   },
   {
     name: '最新音乐',
-    url: '/a',
+    url: '/e',
   },
 ];
 
@@ -42,7 +42,7 @@ const DiscoverTopNav = () => {
     <div className={styles.list}>
       {map(navList, (item) => {
         return (
-          <Link to={item.url}>
+          <Link to={item.url} key={item.url}>
             <div
               className={classnames(styles['list-item'], {
                 [styles.active]: pathname === item.url,

@@ -93,7 +93,9 @@ class RecommendSongs extends Component<
   };
 }
 
-function mapStateToProps(state) {
+function mapStateToProps(state: {
+  recommendation: { recommendSongsList: any };
+}) {
   return {
     recommendSongsList: state.recommendation.recommendSongsList,
   };

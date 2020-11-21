@@ -1,6 +1,7 @@
 import requestMap from '../request/index';
+import { IModal } from '../utils/enhanceRedux/index.d';
 
-export default {
+const modal: IModal = {
   namespace: 'playlist',
   state: {
     playlist: {
@@ -45,3 +46,5 @@ export default {
     },
   },
 };
+
+export default modal;

@@ -1,6 +1,7 @@
 import requestMap from '../request/index';
+import { IModal } from '../utils/enhanceRedux/index.d';
 
-export default {
+const modal: IModal = {
   namespace: 'recommendation',
   state: {
     bannerList: [],
@@ -17,14 +18,7 @@ export default {
 
     async getPersonalized({ call, push, state, rootState }, name) {
       const list = await requestMap.requestGetPersonalized();
-      push(
-        'recommendation/personalizedList',
-        list
-          // .sort((a, b) => {
-          // 	return b.playCount - a.playCount;
-          // })
-          .slice(0, 9)
-      );
+      push('recommendation/personalizedList', list.slice(0, 9));
     },
     async getRecommendSongs({ call, push, state, rootState }, name) {
       const list = await requestMap.requestRecommendSongs();
@@ -32,3 +26,5 @@ export default {
     },
   },
 };
+
+export default modal;

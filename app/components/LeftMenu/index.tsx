@@ -78,9 +78,9 @@ const LeftMenu = () => {
   return (
     <div className={styles['left-nav']}>
       <div className={styles.list}>
-        {map(list, (item) => {
+        {map(list, (item, index) => {
           return (
-            <Link to={item.url}>
+            <Link key={index} to={item.url}>
               <div
                 className={classnames(styles['list-item'], {
                   [styles.active]: pathname === item.url,
@@ -95,9 +95,9 @@ const LeftMenu = () => {
       <div className={styles['sub-wrap']}>
         <p>{myMusic.title}</p>
         <div className={styles.list}>
-          {map(myMusic.sub, (item: ISubItem) => {
+          {map(myMusic.sub, (item: ISubItem, index) => {
             return (
-              <Link to={item.url}>
+              <Link to={item.url} key={index}>
                 <div
                   className={classnames(styles['list-item'], {
                     [styles.active]: pathname === item.url,

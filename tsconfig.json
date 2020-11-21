@@ -1,5 +1,29 @@
 {
   "compilerOptions": {
+    "baseUrl": "./",
+    "paths": {
+      "@components/*": [
+        "app/components"
+      ],
+      "@store/*": [
+        "app/store"
+      ],
+      "@utils/*": [
+        "app/utils"
+      ],
+      "@style/*": [
+        "app/style"
+      ],
+      "@page/*": [
+        "app/page"
+      ],
+      "@static/*": [
+        "app/static"
+      ],
+      "@images/*": [
+        "app/images"
+      ],
+    },
     "target": "ES2018",
     "module": "CommonJS",
     "lib": [
@@ -33,7 +57,4 @@
     "app/dist",
     "dll",
   ],
-  "include": [
-    "app"
-  ]
 }

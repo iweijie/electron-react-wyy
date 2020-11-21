@@ -7,8 +7,9 @@ import {
 } from './quiescent';
 import requestMap from '../request/index';
 import { getStore, setStore } from '../utils/index';
+import { IModal } from '../utils/enhanceRedux/index.d';
 
-export default {
+const modal: IModal = {
   namespace: 'common',
   state: {
     version: '0.0.1',
@@ -52,3 +53,4 @@ export default {
     },
   },
 };
+export default modal;

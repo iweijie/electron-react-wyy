@@ -6,7 +6,7 @@ import path from 'path';
 import webpack from 'webpack';
 import { dependencies as externals } from '../app/package.json';
 
-const appPath = path.join(__dirname, '..', 'app');
+const appPath = path.join(__dirname, '../app');
 
 export default {
   externals: [...Object.keys(externals || {})],

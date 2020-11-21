@@ -11,19 +11,19 @@ interface IApiItem {
   field?: string;
 }
 
-interface IRequestData {
-  code: number;
-  data: any;
-  msg: string;
-}
+// interface IRequestData {
+//   code: number;
+//   data: any;
+//   msg: string;
+// }
 
 interface IRequestMap {
-  [x: string]: (a?: any) => Promise<IRequestData>;
+  [x: string]: (a?: any) => Promise<any>;
 }
 
 // const host = 'http://5fan.win:3000';
 // const host = 'http://localhost:3000';
-const host = 'http://wangyiyun.iweijie.cn';
+const host = 'https://wangyiyun.iweijie.cn';
 const apis: IApis = {
   // 登入
   requestLogin: {
@@ -50,11 +50,14 @@ const apis: IApis = {
     // field: 'lrc.lyric',
     defaultValue: [],
   },
-  // 精选电台
+  /**
+   * 依据 id 获取歌曲详情列表
+   * url?ids=123  or  url?ids=123,456,789
+   */
   requestSongDetail: {
     url: `${host}/song/detail`,
-    field: 'songs.0',
-    defaultValue: {},
+    field: 'songs',
+    defaultValue: [],
   },
   // 获取歌词评论
   requestGetMusicComment: {

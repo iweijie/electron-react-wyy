@@ -1,13 +1,24 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import styles from './index.less';
+import classnames from 'classnames';
 import observer from '../../utils/observer';
 import { getFormatTime } from '../../utils';
 import { reducers } from '../../store';
 import { isEmpty, map, join, get } from 'lodash';
 
+interface ISong {
+  name: string;
+  id: number;
+  artists: any[];
+  alias: any[];
+  duration: number;
+  album: string;
+  mvid?: number;
+}
+
 interface ISongListProps {
-  songsList: any[];
+  songsList: ISong[];
   loading?: boolean;
   currentPlaySongId: number;
   changePlayMore: (params: any) => any;
@@ -50,12 +61,13 @@ class SongList extends Component<ISongListProps> {
             return (
               // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
               <li
-                className={activeItemIndex === index ? styles.active : ''}
+                className={classnames({
+                  [styles.active]: currentPlaySongId === id,
+                })}
                 key={id}
-                onClick={() => this.handleClick(item, index)}
                 onDoubleClick={() => this.handleDoubleClick(item)}
               >
-                <div className={styles.oreder}>
+                <div className={styles.order}>
                   {currentPlaySongId === id ? (
                     <i className="iconfont iconyinlianglabashengyin" />
                   ) : (
@@ -84,7 +96,7 @@ class SongList extends Component<ISongListProps> {
                     )}
                 </div>
                 <div className={styles.album}>
-                  {get(album, 'name')}{' '}
+                  {get(album, 'name')}
                   {!isEmpty(album.alias) && (
                     <span className={styles.alias}>
                       （{join(album.alias, '，')}）
@@ -109,12 +121,6 @@ class SongList extends Component<ISongListProps> {
       num = `0${num}`;
     }
     return num;
-  };
-
-  handleClick = (item: any, index: any) => {
-    this.setState({
-      activeItemIndex: index,
-    });
   };
 
   handleDoubleClick = (item: any) => {

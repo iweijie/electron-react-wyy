@@ -1,21 +1,25 @@
 import requestMap from '../request/index';
-import { get, split, slice, filter } from 'lodash';
+import { get, split, slice, first, filter, isElement, isEmpty } from 'lodash';
 
-function lyricFormat(lyric) {
-  const newArr = [];
+import { IModal } from '../utils/enhanceRedux/index.d';
+
+type IlyricItem = [number, string];
+
+function lyricFormat(lyric: string) {
+  const newArr: IlyricItem[] = [];
   if (!lyric) return newArr;
   const arr = filter(split(lyric, '\n'), Boolean);
   for (let i = arr.length - 1; i >= 0; i--) {
     if (!arr[i]) continue;
     const a = split(arr[i].slice(1), ']');
-    a[0] = getTime(a[0]);
-    newArr.push(a);
+    const num = getTime(a[0]);
+    newArr.push([num, a[1]]);
   }
 
   return newArr.reverse();
 }
 
-function getTime(str) {
+function getTime(str: string): number {
   const likeList = /^(\d{2}):(\d{2})(\.?\d*)$/.exec(str);
   return (
     Number(get(likeList, '1', 0)) * 60 +
@@ -24,7 +28,7 @@ function getTime(str) {
   );
 }
 
-export default {
+const modal: IModal = {
   namespace: 'playSongDetail',
   state: {
     // 当前显示详情的 id
@@ -56,7 +60,9 @@ export default {
   effects: {
     async getSongDetail({ call, push, state, rootState }, ids) {
       const info = await requestMap.requestSongDetail({ ids });
-      push('playSongDetail/info', info);
+      const firstData = first(info);
+      if (isEmpty(firstData)) return;
+      push('playSongDetail/info', firstData);
     },
     async getLyric({ call, push, state, rootState }, id) {
       const lyricInfo = await requestMap.requestGetLyric({ id });
@@ -81,3 +87,5 @@ export default {
     },
   },
 };
+
+export default modal;

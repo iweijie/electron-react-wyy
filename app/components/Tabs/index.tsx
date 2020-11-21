@@ -1,52 +1,126 @@
+import React, {
+  Context,
+  useState,
+  useMemo,
+  useCallback,
+  useEffect,
+} from 'react';
 import { useSetState } from 'ahooks';
-import React, { Context, useState } from 'react';
+import classnames from 'classnames';
+import { isEmpty, noop, get, map, find, first } from 'lodash';
+import styles from './index.less';
 
-interface ITabs {
+export interface ITabs {
   activeKey?: string;
   onChange?: (key: string) => any;
-  children: React.ReactNode;
-  TabPane: React.ReactNode;
+  children?: any;
+  className?: string;
 }
-interface ITabPane {
-  key: string;
-  tab: string;
+export interface ITabPane {
+  tabKey: string;
+  tabName: string;
+  children?: any;
 }
 
-export const TabPane: React.FC<ITabPane> = (props) => {
-  const { children, key } = props;
-  return <div>{children}</div>;
+export interface IState {
+  active: string;
+  isControlled: boolean;
+}
+
+export const TabPane = (props: ITabPane) => {
+  const { children, tabKey } = props;
+  return <div key={tabKey}>{children}</div>;
 };
 
-const Tabs = ({ children, activeKey }: ITabs) => {
-  const list = React.Children.map(children, (child) => {
-    if (child === null) return;
-    if (!('type' in child)) return;
-    // && child.type === TabPane
-  });
+const Tabs = ({
+  children,
+  activeKey: key,
+  onChange = noop,
+  className,
+}: ITabs) => {
+  // TODO useSetState 不造咋设置 返回值 类型
+  const initState = useCallback(() => {
+    let active: string;
+    let isControlled = false;
+    if (key !== undefined) {
+      active = key;
+      isControlled = true;
+    } else if (isEmpty(children)) {
+      active = '0';
+    } else if (!Array.isArray(children)) {
+      active = get(children, 'props.tabKey');
+    } else {
+      active = get(first(children), 'props.tabKey');
+    }
+    return { active, isControlled };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  const [active, setActive] = useState();
+  const [state, setState] = useSetState<IState>(initState());
 
-  return <div>{children}</div>;
+  const { active, isControlled } = state;
+
+  const cList = useMemo(() => {
+    return React.Children.map(children, (child) => {
+      if (child && child.type === TabPane) return child;
+      return undefined;
+    }).filter(Boolean);
+  }, [children]);
+
+  const tabList = useMemo(() => {
+    if (isEmpty(cList)) return [];
+    return map(cList, (child, index) => {
+      return {
+        tabKey: get(child, 'props.tabKey', index.toString()),
+        tabName: get(child, 'props.tabName', ''),
+      };
+    });
+  }, [cList]);
+
+  const activeChild = useMemo(() => {
+    if (isEmpty(cList)) return null;
+    return find(cList, (c) => get(c, 'props.tabKey') === active);
+  }, [cList, active]);
+
+  const handleOnChange = useCallback(
+    (activeKey: string) => {
+      setState({ active: activeKey });
+      onChange(activeKey);
+    },
+    [onChange, setState]
+  );
+
+  useEffect(() => {
+    if (!isControlled) return;
+    setState({ active: key });
+  }, [key, setState]);
+
+  return (
+    <div
+      className={classnames(styles['tabs-wrap'], {
+        [(className as string)]: !!className,
+      })}
+    >
+      <ul className={styles['tab-wrap']}>
+        {map(tabList, ({ tabKey, tabName }: ITabPane) => {
+          return (
+            <li
+              onClick={() => handleOnChange(tabKey)}
+              key={tabKey}
+              className={classnames({
+                [styles.active]: active === tabKey,
+              })}
+            >
+              {tabName}
+            </li>
+          );
+        })}
+      </ul>
+      <div className={styles.solt}>{activeChild}</div>
+    </div>
+  );
 };
 
 Tabs.TabPane = TabPane;
 
 export default Tabs;
-
-//   <Tabs type="card">
-//   <TabPane tab="Tab Title 1" key="1">
-//     <p>Content of Tab Pane 1</p>
-//     <p>Content of Tab Pane 1</p>
-//     <p>Content of Tab Pane 1</p>
-//   </TabPane>
-//   <TabPane tab="Tab Title 2" key="2">
-//     <p>Content of Tab Pane 2</p>
-//     <p>Content of Tab Pane 2</p>
-//     <p>Content of Tab Pane 2</p>
-//   </TabPane>
-//   <TabPane tab="Tab Title 3" key="3">
-//     <p>Content of Tab Pane 3</p>
-//     <p>Content of Tab Pane 3</p>
-//     <p>Content of Tab Pane 3</p>
-//   </TabPane>
-// </Tabs>

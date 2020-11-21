@@ -2,6 +2,11 @@ interface IKeyValue {
   [x: string]: any;
 }
 
+interface IDecorateHandle {
+  (payload: any): any;
+  [x: string]: any;
+}
+
 export interface ReducerInjectParams {
   state: IKeyValue;
   rootState: IKeyValue;
@@ -18,6 +23,7 @@ interface ReducerType {
 export type EffectsInjectParams = {
   state: IKeyValue;
   rootState: IKeyValue;
+  getState: (namespace?: string) => any;
   call: (path: string, payload: any) => any;
   push: (path: string, payload: any) => any;
 };
@@ -39,18 +45,19 @@ export interface IModal {
   };
 }
 
-// store, reducers, registry, unRegistry
-
 export interface IEnhanceReduxReturn {
   store: IKeyValue;
   reducers: IKeyValue;
-  registry: IKeyValue;
-  unRegistry: IKeyValue;
+  register: IKeyValue;
+  unRegister: IKeyValue;
 }
 
-declare module 'enhance-redux' {
-  export default function enhanceRedux(
-    models: IModal[],
-    options: any
-  ): IEnhanceReduxReturn;
+export interface IAction {
+  type: string;
+  payload: any;
+  [x: string]: any;
+}
+
+export interface IDefaultReduce {
+  (state: any, action: null | IAction): any;
 }
