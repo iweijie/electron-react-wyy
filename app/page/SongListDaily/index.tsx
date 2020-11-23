@@ -1,16 +1,17 @@
-import React, { Component } from 'react';
+import React, { Component, useCallback } from 'react';
 import { connect } from 'react-redux';
 import { Link, useHistory, useParams } from 'react-router-dom';
 import { reducers } from '@store';
 import { useSetState, useMount } from 'ahooks';
-import { map, get, join, trim, isEmpty } from 'lodash';
+import { map, get, join, trim, isEmpty, split } from 'lodash';
+import classnames from 'classnames';
 import Api from '../../request/index';
 import Tabs, { TabPane } from '../../components/Tabs';
+import Comment from '../../components/CommentWrap';
 import Button from '../../components/Button';
 import { formatDate, getFormatCount } from '../../utils/index';
 import SongsList from '../../components/SongsList';
 import styles from './index.less';
-import json from './test.json';
 
 interface IPlaylist {
   // 封面图片
@@ -63,13 +64,25 @@ interface IResponseData {
 
 const SongListDaily = () => {
   const { id } = useParams<ISongListDailyURLParams>();
-  console.log(id);
+  const [otherState, setOtherState] = useSetState({
+    showMoreSynopsis: false,
+  });
+  const { showMoreSynopsis } = otherState;
   const [state, setState] = useSetState<ISongListDailyState>({
     loading: false,
     songList: [],
     relatedVideos: null,
     playlist: null,
   });
+
+  const handleToggleMoreSynopsis = useCallback(() => {
+    setOtherState((data) => {
+      return {
+        ...data,
+        showMoreSynopsis: !data.showMoreSynopsis,
+      };
+    });
+  }, [showMoreSynopsis, setOtherState]);
 
   useMount(() => {
     if (!id) throw new Error('歌单详情错误');
@@ -171,18 +184,46 @@ const SongListDaily = () => {
                 播放：{getFormatCount(get(state, 'playlist.playCount', 0))}
               </span>
             </p>
-            <p className={styles['play-count']}>
-              <span>简介：{get(state, 'playlist.description', '')}</span>
+            <p
+              className={classnames(styles['synopsis'], {
+                [styles.show]: showMoreSynopsis,
+              })}
+            >
+              <span>
+                简介：
+                {split(get(state, 'playlist.description', ''), '\n').map(
+                  (text) => {
+                    return (
+                      <>
+                        <span>{text}</span>
+                        <br />
+                      </>
+                    );
+                  }
+                )}
+              </span>
+
+              <span
+                className={styles['border-down-empty']}
+                onClick={handleToggleMoreSynopsis}
+              >
+                <i />
+              </span>
             </p>
           </div>
         </div>
       </div>
-      <Tabs className={styles.tab} activeKey="playlist">
-        <TabPane tabKey="playlist" tabName="歌曲列表1">
+      <Tabs className={styles.tab} activeKey="comment">
+        <TabPane tabKey="playlist" tabName="歌曲列表">
           <SongsList songsList={state.songList} loading={state.loading} />
         </TabPane>
-        <TabPane tabKey="comment" tabName="评论(2898394)">
-          <span>22222</span>
+        <TabPane
+          tabKey="comment"
+          tabName={`评论(${get(state, 'playlist.commentCount', 0)})`}
+        >
+          <div className={styles['comment-wrap']}>
+            <Comment id={id} />
+          </div>
         </TabPane>
         <TabPane tabKey="likes" tabName="收藏者">
           <span>3333</span>

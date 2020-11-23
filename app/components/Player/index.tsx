@@ -205,7 +205,7 @@ class Player extends Component<IPlayerProps, IPlayerState> {
                   <p className={styles.artists}>
                     {join(
                       map(
-                        get(currentPlaySong, 'album.artists'),
+                        get(currentPlaySong, 'artists'),
                         (item) => item.name
                       ),
                       '/'
@@ -577,7 +577,7 @@ class Player extends Component<IPlayerProps, IPlayerState> {
   };
 
   getSmallSongImg = (item: any) => {
-    const url = get(item, 'album.blurPicUrl', '');
+    const url = get(item, 'album.picUrl', '');
     if (url) return `${url}?param=140y140`;
     return url;
   };

@@ -61,14 +61,15 @@
   }
 
   .btns {
-    margin: 12px 0 20px;
+    margin: 12px 0;
     > div {
       margin-right: 8px;
     }
   }
   .description {
     p {
-      margin-bottom: 8px;
+      line-height: 34px;
+      // margin-bottom: 8px;
     }
   }
   .tags {
@@ -82,11 +83,56 @@
       margin-right: 15px;
     }
   }
+  .synopsis {
+    padding-right: 25px;
+    height: 2.4em;
+    position: relative;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    transition: all 1s;
+
+    &.show {
+      height: auto;
+      white-space: normal;
+      .border-down-empty {
+        > i {
+          border-bottom: 6px solid #999999;
+          border-top: none;
+        }
+      }
+    }
+
+    .border-down-empty {
+      position: absolute;
+      top: 6px;
+      right: 0;
+      width: 20px;
+      height: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      > i {
+        width: 0;
+        height: 0;
+        border-left: 5px solid transparent;
+        border-right: 5px solid transparent;
+        border-top: 6px solid #999999;
+        border-bottom: none;
+        display: block;
+      }
+    }
+  }
 }
 
 .tab {
   > ul {
-    padding: 0 25px;
+    padding: 0 30px;
     margin-bottom: 15px;
   }
+}
+
+.comment-wrap {
+  padding: 0 30px;
 }

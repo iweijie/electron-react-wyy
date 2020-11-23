@@ -1,34 +1,107 @@
 import React, { Component } from 'react';
 import { get, map, noop } from 'lodash';
+import classnames from 'classnames';
+import { formatDate } from '../../utils/index';
 import { reducers } from '../../store/index';
 import styles from './index.less';
 
-const getCommentItem = (item, index) => {
-	const avatarUrl = get(item, 'user.avatarUrl');
-	const nickname = get(item, 'user.nickname');
-	const content = get(item, 'content');
-	const likedCount = get(item, 'likedCount');
-	const time = get(item, 'time');
+interface IBasicComment {
+  user: {
+    nickname: string;
+    avatarUrl: string;
+  };
+  content: string;
+}
 
-	return (
-		<li>
-			<div />
-			<div>
-				<p>
-					<span>{nickname}:</span>
-					{content}
-				</p>
-				<div>
-					<span>{time}</span>
-					<span>{likedCount}</span>
-				</div>
-			</div>
-		</li>
-	);
+type IBeReplied = IBasicComment[];
+
+interface ICommentItemProps extends IBasicComment {
+  beReplied: IBeReplied;
+  time: number;
+  likedCount: number;
+  liked: boolean;
+}
+
+const getFormatTime = (time: number): string => {
+  const today = new Date(formatDate(new Date(), 'yyyy-MM-dd') + ' 00:00:00');
+  const thisYear = new Date(formatDate(new Date(), 'yyyy') + '-1-1 00:00:00');
+  const todayTimestamp = today.getTime();
+  const tomorrowTimestamp = todayTimestamp - 24 * 60 * 60 * 1000;
+
+  if (time >= todayTimestamp) {
+    return formatDate(time, 'hh:mm');
+  } else if (time >= tomorrowTimestamp) {
+    return `昨天 ${formatDate(time, 'hh:mm')}`;
+  } else if (time >= thisYear.getTime()) {
+    return formatDate(time, 'MM-dd hh:mm');
+  }
+  return formatDate(time, 'yyyy-MM-dd hh:mm');
 };
 
-export default (props = {}) => {
-	const { list, pageSize, pageData, totle, handleCallback = noop } = props;
-	// const list = get(props, 'list', []);
-	return <ul className={styles['commet-wrap']}>{map(list, getCommentItem)}</ul>;
+const getCommentItem = (item: ICommentItemProps) => {
+  const avatarUrl = get(item, 'user.avatarUrl');
+  const nickname = get(item, 'user.nickname');
+  const content = get(item, 'content');
+  const likedCount = get(item, 'likedCount');
+  const time = get(item, 'time');
+  const liked = get(item, 'liked');
+  const beReplied = get(item, 'beReplied', []);
+  return (
+    <li className={styles['comment-item']}>
+      <div
+        className={styles.avatar}
+        style={{ backgroundImage: `url(${avatarUrl})` }}
+      />
+      <div className={styles['comment-content']}>
+        <p className={styles.content}>
+          <span className={styles.nickname}>{nickname}：</span>
+          {content}
+        </p>
+        {map(beReplied, (item) => {
+          return (
+            <p className={classnames(styles.content, styles.grey)}>
+              <span className={styles.nickname}>@{item.user.nickname}：</span>
+              {item.content}
+            </p>
+          );
+        })}
+        <div className={styles.footer}>
+          <time className={styles.time}>{getFormatTime(time)}</time>
+          <div className={styles.icon}>
+            <span
+              className={classnames({
+                [styles.liked]: liked,
+              })}
+            >
+              <i className="iconfont icondianzan" />
+              {likedCount}
+            </span>
+            <span>
+              <i className="iconfont iconshare" />
+            </span>
+            <span>
+              <i className="iconfont iconpinglun1" />
+            </span>
+          </div>
+        </div>
+      </div>
+    </li>
+  );
+};
+
+interface ICommentProps {
+  list: ICommentItemProps[];
+  // limit: number;
+  // offset: number;
+  // total: number;
+}
+
+export default (props: ICommentProps) => {
+  const { list } = props;
+
+  return (
+    <div className={styles.wrap}>
+      <ul className={styles['comment-wrap']}>{map(list, getCommentItem)}</ul>
+    </div>
+  );
 };

@@ -117,6 +117,10 @@ const apis: IApis = {
   requestTagList: {
     url: `${host}/playlist/hot`,
   },
+  // 获取歌单评论
+  requestPlaylistComments: {
+    url: `${host}/comment/playlist`,
+  },
 };
 
 const requestMap: IRequestMap = {};
