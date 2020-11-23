@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { reducers } from 'store';
 import classNames from 'classnames';
-import Select from '@components/Select';
+import Select from 'components/Select';
 import Icon from '../../../components/Icon';
 
 import styles from './index.less';

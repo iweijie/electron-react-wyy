@@ -13,104 +13,95 @@ interface ICommentWrapProps {
   hasTotal?: boolean;
 }
 
-// hotComments: (3) [{…}, {…}, {…}]
-// commentBanner: null
-// code: 200
-// comments: (20) [{…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}]
-// total: 47
-
 const CommentWrap = (props: ICommentWrapProps) => {
   const { id } = props;
   // 普通评论
-  // const [state, setState] = useSetState({
-  //   list: [],
-  //   limit: 20,
-  //   page: 1,
-  //   total: 0,
-  // });
-  // // 热门评论
-  // const [hotState, setHotState] = useSetState({
-  //   list: [],
-  //   limit: 20,
-  //   page: 1,
-  //   more: false,
-  // });
+  const [state, setState] = useSetState({
+    list: [],
+    limit: 20,
+    page: 1,
+    total: 0,
+  });
+  // 热门评论
+  const [hotState, setHotState] = useSetState({
+    list: [],
+    limit: 20,
+    page: 1,
+    more: false,
+  });
 
-  // const { list, limit, page, total } = state;
+  const { list, limit, page, total } = state;
 
-  // const handleGetPlaylistComments = useCallback(
-  //   (page, limit) => {
-  //     if (total < limit * page) return;
-  //     Api.requestPlaylistComments({
-  //       id,
-  //       limit: limit,
-  //       offset: (page - 1) * limit,
-  //     }).then((data) => {
-  //       if (data.code !== 200) throw data;
-  //       setState({
-  //         list: data.comments || [],
-  //         page: page + 1,
-  //         total: data.total,
-  //       });
-  //     });
-  //   },
-  //   [total]
-  // );
+  const handleGetPlaylistComments = useCallback(
+    (page, limit) => {
+      if (page > Math.ceil(total / limit)) return;
+      Api.requestPlaylistComments({
+        id,
+        limit: limit,
+        offset: (page - 1) * limit,
+      }).then((data) => {
+        if (data.code !== 200) throw data;
+        setState({
+          list: data.comments || [],
+          page,
+          total: data.total,
+        });
+      });
+    },
+    [total]
+  );
 
-  // const handleGetHotComments = useCallback(
-  //   (page, limit) => {
-  //     if (!hotState.more) return;
-  //     Api.requestGetHotComment({
-  //       id,
-  //       type: 2,
-  //       limit: limit,
-  //       offset: (page - 1) * limit,
-  //     }).then((data) => {
-  //       if (data.code !== 200) throw data;
-  //       setHotState({
-  //         list: data.comments || [],
-  //         page: page + 1,
-  //         more: data.more,
-  //       });
-  //     });
-  //   },
-  //   [hotState.more]
-  // );
+  const handleGetHotComments = useCallback(
+    (page, limit) => {
+      if (!hotState.more) return;
+      Api.requestGetHotComment({
+        id,
+        type: 2,
+        limit: limit,
+        offset: (page - 1) * limit,
+      }).then((data) => {
+        if (data.code !== 200) throw data;
+        setHotState({
+          list: data.comments || [],
+          page: page + 1,
+          more: data.more,
+        });
+      });
+    },
+    [hotState.more]
+  );
 
-  // useMount(() => {
-  //   Api.requestPlaylistComments({ id }).then((data) => {
-  //     if (data.code !== 200) throw data;
-  //     setState({
-  //       list: data.comments || [],
-  //       total: data.total || 0,
-  //     });
+  useMount(() => {
+    Api.requestPlaylistComments({ id }).then((data) => {
+      if (data.code !== 200) throw data;
+      setState({
+        list: data.comments || [],
+        total: data.total || 0,
+      });
 
-  //     setHotState({
-  //       more: data.moreHot,
-  //       list: data.hotComments || [],
-  //     });
-  //   });
-  // });
-  // console.log('state', state);
+      setHotState({
+        more: data.moreHot,
+        list: data.hotComments || [],
+      });
+    });
+  });
   return (
     <div>
-      {/* {hotState.list.length ? (
+      {hotState.list.length ? (
         <div>
           <div className={styles.title}>精彩评论</div>
           <Comment list={hotState.list} />
         </div>
-      ) : null} */}
+      ) : null}
       <div>
-        {/* <div className={styles.title}>最新评论({total})</div> */}
-        {/* <Comment list={list} /> */}
+        <div className={styles.title}>最新评论({total})</div>
+        <Comment list={list} />
         <Pagination
-          // pageSize={limit}
-          // page={page}
-          // total={total}
-          // onChange={handleGetPlaylistComments}
-          pageSize={10}
-          page={1}
-          total={70}
+          align="center"
+          pageSize={limit}
+          page={page}
+          total={total}
+          onChange={handleGetPlaylistComments}
         />
       </div>
     </div>

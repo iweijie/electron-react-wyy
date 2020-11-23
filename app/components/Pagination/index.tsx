@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useSetState, useMount, usePersistFn } from 'ahooks';
 import classnames from 'classnames';
-import { times, map } from 'lodash';
+import { times, map, noop } from 'lodash';
 import styles from './index.less';
 
 interface IPaginationProps {
   pageSize: number;
   page: number;
   total: number;
+  align: 'center' | 'left' | 'right';
   // 只有一页是，是否隐藏分页
   hideOnSinglePage?: boolean;
   onChange?: (page: number, pageSize: number) => any;
@@ -23,21 +24,23 @@ interface IListItem {
 interface IPaginationState {
   page: number;
   list: IListItem[];
-  leftDisabled: boolean;
-  rightDisabled: boolean;
   hide: boolean;
 }
 
-const limitPage = 7;
+const limitPage = 5;
 
 const Pagination = (props: IPaginationProps) => {
-  const { pageSize, total, onChange, hideOnSinglePage = false } = props;
+  const {
+    pageSize,
+    total,
+    onChange,
+    align = 'center',
+    hideOnSinglePage = false,
+  } = props;
 
   const [state, setState] = useSetState<IPaginationState>({
     page: props.page || 1,
     list: [],
-    leftDisabled: false,
-    rightDisabled: false,
     hide: false,
   });
 
@@ -53,7 +56,7 @@ const Pagination = (props: IPaginationProps) => {
   useEffect(() => {
     // 一共多少页
     const pages = Math.ceil(total / pageSize);
-    const center = Math.floor(limitPage / 2);
+    const center = limitPage / 2;
 
     const data: any = {
       list: [],
@@ -64,16 +67,30 @@ const Pagination = (props: IPaginationProps) => {
     }
 
     if (pages <= limitPage) {
-      times(limitPage, (index) => {
+      times(pages, (index) => {
+        const current = index + 1;
         data.list.push({
-          name: `${index + 1}`,
-          index: index + 1,
-          disabled: false,
-          isActived: index + 1 === page,
+          name: `${current}`,
+          index: current,
+          disabled: current === page,
+          isActived: current === page,
         });
       });
     } else {
-      if (page > center) {
+      let startNum: number;
+      let endNum: number;
+
+      if (page - center > 0 && page + center <= pages) {
+        startNum = Math.ceil(page - center);
+      } else if (page - center <= 0) {
+        startNum = 1;
+      } else {
+        startNum = pages - limitPage + 1;
+      }
+
+      endNum = startNum + limitPage - 1;
+
+      if (startNum >= 2) {
         data.list.push({
           name: '1',
           index: 1,
@@ -82,43 +99,58 @@ const Pagination = (props: IPaginationProps) => {
         });
       }
 
-      if (page <= center + 1) {
+      if (startNum >= 3) {
         data.list.push({
           name: '...',
+          index: Number.MIN_SAFE_INTEGER,
+          disabled: true,
+          isActived: false,
+        });
+      }
+      times(limitPage, (index) => {
+        const i = startNum + index;
+        data.list.push({
+          name: `${i}`,
+          index: i,
+          disabled: i === page,
+          isActived: i === page,
+        });
+      });
+
+      if (pages - endNum >= 2) {
+        data.list.push({
+          name: '...',
+          index: Number.MAX_SAFE_INTEGER,
           disabled: true,
           isActived: false,
         });
       }
 
-      times(limitPage, (index) => {
-        const i = page - index;
-        data.list.push({
-          name: i,
-          disabled: false,
-          isActived: i === page,
-        });
-      });
-
-      if (page < pages - center) {
+      if (pages - endNum >= 1) {
         data.list.push({
           name: pages,
           disabled: false,
           isActived: pages === page,
         });
       }
-
-      console.log(data);
     }
 
     setState(data);
   }, [page, pageSize, total, hideOnSinglePage]);
 
   return (
-    <ul className={classnames(styles.wrap)}>
+    <ul
+      className={classnames(styles.wrap, {
+        [styles.center]: align === 'center',
+        [styles.left]: align === 'left',
+        [styles.right]: align === 'right',
+      })}
+    >
       <li
         className={classnames({
-          [styles.disabled]: state.leftDisabled,
+          [styles.disabled]: page === 1,
         })}
+        key="icon-left"
       >
         <i className="iconicon-test4 iconfont" />
       </li>
@@ -129,7 +161,10 @@ const Pagination = (props: IPaginationProps) => {
               [styles.disabled]: item.disabled,
               [styles.active]: item.isActived,
             })}
-            onClick={() => handleChange(item.index, pageSize)}
+            key={item.index}
+            onClick={
+              item.disabled ? noop : () => handleChange(item.index, pageSize)
+            }
           >
             {item.name}
           </li>
@@ -137,8 +172,9 @@ const Pagination = (props: IPaginationProps) => {
       })}
       <li
         className={classnames({
-          [styles.disabled]: state.rightDisabled,
+          [styles.disabled]: page === Math.ceil(total / pageSize),
         })}
+        key="icon-right"
       >
         <i className="iconicon-test6 iconfont" />
       </li>

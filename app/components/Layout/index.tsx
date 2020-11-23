@@ -41,7 +41,7 @@ class Layout extends Component {
         <TopNav />
         <div className={styles['global-container']}>
           <div className={styles['global-container-left']}>
-            <LeftMenu menu={menuList} />
+            <LeftMenu />
           </div>
           <div className={styles['global-container-right']}>
             <Switch>

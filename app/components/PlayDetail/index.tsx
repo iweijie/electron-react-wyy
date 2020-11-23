@@ -3,7 +3,7 @@ import { CSSTransition } from 'react-transition-group';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import Toast from '@components/Toast';
+import Toast from 'components/Toast';
 import { get, isNaN, isEmpty, join, map, first } from 'lodash';
 import './animation.global.less';
 import styles from './index.less';

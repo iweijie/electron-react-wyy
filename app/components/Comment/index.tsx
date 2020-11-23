@@ -10,6 +10,7 @@ interface IBasicComment {
     nickname: string;
     avatarUrl: string;
   };
+  beRepliedCommentId: number;
   content: string;
 }
 
@@ -39,6 +40,7 @@ const getFormatTime = (time: number): string => {
 };
 
 const getCommentItem = (item: ICommentItemProps) => {
+  const commentId = get(item, 'commentId');
   const avatarUrl = get(item, 'user.avatarUrl');
   const nickname = get(item, 'user.nickname');
   const content = get(item, 'content');
@@ -47,7 +49,7 @@ const getCommentItem = (item: ICommentItemProps) => {
   const liked = get(item, 'liked');
   const beReplied = get(item, 'beReplied', []);
   return (
-    <li className={styles['comment-item']}>
+    <li key={commentId} className={styles['comment-item']}>
       <div
         className={styles.avatar}
         style={{ backgroundImage: `url(${avatarUrl})` }}
@@ -59,7 +61,10 @@ const getCommentItem = (item: ICommentItemProps) => {
         </p>
         {map(beReplied, (item) => {
           return (
-            <p className={classnames(styles.content, styles.grey)}>
+            <p
+              key={item.beRepliedCommentId}
+              className={classnames(styles.content, styles.grey)}
+            >
               <span className={styles.nickname}>@{item.user.nickname}：</span>
               {item.content}
             </p>

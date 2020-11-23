@@ -48,27 +48,27 @@ const myMusic: IList = {
     {
       icon: 'iconwuxianpu',
       name: '本地音乐',
-      url: '/',
+      url: '/1',
     },
     {
       icon: 'iconxiazai',
       name: '下载管理',
-      url: '/',
+      url: '/2',
     },
     {
       icon: 'iconicon-',
       name: '我的音乐云盘',
-      url: '/',
+      url: '/3',
     },
     {
       icon: 'iconfasheta',
       name: '我的电台',
-      url: '/',
+      url: '/4',
     },
     {
       icon: 'iconwodexingqiu_shoucangdeshangpin',
       name: '我的收藏',
-      url: '/',
+      url: '/5',
     },
   ],
 };

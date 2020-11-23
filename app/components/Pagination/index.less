@@ -2,6 +2,16 @@
 
 .wrap {
   display: flex;
+  align-items: center;
+  &.center {
+    justify-content: center;
+  }
+  &.left {
+    justify-content: flex-start;
+  }
+  &.right {
+    justify-content: flex-end;
+  }
 
   li {
     width: 24px;
@@ -20,6 +30,8 @@
       background-color: #f4f4f4;
     }
     &.disabled {
+      cursor: default;
+      color: @grey;
       background-color: #ffffff;
     }
     &.active {

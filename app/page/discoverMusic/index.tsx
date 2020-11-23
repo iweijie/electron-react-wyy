@@ -6,7 +6,7 @@ import Recommendation from './recommendation/index';
 import Playlist from './playlist/index';
 import { History } from '@types/history';
 import styles from './index.less';
-// import Toast from '@components/Toast';
+// import Toast from 'components/Toast';
 
 interface IDiscovrMusic {
   history: History;

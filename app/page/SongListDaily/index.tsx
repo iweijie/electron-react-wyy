@@ -1,7 +1,7 @@
 import React, { Component, useCallback } from 'react';
 import { connect } from 'react-redux';
 import { Link, useHistory, useParams } from 'react-router-dom';
-import { reducers } from '@store';
+import { reducers } from 'store';
 import { useSetState, useMount } from 'ahooks';
 import { map, get, join, trim, isEmpty, split } from 'lodash';
 import classnames from 'classnames';
@@ -192,10 +192,10 @@ const SongListDaily = () => {
               <span>
                 简介：
                 {split(get(state, 'playlist.description', ''), '\n').map(
-                  (text) => {
+                  (text, index) => {
                     return (
                       <>
-                        <span>{text}</span>
+                        <span key={index}>{text}</span>
                         <br />
                       </>
                     );
