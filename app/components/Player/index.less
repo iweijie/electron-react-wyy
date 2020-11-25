@@ -382,6 +382,11 @@
   height: 4px;
   border-radius: 2px;
   background-color: #e8e8e8;
+  &:hover {
+    .drag {
+      display: block;
+    }
+  }
 
   .progress-mask {
     position: absolute;
@@ -392,7 +397,12 @@
     border-radius: 2px;
     background-color: @red;
   }
-
+  .load-progress {
+    border-radius: 2px;
+    background-color: #c2c2c2;
+    width: 0%;
+    height: 100%;
+  }
   .drag {
     position: absolute;
     cursor: pointer;

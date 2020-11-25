@@ -213,7 +213,7 @@ const SongListDaily = () => {
           </div>
         </div>
       </div>
-      <Tabs className={styles.tab} activeKey="comment">
+      <Tabs className={styles.tab} activeKey="playlist">
         <TabPane tabKey="playlist" tabName="歌曲列表">
           <SongsList songsList={state.songList} loading={state.loading} />
         </TabPane>

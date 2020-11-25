@@ -1,4 +1,3 @@
-import { setCookie } from '../bridge/cookies';
 import { isNaN } from 'lodash';
 import './mainInfo';
 
@@ -8,7 +7,11 @@ import './mainInfo';
 
 export const setStore = (name: string, content: any) => {
   if (!name) return;
-  window.localStorage.setItem(name, JSON.stringify(content));
+  try {
+    window.localStorage.setItem(name, JSON.stringify(content));
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 /**
@@ -17,7 +20,11 @@ export const setStore = (name: string, content: any) => {
 export const getStore = (name: string) => {
   if (!name) return;
   // eslint-disable-next-line consistent-return
-  return JSON.parse((window.localStorage.getItem(name) as string) || '');
+  try {
+    return JSON.parse((window.localStorage.getItem(name) as string) || '');
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 /**
@@ -32,7 +39,11 @@ export const removeStore = (name: string) => {
  */
 export const setSessionStore = (name: string, content: any) => {
   if (!name) return;
-  window.sessionStorage.setItem(name, JSON.stringify(content));
+  try {
+    window.sessionStorage.setItem(name, JSON.stringify(content));
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 /**
@@ -40,7 +51,11 @@ export const setSessionStore = (name: string, content: any) => {
  */
 export const getSessionStore = (name: string) => {
   if (!name) return '';
-  return JSON.parse((window.sessionStorage.getItem(name) as string) || '');
+  try {
+    return JSON.parse((window.sessionStorage.getItem(name) as string) || '');
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 /**

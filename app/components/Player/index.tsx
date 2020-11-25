@@ -7,8 +7,8 @@ import { connect } from 'react-redux';
 import Toast from '../Toast/index';
 import observer from '../../utils/observer';
 import { get, isEmpty, join, map } from 'lodash';
+import classnames from 'classnames';
 import { loopCallback, getFormatTime } from '../../utils';
-
 import requestMap from '../../request/index';
 import PlayList from './playList';
 import { reducers } from '../../store';
@@ -72,12 +72,15 @@ interface IPlayerState {
   currentTime: number;
   // 进度条比例
   runningTimeRatio: number;
+  loadRatio: number;
+
+  volumeRatio: number;
 }
 
 class Player extends Component<IPlayerProps, IPlayerState> {
   audio: HTMLAudioElement;
   loopStopCallBack: null | (() => any);
-
+  progressTime: number;
   volumeRef: React.RefObject<HTMLDivElement>;
   progressRef: React.RefObject<HTMLDivElement>;
   wrapRef: React.RefObject<HTMLDivElement>;
@@ -97,6 +100,8 @@ class Player extends Component<IPlayerProps, IPlayerState> {
     // 当前播放歌单列表容器
     this.playListWrapRef = React.createRef();
 
+    this.progressTime = 0;
+
     this.state = {
       // 是否展示播放野详情
       // isShowPlayDetailPage: false,
@@ -108,6 +113,8 @@ class Player extends Component<IPlayerProps, IPlayerState> {
       currentTime: 0,
       // 进度条比例
       runningTimeRatio: 0,
+      loadRatio: 0,
+      volumeRatio: 100,
     };
   }
 
@@ -123,8 +130,46 @@ class Player extends Component<IPlayerProps, IPlayerState> {
     // Toast.fail('音乐获取失败，请重新尝试',2);
     // Toast.info('普通的Toast我普通的摇！！', 4000);
     observer.on('play-song', this.handlePlay);
-    // this.dragSlide(this.progressWrap);
+    const volumeDom = this.volumeRef.current as HTMLDivElement;
+    const spanDom = volumeDom.querySelector('i') as HTMLSpanElement;
+    spanDom.addEventListener('mousedown', this.handleDragVolume);
   }
+
+  handleDragProgress = () => {};
+
+  handleDragVolume = (e: MouseEvent) => {
+    const { audio } = this;
+    if (e.button !== 0) return;
+    const volumeDom = this.volumeRef.current as HTMLDivElement;
+    const span = volumeDom.querySelector('span') as HTMLSpanElement;
+    const currentWidth = parseFloat(span.style.width);
+    const { width } = volumeDom.getBoundingClientRect();
+    const { x: startX } = e;
+
+    const handleMouseEvent = (event: MouseEvent) => {
+      const { x: moveX } = event;
+      const direction = moveX - startX > 0;
+      const diff = Math.floor(((moveX - startX) / width) * 10000) / 100;
+      const progress = direction
+        ? Math.min(currentWidth + diff, 100)
+        : Math.max(currentWidth + diff, 0);
+      console.log(progress);
+      this.setState({
+        volumeRatio: progress,
+      });
+      audio.volume = progress / 100;
+    };
+    document.addEventListener('mousemove', handleMouseEvent);
+    document.addEventListener(
+      'mouseup',
+      (event: MouseEvent) => {
+        document.removeEventListener('mousemove', handleMouseEvent);
+      },
+      {
+        once: true,
+      }
+    );
+  };
 
   handleGlobalClosePlayList = (event: any): void => {
     const { playListStatus } = this.state;
@@ -169,6 +214,7 @@ class Player extends Component<IPlayerProps, IPlayerState> {
       audioPlayStatus,
       currentTime,
       runningTimeRatio,
+      loadRatio,
     } = this.state;
     const {
       playerList,
@@ -204,10 +250,7 @@ class Player extends Component<IPlayerProps, IPlayerState> {
                   <p className={styles.name}>{get(currentPlaySong, 'name')}</p>
                   <p className={styles.artists}>
                     {join(
-                      map(
-                        get(currentPlaySong, 'artists'),
-                        (item) => item.name
-                      ),
+                      map(get(currentPlaySong, 'artists'), (item) => item.name),
                       '/'
                     )}
                   </p>
@@ -257,6 +300,10 @@ class Player extends Component<IPlayerProps, IPlayerState> {
                   : getFormatTime(currentTime)}
               </div>
               <div ref={this.progressRef} className={styles.progress}>
+                <div
+                  className={styles['load-progress']}
+                  style={{ width: `${loadRatio}%` }}
+                />
                 <span
                   className={styles['progress-mask']}
                   style={{ width: `${runningTimeRatio}%` }}
@@ -276,10 +323,10 @@ class Player extends Component<IPlayerProps, IPlayerState> {
               <div className={styles['sound-control']}>
                 <i className="iconfont iconshengyin" />
               </div>
-              <div ref={this.volumeRef} className={styles.progress}>
+              <div className={styles.progress} ref={this.volumeRef}>
                 <span
                   className={styles['progress-mask']}
-                  style={{ width: `${audio.volume * 100}%` }}
+                  style={{ width: `${this.state.volumeRatio}%` }}
                 >
                   <i className={styles.drag} />
                 </span>
@@ -322,6 +369,7 @@ class Player extends Component<IPlayerProps, IPlayerState> {
     audio.addEventListener('canplay', this.handleCanplay);
     audio.addEventListener('error', this.handleError);
     audio.addEventListener('ended', this.handleEnded);
+    audio.addEventListener('progress', this.handleProgress);
   };
 
   getAudioCurrentTime() {
@@ -330,6 +378,22 @@ class Player extends Component<IPlayerProps, IPlayerState> {
 
   handleCanplay = () => {
     this.handlePlayAudio();
+  };
+
+  handleProgress = (e: any) => {
+    const { audio } = this;
+    const { timeStamp } = e;
+    const duration = audio.duration || 0;
+    let progress: number;
+    if (!duration) {
+      this.progressTime = 0;
+      progress = 0;
+    }
+    this.progressTime += Math.floor(timeStamp / 10) / 100;
+    // progress = Math.floor(timeStamp / 10 / duration) / 100;
+    // progressTime +
+    console.log('---------', this.progressTime, duration);
+    console.log('---------', e);
   };
 
   handleEnded = () => {
@@ -460,9 +524,11 @@ class Player extends Component<IPlayerProps, IPlayerState> {
         Math.floor((currentTime / duration) * 10000) / 100,
         0
       );
+      const loadRatio = audio.buffered.end(audio.buffered.length - 1);
       this.setState({
         currentTime,
         runningTimeRatio,
+        loadRatio: Math.min(Math.ceil(loadRatio / duration) * 100, 100),
       });
     }, 100);
     this.setState({

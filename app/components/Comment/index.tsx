@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { get, map, noop } from 'lodash';
 import classnames from 'classnames';
+import placeholder from 'static/images/placeholder.jpg'
+import { SimpleImg } from 'react-simple-img';
 import { formatDate } from '../../utils/index';
 import { reducers } from '../../store/index';
 import styles from './index.less';
@@ -48,12 +50,12 @@ const getCommentItem = (item: ICommentItemProps) => {
   const time = get(item, 'time');
   const liked = get(item, 'liked');
   const beReplied = get(item, 'beReplied', []);
+  // style={{ backgroundImage: `url(${avatarUrl})` }}>
   return (
     <li key={commentId} className={styles['comment-item']}>
-      <div
-        className={styles.avatar}
-        style={{ backgroundImage: `url(${avatarUrl})` }}
-      />
+      <div className={styles.avatar}>
+        <SimpleImg height={36} width={36} src={`${avatarUrl}?param=50y50`} placeholder={placeholder} />
+      </div>
       <div className={styles['comment-content']}>
         <p className={styles.content}>
           <span className={styles.nickname}>{nickname}：</span>

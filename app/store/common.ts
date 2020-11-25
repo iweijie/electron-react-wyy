@@ -31,7 +31,7 @@ const modal: IModal = {
         windowState: payload,
       };
     },
-    handleChangeHistoryState({ state, rootState }) {
+    handleChangeHistoryState({ state, rootState }, payload) {
       return {
         ...state,
         historyState: payload,

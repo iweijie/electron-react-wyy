@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { SimpleImg } from 'react-simple-img';
 import classnames from 'classnames';
 import { History } from 'history';
+import placeholder from 'static/images/placeholder.jpg';
 import styles from './index.less';
 import { getFormatCount } from '../../../utils/index';
 import { reducers } from '../../../store/index';
@@ -83,13 +85,14 @@ class Recommendation extends Component<
                   className={styles['personalized-item']}
                   onClick={() => this.handleGoDetail(item.id)}
                 >
-                  <div
-                    className={styles['border-grey']}
-                    style={{
-                      backgroundImage: `url(${item.picUrl}?param=140y140)`,
-                    }}
-                  >
+                  <div className={styles['border-grey']}>
                     <div className={styles.tip}>{item.copywriter}</div>
+                    <SimpleImg
+                      height={137}
+                      width={137}
+                      src={`${item.picUrl}?param=140y140`}
+                      placeholder={placeholder}
+                    />
                     <p className={styles.playCount}>
                       <i className="iconfont iconbofangsanjiaoxing" />
                       &nbsp;&nbsp;

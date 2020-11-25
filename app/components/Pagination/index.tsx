@@ -157,7 +157,7 @@ const Pagination = (props: IPaginationProps) => {
       {map(state.list, (item) => {
         return (
           <li
-            className={classnames({
+            className={classnames(styles.num,{
               [styles.disabled]: item.disabled,
               [styles.active]: item.isActived,
             })}
